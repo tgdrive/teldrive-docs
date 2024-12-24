@@ -140,7 +140,7 @@ teldrive.yourdomain.com {
     reverse_proxy teldrive:8080
 }
 
-img-resizer.yourdomain.com {
+imgproxy.yourdomain.com {
     tls internal
     reverse_proxy imgproxy:8080
 }
@@ -177,25 +177,13 @@ networks:
     docker-compose -f caddy.yml up -d
     ```
 - Now teldrive should be accessible via your domain name `https://teldrive.yourdomain.com`.
-- Change Resizer host to `https://img-resizer.yourdomain.com` in teldrive UI settings.
+- Change Resizer host to `https://imgproxy.yourdomain.com` in teldrive UI settings.
 
-## Best Practices
-
-### HTTPS Configuration
-
-*   **Cloudflare:** Ensure connections are encrypted over HTTPS with "Full" or "Full (strict)" encryption.
-*   **Caddy:** Automatically obtains and manages HTTPS certificates using Let's Encrypt.
-
-### Caching and CDN
-
-*   **Cloudflare:** Provides caching through its CDN. Set proxy status to "Proxied".
-*   **Headers:** Ensure your web application sends appropriate cache headers.
 
 ## Troubleshooting
 
 *   **DNS Propagation:** Ensure your domain is pointing to your server's IP address.
-*   **Teldrive Errors:** Check `docker-compose teldrive` and `docker ps` for issues.
-*   **Caddy Errors:** Use  `docker-compose logs caddy` to view Caddy logs.
+*   **Teldrive Errors:** Check `docker logs teldrive -f ` for issues.
+*   **Caddy Errors:** Use  `docker logs caddy -f` to view Caddy logs.
 *   **Firewall:** Ensure the necessary ports (80 and 443) are open if you have a firewall enabled on your server.
-*   **Application Errors:** Check application logs for issues.
 *   **Cloudflare:** Double-check Cloudflare settings if you are facing issues.
