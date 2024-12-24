@@ -76,6 +76,5 @@ export default defineConfig({
       { property: 'twitter:card', content: 'summary_large_image' },
     ],
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
-  ],
-  titleTemplate: ':title - Teldrive',
+  ]
 })
