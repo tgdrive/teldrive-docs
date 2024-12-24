@@ -69,7 +69,7 @@ export default defineConfig({
       },
     ],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'twitter:domain', content: 'teldrive.github.io' }],
+    ['meta', { property: 'twitter:domain', content: 'teldrive-docs.pages.dev' }],
     [
       'meta',
       {
