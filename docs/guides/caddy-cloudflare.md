@@ -54,7 +54,7 @@ Before you start, you'll need the following:
     *  **Web Application Firewall (WAF):** Set to "On" for basic security. Customize rules as needed.
     *  **Bot Fight Mode:** Enable this to block malicious bots.
 
-## Docker and Docker Compose Setup
+## Docker Setup
 
 ```sh
 curl https://get.docker.com | sh
@@ -62,7 +62,7 @@ curl https://get.docker.com | sh
 **Verify Installation:**
 ```sh
 docker --version
-docker-compose --version
+docker compose --version
 ```
 
 ## Deploy Services

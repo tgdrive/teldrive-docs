@@ -7,10 +7,15 @@ Before you can start using this project, there are a few prerequisites you need 
 3. A Supabase PostgreSQL database (skip if you want to use local postgres instance).
 4. Docker and Docker compose(For Linux and Mac only).
 
-## Install Docker
+## Docker Setup
 
 ```sh
 curl https://get.docker.com | sh
+```
+**Verify Installation:**
+```sh
+docker --version
+docker compose --version
 ```
 
 ## Creating a Telegram Account
