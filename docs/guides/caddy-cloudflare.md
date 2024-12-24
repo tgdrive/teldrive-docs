@@ -162,8 +162,8 @@ services:
       - caddy
     restart: always
     volumes:
-      - /path/to/Caddyfile:/etc/caddy/Caddyfile
-      - /path/to/data:/data
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
 
 networks:
   caddy:                                 
