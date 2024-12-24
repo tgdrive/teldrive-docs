@@ -1,6 +1,6 @@
-# Telegram Drive
+# Teldrive
 
-Telegram Drive is a powerful utility that enables you to organise your telegram files and much more.
+Teldrive is a powerful utility that enables you to organise your telegram files and much more.
 
 ## Features
 
@@ -30,15 +30,6 @@ Seamless integration with Rclone for enhanced functionality:
 ### 🔐 Robust Encryption
 Protect Files with Robust Encryption:
 - Secure individual file chunks.
-
-## Advantages Over Alternative Solutions
-
-- **Exceptional Speed:** Teldrive stands out among similar tools, thanks to its implementation in Go, a language known for its efficiency. Its performance surpasses alternatives written in Python and other languages, with the exception of Rust.
-
-- **Enhanced Management Capabilities:** Teldrive not only excels in speed but also offers an intuitive user interface for efficient file interaction which other tool lacks. Its compatibility with Rclone further enhances file management.
-
-> [!IMPORTANT]
-> Teldrive functions as a wrapper over your Telegram account, simplifying file access. However, users must adhere to the limitations imposed by the Telegram API. Teldrive is not responsible for any consequences arising from non-compliance with these API limits.You will be banned instantly if you misuse telegram API.
 
 ![demo](/images/demo1.png)
 
