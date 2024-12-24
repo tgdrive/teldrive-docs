@@ -5,7 +5,7 @@
 #### Linux and macOS
 
 ```bash
-curl -sSL https://instl.vercel.app/tgdrive/rclone?move=1 | bash
+curl -sSL instl.vercel.app/tgdrive/rclone?move=1 | bash
 ```
 
 #### Windows

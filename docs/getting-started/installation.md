@@ -5,7 +5,7 @@ If you want to use teldrive without docker you can install directly by using one
 #### Linux and macOS
 
 ```bash
-curl -sSL https://instl.vercel.app/tgdrive/teldrive?move=1 | bash
+curl -sSL instl.vercel.app/tgdrive/teldrive?move=1 | bash
 ```
 
 #### Windows
