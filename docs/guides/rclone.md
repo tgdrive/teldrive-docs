@@ -1,6 +1,18 @@
 # Setup Teldrive with Rclone
 
-**Download modified [Rclone](https://github.com/tgdrive/rclone) for teldrive.**
+# Installation
+
+#### Linux and macOS
+
+```bash
+curl -sSL https://instl.vercel.app/tgdrive/rclone?move=1 | bash
+```
+
+#### Windows
+
+```powershell
+irm "https://instl.vercel.app/tgdrive/rclone?platform=windows&move=1" | iex
+```
 
 ### Rclone Configuration Section
 The configuration should be defined under the `[teldrive]` section in your config file.
