@@ -1,9 +1,10 @@
 # Backing Up Database through Rclone Remote
 
-Make sure to setup database from [Prerequisites](/docs/getting-started/prerequisites.md) guide.
+- Make sure to setup database from [prerequisites](/docs/getting-started/prerequisites.md) guide.
 
-```yml
-# docker-compose.yml
+::: code-group
+
+```yml [docker-compose.yml]
 services:
   rclone-backup:
     image: ghcr.io/bhunter234/rclone-backup # for postgres 16 use ghcr.io/adrienpoupa/rclone-backup
@@ -29,7 +30,9 @@ networks:
   postgres:                                 
     external: true
 ```
-Remove networks block in compose file if you are using supabase.
+:::
+
+- Remove networks block in compose file if you are using supabase.
 
 ```sh
 docker compose up -d

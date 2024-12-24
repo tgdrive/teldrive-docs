@@ -35,8 +35,8 @@ allowed-users = ["your-telegram-username"]
 secret = "abcd"
 
 [tg]
-app-id = <your_telegram_app_id>
-app-hash = <your_telegram_app_hash>
+app-id = "your_telegram_app_id"
+app-hash = "your_telegram_app_hash"
 ```
 
 ## Values 
@@ -46,7 +46,7 @@ app-hash = <your_telegram_app_hash>
 - allowed-users: Make sure to add your telegram `username` here for restricting access to others users.
 
 > [!NOTE]  
->- For local db use `data-source = "postgres://<db username>:<db password>@postgres/postgres"`.Use username and password which you used in [Prerequisites](/docs/getting-started/prerequisites.md) guide.
+>- For local db use `data-source` from [prerequisites](/docs/getting-started/prerequisites#creating-a-local-posgtres-instance-using-docker) guide.
 >- For advanced cli [usage](/docs/cli/run.md).
 >- For Sample config [visit](https://github.com/tgdrive/teldrive/blob/main/config.sample.toml).
 

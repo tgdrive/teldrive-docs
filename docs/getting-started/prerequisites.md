@@ -47,12 +47,41 @@ Supabase provides a hosted PostgreSQL database with an easy-to-use interface. Fo
 
 
 ## Creating a Local Posgtres Instance using docker
-- Make sure you have docker and docker compose installed before running this.
+
+- Create a `docker-compose.yml` file and add the following configuration.
+
+::: code-group
+
+```yml [docker-compose.yml]
+services:
+  postgres:
+    image: ghcr.io/tgdrive/postgres:17-alpine
+    container_name: postgres_db
+    restart: always
+    networks:
+     - postgres
+    environment:
+      - POSTGRES_USER=teldrive
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  postgres:                                 
+    external: true
+
+volumes:
+  postgres_data:
+    external: true
+```
+:::
+
+**Change default user and password in environment variables.**
 
 ```sh
-mkdir postgres && cd postgres
-curl -LO "https://raw.githubusercontent.com/tgdrive/teldrive/refs/heads/main/docker/compose/postgres.yml"
-#Change default user and password in postgres.yml
 docker network create postgres
-docker compose -f postgres.yml up -d
+docker volume create postgres_data
+docker compose up -d
 ```
+- Connection string for local db will be `postgres://teldrive:secret@postgres/postgres` which will be used later in teldrive config.

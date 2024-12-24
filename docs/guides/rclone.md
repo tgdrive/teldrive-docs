@@ -1,8 +1,8 @@
 # Setup Teldrive with Rclone
 
-Download modified [Rclone](https://github.com/tgdrive/rclone) for teldrive.
+**Download modified [Rclone](https://github.com/tgdrive/rclone) for teldrive.**
 
-### TelDrive Configuration Section
+### Rclone Configuration Section
 The configuration should be defined under the `[teldrive]` section in your config file.
 
 **`type`**  
@@ -30,10 +30,10 @@ Use random names for file chunks when uploading to channel instead of original f
 ### Example Configuration
 ```toml
 [teldrive]
-type = teldrive
-api_host = http://localhost:8080
-access_token = your_session_token_here
-chunk_size = 500M
+type = "teldrive"
+api_host = "http://localhost:8080"
+access_token = "your_session_token_here"
+chunk_size = "500M"
 upload_concurrency = 4
 encrypt_files = false
 random_chunk_name = true

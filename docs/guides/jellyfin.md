@@ -1,30 +1,21 @@
-# Using Teldrive with Plex/Jellyfin
+# Using Teldrive with Plex/Jellyfin/Emby
 
-This guide outlines the best practices for using Teldrive Plex/Jellyfin.
+**This guide outlines the best practices for using Teldrive Plex/Jellyfin/Emby.**
 
-### Setting Up Teldrive
-
-- Read teldrive setup guide.
-
-- Expose teldrive port locally
-```yml
-ports:
-     - 127.0.0.1:8080:8080
-```
-This will expose port locally.Change ``api_host = http://localhost:8080`` in rclone config file.
+**Read Teldrive setup guide before running this.**
 
 ### Install Docker Volume Plugin
 ```bash
 docker plugin install ghcr.io/tgdrive/docker-volume-rclone --alias rclone --grant-all-permissions args="--allow-other" config=/etc/rclone cache=/var/cache
 ```
-**Note:** If you are using diff architecture, you can find all plugin tags [here](https://github.com/tgdrive/rclone/pkgs/container/docker-volume-rclone).Change rclone cache and config dir path acordingly
+> [!NOTE] 
+If you are using diff architecture, you can find all plugin tags [here](https://github.com/tgdrive/rclone/pkgs/container/docker-volume-rclone).Change rclone cache and config dir path acordingly
 
 ### Setting Up Jellyfin
 
-To set up Jellyfin with Teldrive, you can use the following Docker configuration:
+::: code-group
 
-```yaml
-#jellyfin.yml
+```yml [docker-compose.yml]
 services:
   jellyfin:
     image: jellyfin/jellyfin
@@ -38,12 +29,13 @@ volumes:
   rclone:
     external: true
 ```
-Plex can be configured in a similar way.You can share teldrive volume to any container by using rclone volume driver.
+:::
+
+- Plex and Emby can be configured in a similar way.You can share teldrive volume to any container by using rclone volume driver.
 
 > [!IMPORTANT]
-> Don't use restart policy in compose file that uses rclone volume driver.You have to use crontab job to start any container that use rclone volume after teldrive is up.
-
-Add the following script to crontab at startup.Change container name accodingly.
+>- Don't use restart policy in compose file that uses rclone volume driver.You have to use crontab job for containers that that depends on rclone volume.
+>- Add the following script to crontab at startup.Change container name accodingly.
 
 ```bash
 #!/bin/bash
@@ -75,7 +67,7 @@ if [ "$VOLUME_EXISTS" == "no" ]; then
   echo "Volume $VOLUME_NAME does not exist. Creating volume..."
   docker volume create \
     --driver rclone \
-    --opt remote="drive:" \
+    --opt remote="teldrive_remote_name:" \
     --opt vfs_cache_max_age=7720h \
     --opt vfs_read_chunk_streams=2 \
     --opt vfs_read_chunk_size=64M \

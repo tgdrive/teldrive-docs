@@ -70,14 +70,14 @@ docker-compose --version
 ```sh
 docker network create caddy
 ```
-**Place all yml files that you will create below in one directory**.
 
-#### Deploy Teldrive
+- Make sure you have followed [usage](/docs/getting-started/usage.md) guide for setting up `config.toml` and database.
+- Create these files mentioned below in the same directory.
+- Remove postgres part from networks if you are using supabase.
 
-- Make sure you have followed [Usage](/docs/getting-started/usage.md) guide for setting up `config.toml`.
+::: code-group
 
-```yml
-#teldrive.yml
+```yml [teldrive.yml]
 services:
   teldrive:
     image: ghcr.io/tgdrive/teldrive
@@ -96,16 +96,7 @@ networks:
     external: true
 ```
 
-```sh
-touch session.db
-docker compose -f teldrive.yml  up -d
-```
-- Remove postgres part from if you are using supabase.
-
-#### Deploy Imgproxy
-
-```yml
-#imgproxy.yml
+```yml [imgproxy.yml]
 services:
   imgproxy:
     image: darthsim/imgproxy
@@ -122,19 +113,7 @@ networks:
   caddy:
     external: true
 ```
-
-```sh
-docker compose -f imgproxy.yml  up -d
-```
-
-## Caddy Setup with Docker
-
-### Creating a Caddyfile
-
-Create a `Caddyfile` in same directory to configure Caddy's reverse proxy:
-
-```caddy
-
+``` [Caddyfile]
 teldrive.yourdomain.com {
     tls internal
     reverse_proxy teldrive:8080
@@ -145,14 +124,11 @@ imgproxy.yourdomain.com {
     reverse_proxy imgproxy:8080
 }
 ```
-* `tls internal` is needed for cloudflare.
-* Replace `yourdomain.com` with your domain.
 
-```yml
-#caddy.yml
+```yml [caddy.yml]
 services:
  caddy:
-    image: caddy
+    image: ghcr.io/tgdrive/caddy
     container_name: caddy
     ports:
      - "80:80"
@@ -163,27 +139,35 @@ services:
     restart: always
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./caddy_data:/data
+      - caddy_data:/data
 
 networks:
   caddy:                                 
-    external: true 
+    external: true
+
+volumes:
+  caddy_data:
+    external: true
 ```
 
-### Running Caddy Service
+:::
 
-- **Run Docker Compose:**
-    ```sh
-    docker-compose -f caddy.yml up -d
-    ```
+```sh
+touch session.db
+docker volume create caddy_data
+docker compose -f teldrive.yml  up -d
+docker compose -f imgproxy.yml  up -d
+docker compose -f caddy.yml up -d
+```
+
+- Replace `yourdomain.com` with your domain.
 - Now teldrive should be accessible via your domain name `https://teldrive.yourdomain.com`.
 - Change Resizer host to `https://imgproxy.yourdomain.com` in teldrive UI settings.
-
 
 ## Troubleshooting
 
 *   **DNS Propagation:** Ensure your domain is pointing to your server's IP address.
 *   **Teldrive Errors:** Check `docker logs teldrive -f ` for issues.
-*   **Caddy Errors:** Use  `docker logs caddy -f` to view Caddy logs.
+*   **Caddy Errors:** Check `docker logs caddy -f ` for issues.
 *   **Firewall:** Ensure the necessary ports (80 and 443) are open if you have a firewall enabled on your server.
 *   **Cloudflare:** Double-check Cloudflare settings if you are facing issues.
