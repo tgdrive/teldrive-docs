@@ -44,6 +44,8 @@ export default defineConfig({
         text: 'Guides',
         collapsed: false,
         items: [
+          { text: 'Deploy Teldrive with Caddy and Cloudflare', link: '/docs/guides/caddy-cloudflare.md' },
+          { text: 'Database Backup', link: '/docs/guides/db-backup.md' },
           { text: 'Setup Teldrive with Rclone', link: '/docs/guides/rclone.md' },
           { text: 'Setup Teldrive with Jellyfin', link: '/docs/guides/jellyfin.md' },
         ]

@@ -39,3 +39,15 @@ A bot token is essential for interacting with the Telegram API for upload and do
 
 > [!WARNING]
 > Bots will be auto added as admin in channel if you set them from UI if it fails somehow add it manually.For newly logged session you have to wait 20-30 min to add bots to telegram channel. **`FRESH_CHANGE_ADMINS_FORBIDDEN`** error  will be thrown if you try to add bots before that time frame.
+
+# Use Thumbnail Resizer
+
+Teldrive supports image resizing on the fly using `imgproxy` for thumbnail viewing.
+
+```sh
+curl -LO "https://raw.githubusercontent.com/tgdrive/teldrive/refs/heads/main/docker/compose/image-resizer.yml"
+docker compose -f image-resizer.yml  up -d
+```
+- As imagproxy doesn't support caching its  recommended to use this behind `cloudflare` or `varnish cache`.
+
+- Enter url of deployed resizer service in teldrive UI settings.
