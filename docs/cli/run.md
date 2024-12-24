@@ -19,7 +19,7 @@ Config file path.
 Enable or disable background cron jobs.
 
 **`--cronjobs-clean-files-interval`** (default: 1h)  
-Interval for cleaning up expired files.
+Interval for cleaning up deleted files.
 
 **`--cronjobs-clean-uploads-interval`** (default: 12h)  
 Interval for cleaning incomplete uploads.
@@ -95,9 +95,6 @@ Telegram application ID (required).
 **`--tg-app-version`** (default: "4.6.3 K")  
 Application version string.
 
-**`--tg-bg-bots-check-interval`** (default: 4h)  
-Interval for checking idle background bots.
-
 **`--tg-device-model`** (default: "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0")  
 Device model string for Telegram client.
 
@@ -161,4 +158,5 @@ Duration to retain upload data.
 **`--tg-uploads-threads`** (default: 8)  
 Number of concurrent upload threads.
 
-> Note: Duration values can be specified using units: "s" (seconds), "m" (minutes), "h" (hours), "d" (days). Required flags must be set either via command line or configuration file.
+> [!NOTE] 
+Duration values can be specified using units: "s" (seconds), "m" (minutes), "h" (hours), "d" (days). Required flags must be set either via command line or configuration file.
