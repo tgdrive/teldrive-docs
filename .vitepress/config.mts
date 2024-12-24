@@ -23,6 +23,7 @@ export default defineConfig({
     },
     footer: {
       message: 'Released under the MIT License.',
+      copyright: 'Copyright © 2023-present Divyam'
     },
     nav: [
       { text: 'Home', link: '/' },
