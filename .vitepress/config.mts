@@ -8,7 +8,7 @@ export default defineConfig({
   ignoreDeadLinks: true,
   cleanUrls: true,
   sitemap: {
-    hostname: 'https://teldrive.vercel.app'
+    hostname: 'https://teldrive-docs.pages.dev'
   },
   themeConfig: {
     logo: '/images/logo.png',
