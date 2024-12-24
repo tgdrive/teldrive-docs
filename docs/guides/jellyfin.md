@@ -77,8 +77,8 @@ if [ "$VOLUME_EXISTS" == "no" ]; then
     --driver rclone \
     --opt remote="drive:" \
     --opt vfs_cache_max_age=7720h \
-    --opt vfs_read_chunk_streams=4 \
-    --opt vfs_read_chunk_size=32M \
+    --opt vfs_read_chunk_streams=2 \
+    --opt vfs_read_chunk_size=64M \
     --opt vfs_cache_max_size=300G \
     $VOLUME_NAME
   echo "Volume $VOLUME_NAME created successfully."
