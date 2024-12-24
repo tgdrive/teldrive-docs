@@ -7,6 +7,9 @@ export default defineConfig({
   lastUpdated: true,
   ignoreDeadLinks: true,
   cleanUrls: true,
+  sitemap: {
+    hostname: 'https://tgdrive.github.io'
+  },
   themeConfig: {
     logo: '/images/logo.png',
     siteTitle: 'Teldrive',
