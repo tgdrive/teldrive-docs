@@ -39,6 +39,5 @@ encrypt_files = false
 random_chunk_name = true
 ```
 > [!IMPORTANT]
->- For obtaining session token from cookies  easily use this chrome [extension](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm)
+>- For obtaining session token from cookies  easily use this chrome [extension](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm).This extension is also available for firefox.
 >- Once extenion is installed go to teldrive website and copy values from cookie named `user-session`.
->- You can also obtain session token from chrome developer tools.

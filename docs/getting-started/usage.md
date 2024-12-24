@@ -6,7 +6,7 @@ This guide will help you set up and use Teldrive. Ensure you have met all the pr
 
 Create a `config.toml` with the following content, replacing the placeholders with your actual values.
 
-### Example `config.toml` file for Supabase DB
+### `config.toml` for Supabase DB
 
 ```toml
 [db]
@@ -21,10 +21,10 @@ allowed-users = ["your-telegram-username"]
 secret = "abcd"
 
 [tg]
-app-id = <your_app_id>
-app-hash = "fwfwfwf"
+app-id = "your_telegram_app_id"
+app-hash = "your_telegram_app_hash"
 ```
-### Example `config.toml` file for local DB
+### `config.toml` for Local DB
 
 ```toml
 [db]
@@ -51,10 +51,9 @@ app-hash = "your_telegram_app_hash"
 >- For Sample config [visit](https://github.com/tgdrive/teldrive/blob/main/config.sample.toml).
 
 ## Generating a JWT Secret
-For the secret field, use your generated JWT secret. You can generate one using:
-
-- OpenSSL: `openssl rand -hex 64`
-- Or visit: [Generate Secret](https://generate-secret.vercel.app/64)
+**For the secret field, use your generated JWT secret. You can generate one using:**
+- OpenSSL: `openssl rand -hex 32`
+- Or visit: [Generate Secret](https://generate-secret.vercel.app/32)
 
 ## Run With Docker 
 ```sh
@@ -64,6 +63,7 @@ touch session.db
 docker compose -f teldrive.yml  up -d
 ```
 - Go to  http://localhost:8080 in your browser to access teldrive.
+- Set default channel in UI settings.
 
 ## Run Without Docker 
 

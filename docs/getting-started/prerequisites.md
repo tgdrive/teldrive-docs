@@ -4,8 +4,9 @@ Before you can start using this project, there are a few prerequisites you need 
 
 1. A Telegram account.
 2. A Telegram application (to obtain `api_id` and `api_hash`).
-3. A Supabase PostgreSQL database (skip if you want to use local postgres instance).
-4. Docker and Docker compose(For Linux and Mac only).
+3. Private telegram channel for storing files.
+4. A Supabase PostgreSQL database (skip if you want to use local postgres instance).
+5. Docker and Docker compose(For Linux and Mac only).
 
 ## Docker Setup
 
