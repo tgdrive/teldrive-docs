@@ -2,14 +2,12 @@
 
 If you want to use teldrive without docker you can install directly by using one line installers.Otherwise head to [Usage](/docs/getting-started/usage.md) guide.
 
-#### Linux and macOS
-
-```bash
-curl -sSL instl.vercel.app/tgdrive/teldrive?move=1 | bash
+::: code-group
+```sh [macOS/Linux (curl)]
+curl -sSL instl.vercel.app/tgdrive/teldrive | bash
 ```
 
-#### Windows
-
-```powershell
-irm "https://instl.vercel.app/tgdrive/teldrive?platform=windows&move=1" | iex
+```powershell [PowerShell/cmd.exe]
+powershell -c "irm https://instl.vercel.app/tgdrive/teldrive?platform=windows|iex"
 ```
+:::

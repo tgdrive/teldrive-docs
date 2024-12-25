@@ -4,15 +4,15 @@
 
 #### Linux and macOS
 
-```bash
-curl -sSL instl.vercel.app/tgdrive/rclone?move=1 | bash
+::: code-group
+```sh [macOS/Linux (curl)]
+curl -sSL instl.vercel.app/tgdrive/rclone | bash
 ```
 
-#### Windows
-
-```powershell
-irm "https://instl.vercel.app/tgdrive/rclone?platform=windows&move=1" | iex
+```powershell [PowerShell/cmd.exe]
+powershell -c "irm https://instl.vercel.app/tgdrive/rclone?platform=windows|iex"
 ```
+:::
 
 ### Rclone Configuration Section
 The configuration should be defined under the `[teldrive]` section in your config file.
