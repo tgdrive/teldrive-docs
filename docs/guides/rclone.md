@@ -2,8 +2,6 @@
 
 # Installation
 
-#### Linux and macOS
-
 ::: code-group
 ```sh [macOS/Linux (curl)]
 curl -sSL instl.vercel.app/tgdrive/rclone | bash
