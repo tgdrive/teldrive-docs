@@ -56,7 +56,13 @@ export default defineConfig({
         items: [
           { text: 'run', link: '/docs/cli/run.md' },
         ]
-      }
+      },
+      {
+        text: "API Reference",
+        link: "/docs/api",
+        rel:"noopener noreferrer",
+        target:"_blank"
+      },
     ],
     
   },
@@ -82,5 +88,8 @@ export default defineConfig({
       { property: 'twitter:card', content: 'summary_large_image' },
     ],
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
-  ]
+  ],
+  vite:{
+    
+  }
 })
