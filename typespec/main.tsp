@@ -10,10 +10,12 @@ using TypeSpec.Http;
 @route("/api")
 namespace Teldrive;
 
+alias ApiAuth = ApiKeyAuth<ApiKeyLocation.cookie, "user-session"> | BearerAuth;
+
 @error
 model Error {
   code: int32;
-  message: string;
+  message?: string;
 }
 model InternalServerError is Response<500>;
 model ErrorResponse<T> {
@@ -25,6 +27,7 @@ model InternalServerErrorResponse is ErrorResponse<InternalServerError>;
 model NotFoundErrorResponse is ErrorResponse<NotFoundResponse>;
 model ConflictErrorResponse is ErrorResponse<ConflictResponse>;
 model BadRequestErrorResponse is ErrorResponse<BadRequestResponse>;
+
 model Session {
   name:     string;
 	userName:  string;
@@ -32,8 +35,7 @@ model Session {
 	isPremium: boolean;   
 	hash:      string; 
 	expires:   string ;
-  @visibility("create")
-  session: string;
+  session?:  string;
 }
 
 @route("/auth")
@@ -42,7 +44,7 @@ interface Auth {
   @route("/session")
   @summary("Get session information")
   @get
-  getSession(): Session | null;
+  session(): Session | null;
 
   @route("/login") 
   @summary("Login")
@@ -50,9 +52,14 @@ interface Auth {
   login(...Session): OkResponse |  InternalServerErrorResponse;
   @route("/logout")
   @summary("Logout")
-  @useAuth(BearerAuth)
+  @useAuth(ApiAuth)
   @post
   logout(): OkResponse | InternalServerErrorResponse;
+
+  @route("/ws")
+  @summary("Websocket QR Login")
+  @get
+  ws(): Response<101>;
 }
 
 enum Category {
@@ -107,7 +114,6 @@ model Part {
   salt?: string;
 }
 model File {
-  @visibility("read") id: string;
   name: string;
   type: string;
   parts?: Part[];
@@ -120,6 +126,7 @@ model File {
 }
 
 model FileOut extends File{
+  id: string;
   updatedAt: utcDateTime;
   parentPath?: string;
 }
@@ -130,22 +137,18 @@ model  Meta {
   currentPage?: int32;
 }
 model FileShareCreate {
-    password?: string;
-    expiresAt?: utcDateTime;
+  password?: string;
+  expiresAt?: utcDateTime;
 }
 
 model FileShare {
-  id?: string;
-  expiresAt?: utcDateTime;
   protected: boolean;
   userId?: int64;
   type: string;
   name: string;
+  expiresAt?: utcDateTime;
 }
 
-model FileShareOut extends FileShare{
-  id: string;
-}
 model FileOperation {
   files: string[];
   destination?: string;
@@ -158,12 +161,12 @@ model DeleteOperation {
 
 @route("/files")
 @tag("Files")
-@useAuth(BearerAuth)
+@useAuth(ApiAuth)
 interface Files {
 @route("")
 @get
 @summary("List all files")
-op listFiles(...FileQuery): {
+op list(...FileQuery): {
   files: FileOut[];
   meta: Meta;
 } | ConflictErrorResponse | NotFoundErrorResponse | InternalServerErrorResponse;
@@ -171,17 +174,18 @@ op listFiles(...FileQuery): {
 @route("")
 @post
 @summary("Create a new file")
-op createFile(...Create<File>): FileOut | NotFoundErrorResponse | ConflictErrorResponse | BadRequestErrorResponse | InternalServerErrorResponse;
+op create(...File): FileOut | NotFoundErrorResponse | ConflictErrorResponse 
+| BadRequestErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}")
 @get
 @summary("Get file by ID")
-op getFileById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
+op getById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}")
 @patch
 @summary("Update file")
-op updateFile(
+op update(
   @path id: string,
     @bodyRoot body: {
     name?: string;
@@ -189,7 +193,8 @@ op updateFile(
     size?: int64;
     updatedAt?: utcDateTime;
   },
-): FileOut | NotFoundErrorResponse | ConflictErrorResponse | BadRequestErrorResponse | InternalServerErrorResponse;
+): FileOut | NotFoundErrorResponse | ConflictErrorResponse | BadRequestErrorResponse 
+| InternalServerErrorResponse;
 
 @route("/{id}/parts")
 @put
@@ -213,7 +218,7 @@ op deleteShare(@path id: string): NoContentResponse | InternalServerErrorRespons
 @route("/{id}/share")
 @get
 @summary("Get share by file ID")
-op getShareByid(@path id: string): FileShare | InternalServerErrorResponse;
+op shareByid(@path id: string): FileShare | InternalServerErrorResponse;
 
 @route("/{id}/share")
 @patch
@@ -234,7 +239,7 @@ op createShare(
 @route("/{id}/copy")
 @post
 @summary("Copy file")
-op copyFile(
+op copy(
   @path id: string,
   @body body: {
     name:string;
@@ -245,19 +250,19 @@ op copyFile(
 @route("/{id}/stream/{name}")
 @get
 @summary("Stream file by ID")
-op getFileStream(@path id: string, @path name: string): OkResponse | Response<206>
+op stream(@path id: string, @path name: string,@query hash?:string): OkResponse | Response<206>
 | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}/download/{name}")
 @get
 @summary("Download file by ID")
-op getFileDownload(@path id: string, @path name: string): OkResponse | Response<206>
+op download(@path id: string, @path name: string,@query hash?:string): OkResponse | Response<206>
 | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/categories")
 @get
 @summary("Get category stats")
-op getCategoryStats(): {
+op categoryStats(): {
   totalFiles: int64;
   totalSize: int64;
   category: string;
@@ -266,14 +271,14 @@ op getCategoryStats(): {
 @route("/move")
 @post
 @summary("Move files")
-op moveFiles(
+op move(
   ...FileOperation
 ): NoContentResponse | InternalServerErrorResponse;
 
 @route("/folders")
 @post
 @summary("Make a new directory")
-op makeDirectory(
+op mkdir(
   @body body: {
     path:string;
   },
@@ -282,7 +287,7 @@ op makeDirectory(
 @route("/folders/move")
 @post
 @summary("Move directory")
-op moveDirectory(
+op movedir(
   @body body: {
     source: string;
     destination: string;
@@ -292,7 +297,7 @@ op moveDirectory(
 @route("/delete")
 @post
 @summary("Bulk Delete files")
-op deleteFiles(
+op bulkDelete(
   @body body: {
     files: string[];
     source: string;
@@ -313,7 +318,7 @@ model UploadQuery {
   encrypted?: boolean;
 }
 
-model UploadPartOut {
+model UploadPart {
   name: string;
   partId: int32;
   partNo: int32;
@@ -330,35 +335,35 @@ model UploadStats {
 
 @route("/uploads")
 @tag("Uploads")
-@useAuth(BearerAuth)
+@useAuth(ApiAuth)
 interface Uploads {
 @route("/{id}")
 @post
 @summary("Upload file")
-op uploadFile(
+op upload(
   @path id: string,
   @header contentType: "application/octet-stream",
   @bodyRoot body: bytes,
   ...UploadQuery
-): UploadPartOut | BadRequestErrorResponse | InternalServerErrorResponse;
+): UploadPart | BadRequestErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}")
 @get
 @summary("Get uploaded parts by ID")
-op getUploadPartsById(@path id: string): UploadPartOut[] | InternalServerErrorResponse;
+op partsById(@path id: string): UploadPart[] | InternalServerErrorResponse;
 
 @route("/{id}")
 @delete
 @summary("Delete uploaded file")
-op deleteUploadFile(@path id: string): NoContentResponse | InternalServerErrorResponse;
+op delete(@path id: string): NoContentResponse | InternalServerErrorResponse;
 
 @route("/stats")
 @get
 @summary("Get upload stats")
-op uploadStats(@query days: int16): UploadStats[] | InternalServerErrorResponse;
+op stats(@query days: int16): UploadStats[] | InternalServerErrorResponse;
 }
 
-model SessionOut {
+model TgSession {
   hash: string;
   createdAt: string;
   location?: string;
@@ -375,17 +380,17 @@ model Channel {
 
 @route("/users")
 @tag("Users")
-@useAuth(BearerAuth)
+@useAuth(ApiAuth)
 interface Users {
 @route("/profile")
 @get
 @summary("Get user profile photo")
-op getProfilePhoto(): OkResponse | NotFoundErrorResponse | InternalServerErrorResponse;
+op profileImage(): OkResponse | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/config")
 @get
 @summary("Get user config")
-op getStats(): {channelId: int64; bots: string[]} | InternalServerErrorResponse;
+op stats(): {channelId: int64; bots: string[]} | InternalServerErrorResponse;
 
 @route("/channels")
 @get
@@ -402,7 +407,7 @@ op updateChannel(
 @route("/sessions")
 @get
 @summary("List user sessions")
-op listSessions(): SessionOut[] | InternalServerErrorResponse;
+op listSessions(): TgSession[] | InternalServerErrorResponse;
 
 @route("/bots")
 @post
@@ -430,11 +435,11 @@ interface Share {
 @route("/{id}")
 @get
 @summary("Get share by ID")
-op getShareById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
+op getById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
 @route("/{id}/files")
 @get
 @summary("List files in share")
-op listShareFiles(@path id: string): {
+op listFiles(@path id: string): {
   files: FileOut[];
   meta: Meta;
 } | ConflictErrorResponse | NotFoundErrorResponse | InternalServerErrorResponse;
@@ -442,18 +447,18 @@ op listShareFiles(@path id: string): {
 @route("/{id}/files/{fileId}/stream/{name}")
 @get
 @summary("Stream shared file")
-op streamSharedFile(
+op streamFile(
   @path id: string,
   @path fileId: string,
   @path name: string,
 ): OkResponse | Response<206>| NotFoundErrorResponse | InternalServerErrorResponse;
 
-@route("/{id}/files/{fileID}/download/{fileName}")
+@route("/{id}/files/{fileId}/download/{name}")
 @get
 @summary("Download shared file")
-op downloadSharedFile(
+op downloadFile(
   @path id: string,
-  @path fileID: string,
-  @path fileName: string,
+  @path fileId: string,
+  @path name: string,
 ): OkResponse | Response<206> | NotFoundErrorResponse | InternalServerErrorResponse;
 }

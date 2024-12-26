@@ -30,7 +30,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionCreate'
+              $ref: '#/components/schemas/Session'
   /api/auth/logout:
     post:
       operationId: Auth_logout
@@ -48,10 +48,11 @@ paths:
       tags:
         - Auth
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/auth/session:
     get:
-      operationId: Auth_getSession
+      operationId: Auth_session
       summary: Get session information
       parameters: []
       responses:
@@ -63,9 +64,19 @@ paths:
                 $ref: '#/components/schemas/Session'
       tags:
         - Auth
+  /api/auth/ws:
+    get:
+      operationId: Auth_ws
+      summary: Websocket QR Login
+      parameters: []
+      responses:
+        '101':
+          description: Informational
+      tags:
+        - Auth
   /api/files:
     get:
-      operationId: Files_listFiles
+      operationId: Files_list
       summary: List all files
       parameters:
         - $ref: '#/components/parameters/FileQuery.name'
@@ -121,9 +132,10 @@ paths:
       tags:
         - Files
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     post:
-      operationId: Files_createFile
+      operationId: Files_create
       summary: Create a new file
       parameters: []
       responses:
@@ -164,12 +176,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateFile'
+              $ref: '#/components/schemas/File'
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/categories:
     get:
-      operationId: Files_getCategoryStats
+      operationId: Files_categoryStats
       summary: Get category stats
       parameters: []
       responses:
@@ -201,10 +214,11 @@ paths:
       tags:
         - Files
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/delete:
     post:
-      operationId: Files_deleteFiles
+      operationId: Files_bulkDelete
       summary: Bulk Delete files
       parameters: []
       responses:
@@ -235,10 +249,11 @@ paths:
                 - files
                 - source
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/folders:
     post:
-      operationId: Files_makeDirectory
+      operationId: Files_mkdir
       summary: Make a new directory
       parameters: []
       responses:
@@ -264,10 +279,11 @@ paths:
               required:
                 - path
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/folders/move:
     post:
-      operationId: Files_moveDirectory
+      operationId: Files_movedir
       summary: Move directory
       parameters: []
       responses:
@@ -296,10 +312,11 @@ paths:
                 - source
                 - destination
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/move:
     post:
-      operationId: Files_moveFiles
+      operationId: Files_move
       summary: Move files
       parameters: []
       responses:
@@ -320,10 +337,11 @@ paths:
             schema:
               $ref: '#/components/schemas/FileOperation'
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/{id}:
     get:
-      operationId: Files_getFileById
+      operationId: Files_getById
       summary: Get file by ID
       parameters:
         - name: id
@@ -353,9 +371,10 @@ paths:
       tags:
         - Files
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     patch:
-      operationId: Files_updateFile
+      operationId: Files_update
       summary: Update file
       parameters:
         - name: id
@@ -416,10 +435,11 @@ paths:
                   type: string
                   format: date-time
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/{id}/copy:
     post:
-      operationId: Files_copyFile
+      operationId: Files_copy
       summary: Copy file
       parameters:
         - name: id
@@ -463,10 +483,11 @@ paths:
                 - name
                 - destination
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/{id}/download/{name}:
     get:
-      operationId: Files_getFileDownload
+      operationId: Files_download
       summary: Download file by ID
       parameters:
         - name: id
@@ -479,6 +500,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: hash
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
@@ -499,6 +526,7 @@ paths:
       tags:
         - Files
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/{id}/parts:
     put:
@@ -554,6 +582,7 @@ paths:
                 - size
                 - channelId
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/{id}/share:
     delete:
@@ -577,9 +606,10 @@ paths:
       tags:
         - Files
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     get:
-      operationId: Files_getShareByid
+      operationId: Files_shareByid
       summary: Get share by file ID
       parameters:
         - name: id
@@ -603,6 +633,7 @@ paths:
       tags:
         - Files
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     patch:
       operationId: Files_editShare
@@ -631,6 +662,7 @@ paths:
             schema:
               $ref: '#/components/schemas/FileShareCreate'
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     post:
       operationId: Files_createShare
@@ -659,10 +691,11 @@ paths:
             schema:
               $ref: '#/components/schemas/FileShareCreate'
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/files/{id}/stream/{name}:
     get:
-      operationId: Files_getFileStream
+      operationId: Files_stream
       summary: Stream file by ID
       parameters:
         - name: id
@@ -675,6 +708,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: hash
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
@@ -695,10 +734,11 @@ paths:
       tags:
         - Files
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/uploads/stats:
     get:
-      operationId: Uploads_uploadStats
+      operationId: Uploads_stats
       summary: Get upload stats
       parameters:
         - name: days
@@ -726,10 +766,11 @@ paths:
       tags:
         - Uploads
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/uploads/{id}:
     post:
-      operationId: Uploads_uploadFile
+      operationId: Uploads_upload
       summary: Upload file
       parameters:
         - name: id
@@ -748,7 +789,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UploadPartOut'
+                $ref: '#/components/schemas/UploadPart'
         '400':
           description: The server could not understand the request due to invalid syntax.
           content:
@@ -771,9 +812,10 @@ paths:
               type: string
               format: binary
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     get:
-      operationId: Uploads_getUploadPartsById
+      operationId: Uploads_partsById
       summary: Get uploaded parts by ID
       parameters:
         - name: id
@@ -789,7 +831,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UploadPartOut'
+                  $ref: '#/components/schemas/UploadPart'
         '500':
           description: Server error
           content:
@@ -799,9 +841,10 @@ paths:
       tags:
         - Uploads
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     delete:
-      operationId: Uploads_deleteUploadFile
+      operationId: Uploads_delete
       summary: Delete uploaded file
       parameters:
         - name: id
@@ -821,6 +864,7 @@ paths:
       tags:
         - Uploads
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/users/bots:
     post:
@@ -858,6 +902,7 @@ paths:
               required:
                 - bots
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     delete:
       operationId: Users_removeBots
@@ -875,6 +920,7 @@ paths:
       tags:
         - Users
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/users/channels:
     get:
@@ -899,6 +945,7 @@ paths:
       tags:
         - Users
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
     patch:
       operationId: Users_updateChannel
@@ -922,10 +969,11 @@ paths:
             schema:
               $ref: '#/components/schemas/ChannelUpdate'
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/users/config:
     get:
-      operationId: Users_getStats
+      operationId: Users_stats
       summary: Get user config
       parameters: []
       responses:
@@ -955,10 +1003,11 @@ paths:
       tags:
         - Users
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/users/profile:
     get:
-      operationId: Users_getProfilePhoto
+      operationId: Users_profileImage
       summary: Get user profile photo
       parameters: []
       responses:
@@ -979,6 +1028,7 @@ paths:
       tags:
         - Users
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/users/sessions:
     get:
@@ -993,7 +1043,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SessionOut'
+                  $ref: '#/components/schemas/TgSession'
         '500':
           description: Server error
           content:
@@ -1003,6 +1053,7 @@ paths:
       tags:
         - Users
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/users/sessions/{id}:
     delete:
@@ -1026,10 +1077,11 @@ paths:
       tags:
         - Users
       security:
+        - ApiKeyAuth: []
         - BearerAuth: []
   /api/{id}:
     get:
-      operationId: Share_getShareById
+      operationId: Share_getById
       summary: Get share by ID
       parameters:
         - name: id
@@ -1060,7 +1112,7 @@ paths:
         - Sharing
   /api/{id}/files:
     get:
-      operationId: Share_listShareFiles
+      operationId: Share_listFiles
       summary: List files in share
       parameters:
         - name: id
@@ -1105,9 +1157,9 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Sharing
-  /api/{id}/files/{fileID}/download/{fileName}:
+  /api/{id}/files/{fileId}/download/{name}:
     get:
-      operationId: Share_downloadSharedFile
+      operationId: Share_downloadFile
       summary: Download shared file
       parameters:
         - name: id
@@ -1115,12 +1167,12 @@ paths:
           required: true
           schema:
             type: string
-        - name: fileID
+        - name: fileId
           in: path
           required: true
           schema:
             type: string
-        - name: fileName
+        - name: name
           in: path
           required: true
           schema:
@@ -1146,7 +1198,7 @@ paths:
         - Sharing
   /api/{id}/files/{fileId}/stream/{name}:
     get:
-      operationId: Share_streamSharedFile
+      operationId: Share_streamFile
       summary: Stream shared file
       parameters:
         - name: id
@@ -1378,45 +1430,6 @@ components:
           type: string
         channelId:
           type: string
-    CreateFile:
-      type: object
-      required:
-        - name
-        - type
-        - channelId
-        - size
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-        parts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Part'
-        mimeType:
-          type: string
-        channelId:
-          type: integer
-          format: int64
-        path:
-          type: string
-        parentId:
-          type: string
-        size:
-          type: integer
-          format: int64
-        encrypted:
-          type: boolean
-      description: |-
-        A copy of the input model `T` with only the properties that are visible during the
-        "Create" resource lifecycle phase.
-
-        This transformation is recursive, and will include only properties that have the
-        `Lifecycle.Create` visibility modifier.
-
-        If a `NameTemplate` is provided, the new model will be named according to the template.
-        The template uses the same syntax as the `@friendlyName` decorator.
     DeleteOperation:
       type: object
       properties:
@@ -1430,7 +1443,6 @@ components:
       type: object
       required:
         - code
-        - message
       properties:
         code:
           type: integer
@@ -1440,15 +1452,11 @@ components:
     File:
       type: object
       required:
-        - id
         - name
         - type
         - channelId
         - size
       properties:
-        id:
-          type: string
-          readOnly: true
         name:
           type: string
         type:
@@ -1485,8 +1493,11 @@ components:
     FileOut:
       type: object
       required:
+        - id
         - updatedAt
       properties:
+        id:
+          type: string
         updatedAt:
           type: string
           format: date-time
@@ -1501,11 +1512,6 @@ components:
         - type
         - name
       properties:
-        id:
-          type: string
-        expiresAt:
-          type: string
-          format: date-time
         protected:
           type: boolean
         userId:
@@ -1515,6 +1521,9 @@ components:
           type: string
         name:
           type: string
+        expiresAt:
+          type: string
+          format: date-time
     FileShareCreate:
       type: object
       properties:
@@ -1523,15 +1532,6 @@ components:
         expiresAt:
           type: string
           format: date-time
-    FileShareOut:
-      type: object
-      required:
-        - id
-      properties:
-        id:
-          type: string
-      allOf:
-        - $ref: '#/components/schemas/FileShare'
     InternalServerError:
       type: object
       description: ''
@@ -1580,33 +1580,9 @@ components:
           type: string
         expires:
           type: string
-    SessionCreate:
-      type: object
-      required:
-        - name
-        - userName
-        - userId
-        - isPremium
-        - hash
-        - expires
-        - session
-      properties:
-        name:
-          type: string
-        userName:
-          type: string
-        userId:
-          type: integer
-          format: int64
-        isPremium:
-          type: boolean
-        hash:
-          type: string
-        expires:
-          type: string
         session:
           type: string
-    SessionOut:
+    TgSession:
       type: object
       required:
         - hash
@@ -1628,7 +1604,7 @@ components:
           type: boolean
         current:
           type: boolean
-    UploadPartOut:
+    UploadPart:
       type: object
       required:
         - name
@@ -1668,6 +1644,10 @@ components:
           type: integer
           format: int64
   securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: cookie
+      name: user-session
     BearerAuth:
       type: http
       scheme: bearer

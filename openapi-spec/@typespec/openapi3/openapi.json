@@ -50,7 +50,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SessionCreate"
+                "$ref": "#/components/schemas/Session"
               }
             }
           }
@@ -82,6 +82,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -89,7 +92,7 @@
     },
     "/api/auth/session": {
       "get": {
-        "operationId": "Auth_getSession",
+        "operationId": "Auth_session",
         "summary": "Get session information",
         "parameters": [],
         "responses": {
@@ -109,9 +112,24 @@
         ]
       }
     },
+    "/api/auth/ws": {
+      "get": {
+        "operationId": "Auth_ws",
+        "summary": "Websocket QR Login",
+        "parameters": [],
+        "responses": {
+          "101": {
+            "description": "Informational"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/api/files": {
       "get": {
-        "operationId": "Files_listFiles",
+        "operationId": "Files_list",
         "summary": "List all files",
         "parameters": [
           {
@@ -222,12 +240,15 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "operationId": "Files_createFile",
+        "operationId": "Files_create",
         "summary": "Create a new file",
         "parameters": [],
         "responses": {
@@ -290,12 +311,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateFile"
+                "$ref": "#/components/schemas/File"
               }
             }
           }
         },
         "security": [
+          {
+            "ApiKeyAuth": []
+          },
           {
             "BearerAuth": []
           }
@@ -304,7 +328,7 @@
     },
     "/api/files/categories": {
       "get": {
-        "operationId": "Files_getCategoryStats",
+        "operationId": "Files_categoryStats",
         "summary": "Get category stats",
         "parameters": [],
         "responses": {
@@ -352,6 +376,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -359,7 +386,7 @@
     },
     "/api/files/delete": {
       "post": {
-        "operationId": "Files_deleteFiles",
+        "operationId": "Files_bulkDelete",
         "summary": "Bulk Delete files",
         "parameters": [],
         "responses": {
@@ -407,6 +434,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -414,7 +444,7 @@
     },
     "/api/files/folders": {
       "post": {
-        "operationId": "Files_makeDirectory",
+        "operationId": "Files_mkdir",
         "summary": "Make a new directory",
         "parameters": [],
         "responses": {
@@ -455,6 +485,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -462,7 +495,7 @@
     },
     "/api/files/folders/move": {
       "post": {
-        "operationId": "Files_moveDirectory",
+        "operationId": "Files_movedir",
         "summary": "Move directory",
         "parameters": [],
         "responses": {
@@ -507,6 +540,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -514,7 +550,7 @@
     },
     "/api/files/move": {
       "post": {
-        "operationId": "Files_moveFiles",
+        "operationId": "Files_move",
         "summary": "Move files",
         "parameters": [],
         "responses": {
@@ -547,6 +583,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -554,7 +593,7 @@
     },
     "/api/files/{id}": {
       "get": {
-        "operationId": "Files_getFileById",
+        "operationId": "Files_getById",
         "summary": "Get file by ID",
         "parameters": [
           {
@@ -603,12 +642,15 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
       },
       "patch": {
-        "operationId": "Files_updateFile",
+        "operationId": "Files_update",
         "summary": "Update file",
         "parameters": [
           {
@@ -706,6 +748,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -713,7 +758,7 @@
     },
     "/api/files/{id}/copy": {
       "post": {
-        "operationId": "Files_copyFile",
+        "operationId": "Files_copy",
         "summary": "Copy file",
         "parameters": [
           {
@@ -784,6 +829,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -791,7 +839,7 @@
     },
     "/api/files/{id}/download/{name}": {
       "get": {
-        "operationId": "Files_getFileDownload",
+        "operationId": "Files_download",
         "summary": "Download file by ID",
         "parameters": [
           {
@@ -809,6 +857,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "hash",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
           }
         ],
         "responses": {
@@ -843,6 +900,9 @@
           "Files"
         ],
         "security": [
+          {
+            "ApiKeyAuth": []
+          },
           {
             "BearerAuth": []
           }
@@ -931,6 +991,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -970,12 +1033,15 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
       },
       "get": {
-        "operationId": "Files_getShareByid",
+        "operationId": "Files_shareByid",
         "summary": "Get share by file ID",
         "parameters": [
           {
@@ -1013,6 +1079,9 @@
           "Files"
         ],
         "security": [
+          {
+            "ApiKeyAuth": []
+          },
           {
             "BearerAuth": []
           }
@@ -1061,6 +1130,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1108,6 +1180,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1115,7 +1190,7 @@
     },
     "/api/files/{id}/stream/{name}": {
       "get": {
-        "operationId": "Files_getFileStream",
+        "operationId": "Files_stream",
         "summary": "Stream file by ID",
         "parameters": [
           {
@@ -1133,6 +1208,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "hash",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "explode": false
           }
         ],
         "responses": {
@@ -1168,6 +1252,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1175,7 +1262,7 @@
     },
     "/api/uploads/stats": {
       "get": {
-        "operationId": "Uploads_uploadStats",
+        "operationId": "Uploads_stats",
         "summary": "Get upload stats",
         "parameters": [
           {
@@ -1219,6 +1306,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1226,7 +1316,7 @@
     },
     "/api/uploads/{id}": {
       "post": {
-        "operationId": "Uploads_uploadFile",
+        "operationId": "Uploads_upload",
         "summary": "Upload file",
         "parameters": [
           {
@@ -1259,7 +1349,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UploadPartOut"
+                  "$ref": "#/components/schemas/UploadPart"
                 }
               }
             }
@@ -1301,12 +1391,15 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
       },
       "get": {
-        "operationId": "Uploads_getUploadPartsById",
+        "operationId": "Uploads_partsById",
         "summary": "Get uploaded parts by ID",
         "parameters": [
           {
@@ -1326,7 +1419,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UploadPartOut"
+                    "$ref": "#/components/schemas/UploadPart"
                   }
                 }
               }
@@ -1348,12 +1441,15 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "operationId": "Uploads_deleteUploadFile",
+        "operationId": "Uploads_delete",
         "summary": "Delete uploaded file",
         "parameters": [
           {
@@ -1384,6 +1480,9 @@
           "Uploads"
         ],
         "security": [
+          {
+            "ApiKeyAuth": []
+          },
           {
             "BearerAuth": []
           }
@@ -1446,6 +1545,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1473,6 +1575,9 @@
           "Users"
         ],
         "security": [
+          {
+            "ApiKeyAuth": []
+          },
           {
             "BearerAuth": []
           }
@@ -1514,6 +1619,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1552,6 +1660,9 @@
         },
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1559,7 +1670,7 @@
     },
     "/api/users/config": {
       "get": {
-        "operationId": "Users_getStats",
+        "operationId": "Users_stats",
         "summary": "Get user config",
         "parameters": [],
         "responses": {
@@ -1605,6 +1716,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1612,7 +1726,7 @@
     },
     "/api/users/profile": {
       "get": {
-        "operationId": "Users_getProfilePhoto",
+        "operationId": "Users_profileImage",
         "summary": "Get user profile photo",
         "parameters": [],
         "responses": {
@@ -1645,6 +1759,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1663,7 +1780,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SessionOut"
+                    "$ref": "#/components/schemas/TgSession"
                   }
                 }
               }
@@ -1684,6 +1801,9 @@
           "Users"
         ],
         "security": [
+          {
+            "ApiKeyAuth": []
+          },
           {
             "BearerAuth": []
           }
@@ -1724,6 +1844,9 @@
         ],
         "security": [
           {
+            "ApiKeyAuth": []
+          },
+          {
             "BearerAuth": []
           }
         ]
@@ -1731,7 +1854,7 @@
     },
     "/api/{id}": {
       "get": {
-        "operationId": "Share_getShareById",
+        "operationId": "Share_getById",
         "summary": "Get share by ID",
         "parameters": [
           {
@@ -1782,7 +1905,7 @@
     },
     "/api/{id}/files": {
       "get": {
-        "operationId": "Share_listShareFiles",
+        "operationId": "Share_listFiles",
         "summary": "List files in share",
         "parameters": [
           {
@@ -1856,9 +1979,9 @@
         ]
       }
     },
-    "/api/{id}/files/{fileID}/download/{fileName}": {
+    "/api/{id}/files/{fileId}/download/{name}": {
       "get": {
-        "operationId": "Share_downloadSharedFile",
+        "operationId": "Share_downloadFile",
         "summary": "Download shared file",
         "parameters": [
           {
@@ -1870,7 +1993,7 @@
             }
           },
           {
-            "name": "fileID",
+            "name": "fileId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1878,7 +2001,7 @@
             }
           },
           {
-            "name": "fileName",
+            "name": "name",
             "in": "path",
             "required": true,
             "schema": {
@@ -1921,7 +2044,7 @@
     },
     "/api/{id}/files/{fileId}/stream/{name}": {
       "get": {
-        "operationId": "Share_streamSharedFile",
+        "operationId": "Share_streamFile",
         "summary": "Stream shared file",
         "parameters": [
           {
@@ -2234,50 +2357,6 @@
           }
         }
       },
-      "CreateFile": {
-        "type": "object",
-        "required": [
-          "name",
-          "type",
-          "channelId",
-          "size"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "parts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Part"
-            }
-          },
-          "mimeType": {
-            "type": "string"
-          },
-          "channelId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "path": {
-            "type": "string"
-          },
-          "parentId": {
-            "type": "string"
-          },
-          "size": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "encrypted": {
-            "type": "boolean"
-          }
-        },
-        "description": "A copy of the input model `T` with only the properties that are visible during the\n\"Create\" resource lifecycle phase.\n\nThis transformation is recursive, and will include only properties that have the\n`Lifecycle.Create` visibility modifier.\n\nIf a `NameTemplate` is provided, the new model will be named according to the template.\nThe template uses the same syntax as the `@friendlyName` decorator."
-      },
       "DeleteOperation": {
         "type": "object",
         "properties": {
@@ -2295,8 +2374,7 @@
       "Error": {
         "type": "object",
         "required": [
-          "code",
-          "message"
+          "code"
         ],
         "properties": {
           "code": {
@@ -2311,17 +2389,12 @@
       "File": {
         "type": "object",
         "required": [
-          "id",
           "name",
           "type",
           "channelId",
           "size"
         ],
         "properties": {
-          "id": {
-            "type": "string",
-            "readOnly": true
-          },
           "name": {
             "type": "string"
           },
@@ -2376,9 +2449,13 @@
       "FileOut": {
         "type": "object",
         "required": [
+          "id",
           "updatedAt"
         ],
         "properties": {
+          "id": {
+            "type": "string"
+          },
           "updatedAt": {
             "type": "string",
             "format": "date-time"
@@ -2401,13 +2478,6 @@
           "name"
         ],
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "expiresAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "protected": {
             "type": "boolean"
           },
@@ -2420,6 +2490,10 @@
           },
           "name": {
             "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -2434,22 +2508,6 @@
             "format": "date-time"
           }
         }
-      },
-      "FileShareOut": {
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/FileShare"
-          }
-        ]
       },
       "InternalServerError": {
         "type": "object",
@@ -2516,46 +2574,13 @@
           },
           "expires": {
             "type": "string"
-          }
-        }
-      },
-      "SessionCreate": {
-        "type": "object",
-        "required": [
-          "name",
-          "userName",
-          "userId",
-          "isPremium",
-          "hash",
-          "expires",
-          "session"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "userName": {
-            "type": "string"
-          },
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "isPremium": {
-            "type": "boolean"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "expires": {
-            "type": "string"
           },
           "session": {
             "type": "string"
           }
         }
       },
-      "SessionOut": {
+      "TgSession": {
         "type": "object",
         "required": [
           "hash",
@@ -2587,7 +2612,7 @@
           }
         }
       },
-      "UploadPartOut": {
+      "UploadPart": {
         "type": "object",
         "required": [
           "name",
@@ -2643,6 +2668,11 @@
       }
     },
     "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "user-session"
+      },
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer"
