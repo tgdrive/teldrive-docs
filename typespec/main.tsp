@@ -1,6 +1,8 @@
 import "@typespec/http";
+import "@typespec/openapi";
 
 using TypeSpec.Http;
+using TypeSpec.OpenAPI;
 @server("{url}", "Teldrive Server URL", {
   url: string;
 })
@@ -44,21 +46,27 @@ interface Auth {
   @route("/session")
   @summary("Get session information")
   @get
+  @extension("x-ogen-operation-group", "Auth")
   session(): Session | null;
 
   @route("/login") 
   @summary("Login")
   @post
+  @extension("x-ogen-operation-group", "Auth")
+  @extension("x-ogen-json-streaming", true)
   login(...Session): OkResponse |  InternalServerErrorResponse;
+
   @route("/logout")
   @summary("Logout")
   @useAuth(ApiAuth)
   @post
+  @extension("x-ogen-operation-group", "Auth")
   logout(): OkResponse | InternalServerErrorResponse;
 
   @route("/ws")
   @summary("Websocket QR Login")
   @get
+  @extension("x-ogen-operation-group", "Auth")
   ws(): Response<101>;
 }
 
@@ -166,6 +174,7 @@ interface Files {
 @route("")
 @get
 @summary("List all files")
+@extension("x-ogen-operation-group", "Files")
 op list(...FileQuery): {
   files: FileOut[];
   meta: Meta;
@@ -174,17 +183,22 @@ op list(...FileQuery): {
 @route("")
 @post
 @summary("Create a new file")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op create(...File): FileOut | NotFoundErrorResponse | ConflictErrorResponse 
 | BadRequestErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}")
 @get
 @summary("Get file by ID")
+@extension("x-ogen-operation-group", "Files")
 op getById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}")
 @patch
 @summary("Update file")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op update(
   @path id: string,
     @bodyRoot body: {
@@ -199,6 +213,8 @@ op update(
 @route("/{id}/parts")
 @put
 @summary("Update file parts")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op updateParts(
   @path id: string,
   @body body: {
@@ -213,16 +229,20 @@ op updateParts(
 @route("/{id}/share")
 @delete
 @summary("Delete share")
+@extension("x-ogen-operation-group", "Files")
 op deleteShare(@path id: string): NoContentResponse | InternalServerErrorResponse;
 
 @route("/{id}/share")
 @get
 @summary("Get share by file ID")
+@extension("x-ogen-operation-group", "Files")
 op shareByid(@path id: string): FileShare | InternalServerErrorResponse;
 
 @route("/{id}/share")
 @patch
 @summary("Edit share")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op editShare(
   @path id: string,
   @bodyRoot body: FileShareCreate,
@@ -231,6 +251,8 @@ op editShare(
 @route("/{id}/share")
 @post
 @summary("Create a share for the file")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op createShare(
   @path id: string,
   @body body: FileShareCreate,
@@ -239,6 +261,8 @@ op createShare(
 @route("/{id}/copy")
 @post
 @summary("Copy file")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op copy(
   @path id: string,
   @body body: {
@@ -250,18 +274,21 @@ op copy(
 @route("/{id}/stream/{name}")
 @get
 @summary("Stream file by ID")
+@extension("x-ogen-operation-group", "Files")
 op stream(@path id: string, @path name: string,@query hash?:string): OkResponse | Response<206>
 | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}/download/{name}")
 @get
 @summary("Download file by ID")
+@extension("x-ogen-operation-group", "Files")
 op download(@path id: string, @path name: string,@query hash?:string): OkResponse | Response<206>
 | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/categories")
 @get
 @summary("Get category stats")
+@extension("x-ogen-operation-group", "Files")
 op categoryStats(): {
   totalFiles: int64;
   totalSize: int64;
@@ -271,6 +298,8 @@ op categoryStats(): {
 @route("/move")
 @post
 @summary("Move files")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op move(
   ...FileOperation
 ): NoContentResponse | InternalServerErrorResponse;
@@ -278,6 +307,8 @@ op move(
 @route("/folders")
 @post
 @summary("Make a new directory")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op mkdir(
   @body body: {
     path:string;
@@ -287,6 +318,8 @@ op mkdir(
 @route("/folders/move")
 @post
 @summary("Move directory")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op movedir(
   @body body: {
     source: string;
@@ -297,6 +330,8 @@ op movedir(
 @route("/delete")
 @post
 @summary("Bulk Delete files")
+@extension("x-ogen-operation-group", "Files")
+@extension("x-ogen-json-streaming", true)
 op bulkDelete(
   @body body: {
     files: string[];
@@ -340,6 +375,7 @@ interface Uploads {
 @route("/{id}")
 @post
 @summary("Upload file")
+@extension("x-ogen-operation-group", "Uploads")
 op upload(
   @path id: string,
   @header contentType: "application/octet-stream",
@@ -350,16 +386,19 @@ op upload(
 @route("/{id}")
 @get
 @summary("Get uploaded parts by ID")
+@extension("x-ogen-operation-group", "Uploads")
 op partsById(@path id: string): UploadPart[] | InternalServerErrorResponse;
 
 @route("/{id}")
 @delete
 @summary("Delete uploaded file")
+@extension("x-ogen-operation-group", "Uploads")
 op delete(@path id: string): NoContentResponse | InternalServerErrorResponse;
 
 @route("/stats")
 @get
 @summary("Get upload stats")
+@extension("x-ogen-operation-group", "Uploads")
 op stats(@query days: int16): UploadStats[] | InternalServerErrorResponse;
 }
 
@@ -385,21 +424,26 @@ interface Users {
 @route("/profile")
 @get
 @summary("Get user profile photo")
+@extension("x-ogen-operation-group", "Users")
 op profileImage(): OkResponse | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/config")
 @get
 @summary("Get user config")
+@extension("x-ogen-operation-group", "Users")
 op stats(): {channelId: int64; bots: string[]} | InternalServerErrorResponse;
 
 @route("/channels")
 @get
 @summary("List user channels")
+@extension("x-ogen-operation-group", "Users")
 op listChannels(): Channel[] | InternalServerErrorResponse;
 
 @route("/channels")
 @patch
 @summary("Update user channel")
+@extension("x-ogen-operation-group", "Users")
+@extension("x-ogen-json-streaming", true)
 op updateChannel(
  ...Channel
 ): NoContentResponse | InternalServerErrorResponse;
@@ -407,11 +451,14 @@ op updateChannel(
 @route("/sessions")
 @get
 @summary("List user sessions")
+@extension("x-ogen-operation-group", "Users")
 op listSessions(): TgSession[] | InternalServerErrorResponse;
 
 @route("/bots")
 @post
 @summary("Add bots to user account")
+@extension("x-ogen-operation-group", "Users")
+@extension("x-ogen-json-streaming", true)
 op addBots(
   @bodyRoot body: {
     bots: string[];
@@ -421,11 +468,13 @@ op addBots(
 @route("/bots")
 @delete
 @summary("Remove bots from user account")
+@extension("x-ogen-operation-group", "Users")
 op removeBots():  NoContentResponse  | InternalServerErrorResponse;
 
 @route("/sessions/{id}")
 @delete
 @summary("Remove user session")
+@extension("x-ogen-operation-group", "Users")
 op removeSession(@path id: string): NoContentResponse  | InternalServerErrorResponse;
 }
 
@@ -435,10 +484,13 @@ interface Shares {
 @route("/{id}")
 @get
 @summary("Get share by ID")
+@extension("x-ogen-operation-group", "Shares")
 op getById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
+
 @route("/{id}/files")
 @get
 @summary("List files in share")
+@extension("x-ogen-operation-group", "Shares")
 op listFiles(@path id: string): {
   files: FileOut[];
   meta: Meta;
@@ -447,6 +499,7 @@ op listFiles(@path id: string): {
 @route("/{id}/files/{fileId}/stream/{name}")
 @get
 @summary("Stream shared file")
+@extension("x-ogen-operation-group", "Shares")
 op streamFile(
   @path id: string,
   @path fileId: string,
@@ -456,6 +509,7 @@ op streamFile(
 @route("/{id}/files/{fileId}/download/{name}")
 @get
 @summary("Download shared file")
+@extension("x-ogen-operation-group", "Shares")
 op downloadFile(
   @path id: string,
   @path fileId: string,

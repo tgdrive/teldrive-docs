@@ -9,6 +9,7 @@
     "@types/bun": "^1.1.14",
     "@typespec/compiler": "^0.63.0",
     "@typespec/http": "^0.63.0",
+    "@typespec/openapi": "^0.63.0",
     "@typespec/openapi3": "^0.63.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "vite": "^6.0.5",

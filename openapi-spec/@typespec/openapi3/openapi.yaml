@@ -31,6 +31,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Session'
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Auth
   /api/auth/logout:
     post:
       operationId: Auth_logout
@@ -50,6 +52,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Auth
   /api/auth/session:
     get:
       operationId: Auth_session
@@ -64,6 +67,7 @@ paths:
                 $ref: '#/components/schemas/Session'
       tags:
         - Auth
+      x-ogen-operation-group: Auth
   /api/auth/ws:
     get:
       operationId: Auth_ws
@@ -74,6 +78,7 @@ paths:
           description: Informational
       tags:
         - Auth
+      x-ogen-operation-group: Auth
   /api/files:
     get:
       operationId: Files_list
@@ -134,6 +139,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Files
     post:
       operationId: Files_create
       summary: Create a new file
@@ -180,6 +186,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/categories:
     get:
       operationId: Files_categoryStats
@@ -216,6 +224,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Files
   /api/files/delete:
     post:
       operationId: Files_bulkDelete
@@ -251,6 +260,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/folders:
     post:
       operationId: Files_mkdir
@@ -281,6 +292,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/folders/move:
     post:
       operationId: Files_movedir
@@ -314,6 +327,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/move:
     post:
       operationId: Files_move
@@ -339,6 +354,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/{id}:
     get:
       operationId: Files_getById
@@ -373,6 +390,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Files
     patch:
       operationId: Files_update
       summary: Update file
@@ -437,6 +455,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/{id}/copy:
     post:
       operationId: Files_copy
@@ -485,6 +505,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/{id}/download/{name}:
     get:
       operationId: Files_download
@@ -528,6 +550,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Files
   /api/files/{id}/parts:
     put:
       operationId: Files_updateParts
@@ -584,6 +607,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/{id}/share:
     delete:
       operationId: Files_deleteShare
@@ -608,6 +633,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Files
     get:
       operationId: Files_shareByid
       summary: Get share by file ID
@@ -635,6 +661,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Files
     patch:
       operationId: Files_editShare
       summary: Edit share
@@ -664,6 +691,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
     post:
       operationId: Files_createShare
       summary: Create a share for the file
@@ -693,6 +722,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Files
   /api/files/{id}/stream/{name}:
     get:
       operationId: Files_stream
@@ -736,6 +767,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Files
   /api/shares/{id}:
     get:
       operationId: Shares_getById
@@ -767,6 +799,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Shares
+      x-ogen-operation-group: Shares
   /api/shares/{id}/files:
     get:
       operationId: Shares_listFiles
@@ -814,6 +847,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Shares
+      x-ogen-operation-group: Shares
   /api/shares/{id}/files/{fileId}/download/{name}:
     get:
       operationId: Shares_downloadFile
@@ -853,6 +887,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Shares
+      x-ogen-operation-group: Shares
   /api/shares/{id}/files/{fileId}/stream/{name}:
     get:
       operationId: Shares_streamFile
@@ -892,6 +927,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Shares
+      x-ogen-operation-group: Shares
   /api/uploads/stats:
     get:
       operationId: Uploads_stats
@@ -924,6 +960,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Uploads
   /api/uploads/{id}:
     post:
       operationId: Uploads_upload
@@ -970,6 +1007,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Uploads
     get:
       operationId: Uploads_partsById
       summary: Get uploaded parts by ID
@@ -999,6 +1037,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Uploads
     delete:
       operationId: Uploads_delete
       summary: Delete uploaded file
@@ -1022,6 +1061,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Uploads
   /api/users/bots:
     post:
       operationId: Users_addBots
@@ -1060,6 +1100,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Users
     delete:
       operationId: Users_removeBots
       summary: Remove bots from user account
@@ -1078,6 +1120,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Users
   /api/users/channels:
     get:
       operationId: Users_listChannels
@@ -1103,6 +1146,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Users
     patch:
       operationId: Users_updateChannel
       summary: Update user channel
@@ -1127,6 +1171,8 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-json-streaming: true
+      x-ogen-operation-group: Users
   /api/users/config:
     get:
       operationId: Users_stats
@@ -1161,6 +1207,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Users
   /api/users/profile:
     get:
       operationId: Users_profileImage
@@ -1186,6 +1233,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Users
   /api/users/sessions:
     get:
       operationId: Users_listSessions
@@ -1211,6 +1259,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Users
   /api/users/sessions/{id}:
     delete:
       operationId: Users_removeSession
@@ -1235,6 +1284,7 @@ paths:
       security:
         - ApiKeyAuth: []
         - BearerAuth: []
+      x-ogen-operation-group: Users
 components:
   parameters:
     FileQuery.category:

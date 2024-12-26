@@ -54,7 +54,9 @@
               }
             }
           }
-        }
+        },
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Auth"
       }
     },
     "/api/auth/logout": {
@@ -87,7 +89,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Auth"
       }
     },
     "/api/auth/session": {
@@ -109,7 +112,8 @@
         },
         "tags": [
           "Auth"
-        ]
+        ],
+        "x-ogen-operation-group": "Auth"
       }
     },
     "/api/auth/ws": {
@@ -124,7 +128,8 @@
         },
         "tags": [
           "Auth"
-        ]
+        ],
+        "x-ogen-operation-group": "Auth"
       }
     },
     "/api/files": {
@@ -245,7 +250,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Files"
       },
       "post": {
         "operationId": "Files_create",
@@ -323,7 +329,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/categories": {
@@ -381,7 +389,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/delete": {
@@ -439,7 +448,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/folders": {
@@ -490,7 +501,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/folders/move": {
@@ -545,7 +558,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/move": {
@@ -588,7 +603,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/{id}": {
@@ -647,7 +664,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Files"
       },
       "patch": {
         "operationId": "Files_update",
@@ -753,7 +771,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/{id}/copy": {
@@ -834,7 +854,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/{id}/download/{name}": {
@@ -906,7 +928,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/{id}/parts": {
@@ -996,7 +1019,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/{id}/share": {
@@ -1038,7 +1063,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Files"
       },
       "get": {
         "operationId": "Files_shareByid",
@@ -1085,7 +1111,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Files"
       },
       "patch": {
         "operationId": "Files_editShare",
@@ -1135,7 +1162,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       },
       "post": {
         "operationId": "Files_createShare",
@@ -1185,7 +1214,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/files/{id}/stream/{name}": {
@@ -1257,7 +1288,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Files"
       }
     },
     "/api/shares/{id}": {
@@ -1308,7 +1340,8 @@
         },
         "tags": [
           "Shares"
-        ]
+        ],
+        "x-ogen-operation-group": "Shares"
       }
     },
     "/api/shares/{id}/files": {
@@ -1384,7 +1417,8 @@
         },
         "tags": [
           "Shares"
-        ]
+        ],
+        "x-ogen-operation-group": "Shares"
       }
     },
     "/api/shares/{id}/files/{fileId}/download/{name}": {
@@ -1447,7 +1481,8 @@
         },
         "tags": [
           "Shares"
-        ]
+        ],
+        "x-ogen-operation-group": "Shares"
       }
     },
     "/api/shares/{id}/files/{fileId}/stream/{name}": {
@@ -1510,7 +1545,8 @@
         },
         "tags": [
           "Shares"
-        ]
+        ],
+        "x-ogen-operation-group": "Shares"
       }
     },
     "/api/uploads/stats": {
@@ -1564,7 +1600,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Uploads"
       }
     },
     "/api/uploads/{id}": {
@@ -1649,7 +1686,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Uploads"
       },
       "get": {
         "operationId": "Uploads_partsById",
@@ -1699,7 +1737,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Uploads"
       },
       "delete": {
         "operationId": "Uploads_delete",
@@ -1739,7 +1778,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Uploads"
       }
     },
     "/api/users/bots": {
@@ -1803,7 +1843,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Users"
       },
       "delete": {
         "operationId": "Users_removeBots",
@@ -1834,7 +1876,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Users"
       }
     },
     "/api/users/channels": {
@@ -1877,7 +1920,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Users"
       },
       "patch": {
         "operationId": "Users_updateChannel",
@@ -1918,7 +1962,9 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-json-streaming": true,
+        "x-ogen-operation-group": "Users"
       }
     },
     "/api/users/config": {
@@ -1974,7 +2020,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Users"
       }
     },
     "/api/users/profile": {
@@ -2017,7 +2064,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Users"
       }
     },
     "/api/users/sessions": {
@@ -2060,7 +2108,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Users"
       }
     },
     "/api/users/sessions/{id}": {
@@ -2102,7 +2151,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-ogen-operation-group": "Users"
       }
     }
   },
