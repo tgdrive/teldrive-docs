@@ -429,7 +429,7 @@ op removeBots():  NoContentResponse  | InternalServerErrorResponse;
 op removeSession(@path id: string): NoContentResponse  | InternalServerErrorResponse;
 }
 
-@route("")
+@route("/shares")
 @tag("Sharing")
 interface Share {
 @route("/{id}")
