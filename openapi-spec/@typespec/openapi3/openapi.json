@@ -194,7 +194,7 @@
                     "files": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/FileOut"
+                        "$ref": "#/components/schemas/File"
                       }
                     },
                     "meta": {
@@ -263,7 +263,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileOut"
+                  "$ref": "#/components/schemas/File"
                 }
               }
             }
@@ -628,7 +628,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileOut"
+                  "$ref": "#/components/schemas/File"
                 }
               }
             }
@@ -686,7 +686,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileOut"
+                  "$ref": "#/components/schemas/File"
                 }
               }
             }
@@ -796,7 +796,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileOut"
+                  "$ref": "#/components/schemas/File"
                 }
               }
             }
@@ -1312,7 +1312,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileOut"
+                  "$ref": "#/components/schemas/File"
                 }
               }
             }
@@ -1369,7 +1369,7 @@
                     "files": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/FileOut"
+                        "$ref": "#/components/schemas/File"
                       }
                     },
                     "meta": {
@@ -2445,6 +2445,9 @@
           "size"
         ],
         "properties": {
+          "id": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
@@ -2476,6 +2479,13 @@
           },
           "encrypted": {
             "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "parentPath": {
+            "type": "string"
           }
         }
       },
@@ -2495,30 +2505,6 @@
             "type": "string"
           }
         }
-      },
-      "FileOut": {
-        "type": "object",
-        "required": [
-          "id",
-          "updatedAt"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "parentPath": {
-            "type": "string"
-          }
-        },
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/File"
-          }
-        ]
       },
       "FileShare": {
         "type": "object",
