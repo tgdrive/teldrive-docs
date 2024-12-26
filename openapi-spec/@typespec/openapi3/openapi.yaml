@@ -1,0 +1,1679 @@
+openapi: 3.0.0
+info:
+  title: Teldrive
+  version: 0.0.0
+tags:
+  - name: Auth
+  - name: Files
+  - name: Uploads
+  - name: Users
+  - name: Sharing
+paths:
+  /api/auth/login:
+    post:
+      operationId: Auth_login
+      summary: Login
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionCreate'
+  /api/auth/logout:
+    post:
+      operationId: Auth_logout
+      summary: Logout
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Auth
+      security:
+        - BearerAuth: []
+  /api/auth/session:
+    get:
+      operationId: Auth_getSession
+      summary: Get session information
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+      tags:
+        - Auth
+  /api/files:
+    get:
+      operationId: Files_listFiles
+      summary: List all files
+      parameters:
+        - $ref: '#/components/parameters/FileQuery.name'
+        - $ref: '#/components/parameters/FileQuery.query'
+        - $ref: '#/components/parameters/FileQuery.searchType'
+        - $ref: '#/components/parameters/FileQuery.type'
+        - $ref: '#/components/parameters/FileQuery.path'
+        - $ref: '#/components/parameters/FileQuery.op'
+        - $ref: '#/components/parameters/FileQuery.deepSearch'
+        - $ref: '#/components/parameters/FileQuery.shared'
+        - $ref: '#/components/parameters/FileQuery.parentId'
+        - $ref: '#/components/parameters/FileQuery.category'
+        - $ref: '#/components/parameters/FileQuery.updatedAt'
+        - $ref: '#/components/parameters/FileQuery.sort'
+        - $ref: '#/components/parameters/FileQuery.order'
+        - $ref: '#/components/parameters/FileQuery.limit'
+        - $ref: '#/components/parameters/FileQuery.page'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileOut'
+                  meta:
+                    $ref: '#/components/schemas/Meta'
+                required:
+                  - files
+                  - meta
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The request conflicts with the current state of the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      security:
+        - BearerAuth: []
+    post:
+      operationId: Files_createFile
+      summary: Create a new file
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileOut'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The request conflicts with the current state of the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFile'
+      security:
+        - BearerAuth: []
+  /api/files/categories:
+    get:
+      operationId: Files_getCategoryStats
+      summary: Get category stats
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalFiles:
+                    type: integer
+                    format: int64
+                  totalSize:
+                    type: integer
+                    format: int64
+                  category:
+                    type: string
+                required:
+                  - totalFiles
+                  - totalSize
+                  - category
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      security:
+        - BearerAuth: []
+  /api/files/delete:
+    post:
+      operationId: Files_deleteFiles
+      summary: Bulk Delete files
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                source:
+                  type: string
+              required:
+                - files
+                - source
+      security:
+        - BearerAuth: []
+  /api/files/folders:
+    post:
+      operationId: Files_makeDirectory
+      summary: Make a new directory
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+              required:
+                - path
+      security:
+        - BearerAuth: []
+  /api/files/folders/move:
+    post:
+      operationId: Files_moveDirectory
+      summary: Move directory
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source:
+                  type: string
+                destination:
+                  type: string
+              required:
+                - source
+                - destination
+      security:
+        - BearerAuth: []
+  /api/files/move:
+    post:
+      operationId: Files_moveFiles
+      summary: Move files
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileOperation'
+      security:
+        - BearerAuth: []
+  /api/files/{id}:
+    get:
+      operationId: Files_getFileById
+      summary: Get file by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileOut'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: Files_updateFile
+      summary: Update file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileOut'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The request conflicts with the current state of the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                parts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Part'
+                size:
+                  type: integer
+                  format: int64
+                updatedAt:
+                  type: string
+                  format: date-time
+      security:
+        - BearerAuth: []
+  /api/files/{id}/copy:
+    post:
+      operationId: Files_copyFile
+      summary: Copy file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileOut'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                destination:
+                  type: string
+              required:
+                - name
+                - destination
+      security:
+        - BearerAuth: []
+  /api/files/{id}/download/{name}:
+    get:
+      operationId: Files_getFileDownload
+      summary: Download file by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+        '206':
+          description: Successful
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      security:
+        - BearerAuth: []
+  /api/files/{id}/parts:
+    put:
+      operationId: Files_updateParts
+      summary: Update file parts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Part'
+                uploadId:
+                  type: string
+                updatedAt:
+                  type: string
+                  format: date-time
+                size:
+                  type: integer
+                  format: int64
+                channelId:
+                  type: integer
+                  format: int64
+              required:
+                - updatedAt
+                - size
+                - channelId
+      security:
+        - BearerAuth: []
+  /api/files/{id}/share:
+    delete:
+      operationId: Files_deleteShare
+      summary: Delete share
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      security:
+        - BearerAuth: []
+    get:
+      operationId: Files_getShareByid
+      summary: Get share by file ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileShare'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: Files_editShare
+      summary: Edit share
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileShareCreate'
+      security:
+        - BearerAuth: []
+    post:
+      operationId: Files_createShare
+      summary: Create a share for the file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileShareCreate'
+      security:
+        - BearerAuth: []
+  /api/files/{id}/stream/{name}:
+    get:
+      operationId: Files_getFileStream
+      summary: Stream file by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+        '206':
+          description: Successful
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Files
+      security:
+        - BearerAuth: []
+  /api/uploads/stats:
+    get:
+      operationId: Uploads_uploadStats
+      summary: Get upload stats
+      parameters:
+        - name: days
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int16
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UploadStats'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Uploads
+      security:
+        - BearerAuth: []
+  /api/uploads/{id}:
+    post:
+      operationId: Uploads_uploadFile
+      summary: Upload file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/UploadQuery.partName'
+        - $ref: '#/components/parameters/UploadQuery.fileName'
+        - $ref: '#/components/parameters/UploadQuery.partNo'
+        - $ref: '#/components/parameters/UploadQuery.channelId'
+        - $ref: '#/components/parameters/UploadQuery.encrypted'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadPartOut'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Uploads
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      security:
+        - BearerAuth: []
+    get:
+      operationId: Uploads_getUploadPartsById
+      summary: Get uploaded parts by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UploadPartOut'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Uploads
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: Uploads_deleteUploadFile
+      summary: Delete uploaded file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Uploads
+      security:
+        - BearerAuth: []
+  /api/users/bots:
+    post:
+      operationId: Users_addBots
+      summary: Add bots to user account
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bots:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - bots
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: Users_removeBots
+      summary: Remove bots from user account
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+  /api/users/channels:
+    get:
+      operationId: Users_listChannels
+      summary: List user channels
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Channel'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: Users_updateChannel
+      summary: Update user channel
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChannelUpdate'
+      security:
+        - BearerAuth: []
+  /api/users/config:
+    get:
+      operationId: Users_getStats
+      summary: Get user config
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  channelId:
+                    type: integer
+                    format: int64
+                  bots:
+                    type: array
+                    items:
+                      type: string
+                required:
+                  - channelId
+                  - bots
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+  /api/users/profile:
+    get:
+      operationId: Users_getProfilePhoto
+      summary: Get user profile photo
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+  /api/users/sessions:
+    get:
+      operationId: Users_listSessions
+      summary: List user sessions
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionOut'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+  /api/users/sessions/{id}:
+    delete:
+      operationId: Users_removeSession
+      summary: Remove user session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+  /api/{id}:
+    get:
+      operationId: Share_getShareById
+      summary: Get share by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileOut'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Sharing
+  /api/{id}/files:
+    get:
+      operationId: Share_listShareFiles
+      summary: List files in share
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileOut'
+                  meta:
+                    $ref: '#/components/schemas/Meta'
+                required:
+                  - files
+                  - meta
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The request conflicts with the current state of the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Sharing
+  /api/{id}/files/{fileID}/download/{fileName}:
+    get:
+      operationId: Share_downloadSharedFile
+      summary: Download shared file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fileID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fileName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+        '206':
+          description: Successful
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Sharing
+  /api/{id}/files/{fileId}/stream/{name}:
+    get:
+      operationId: Share_streamSharedFile
+      summary: Stream shared file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fileId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+        '206':
+          description: Successful
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Sharing
+components:
+  parameters:
+    FileQuery.category:
+      name: category
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/Category'
+      explode: false
+    FileQuery.deepSearch:
+      name: deepSearch
+      in: query
+      required: false
+      schema:
+        type: boolean
+      explode: false
+    FileQuery.limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int16
+        minimum: 1
+        maximum: 1000
+        default: 500
+      explode: false
+    FileQuery.name:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+      explode: false
+    FileQuery.op:
+      name: op
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - list
+          - find
+        default: list
+      explode: false
+    FileQuery.order:
+      name: order
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: asc
+      explode: false
+    FileQuery.page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        default: 1
+      explode: false
+    FileQuery.parentId:
+      name: parentId
+      in: query
+      required: false
+      schema:
+        type: string
+      explode: false
+    FileQuery.path:
+      name: path
+      in: query
+      required: false
+      schema:
+        type: string
+      explode: false
+    FileQuery.query:
+      name: query
+      in: query
+      required: false
+      schema:
+        type: string
+      explode: false
+    FileQuery.searchType:
+      name: searchType
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - text
+          - regex
+        default: text
+      explode: false
+    FileQuery.shared:
+      name: shared
+      in: query
+      required: false
+      schema:
+        type: boolean
+      explode: false
+    FileQuery.sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - name
+          - updatedAt
+          - size
+        default: name
+      explode: false
+    FileQuery.type:
+      name: type
+      in: query
+      required: false
+      schema:
+        type: string
+      explode: false
+    FileQuery.updatedAt:
+      name: updatedAt
+      in: query
+      required: false
+      schema:
+        type: string
+      explode: false
+    UploadQuery.channelId:
+      name: channelId
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+      explode: false
+    UploadQuery.encrypted:
+      name: encrypted
+      in: query
+      required: false
+      schema:
+        type: boolean
+      explode: false
+    UploadQuery.fileName:
+      name: fileName
+      in: query
+      required: true
+      schema:
+        type: string
+      explode: false
+    UploadQuery.partName:
+      name: partName
+      in: query
+      required: true
+      schema:
+        type: string
+      explode: false
+    UploadQuery.partNo:
+      name: partNo
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int32
+      explode: false
+  schemas:
+    Category:
+      type: string
+      enum:
+        - archive
+        - audio
+        - document
+        - image
+        - other
+        - video
+    Channel:
+      type: object
+      required:
+        - channelName
+        - channelId
+      properties:
+        channelName:
+          type: string
+        channelId:
+          type: string
+    ChannelUpdate:
+      type: object
+      properties:
+        channelName:
+          type: string
+        channelId:
+          type: string
+    CreateFile:
+      type: object
+      required:
+        - name
+        - type
+        - channelId
+        - size
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Part'
+        mimeType:
+          type: string
+        channelId:
+          type: integer
+          format: int64
+        path:
+          type: string
+        parentId:
+          type: string
+        size:
+          type: integer
+          format: int64
+        encrypted:
+          type: boolean
+      description: |-
+        A copy of the input model `T` with only the properties that are visible during the
+        "Create" resource lifecycle phase.
+
+        This transformation is recursive, and will include only properties that have the
+        `Lifecycle.Create` visibility modifier.
+
+        If a `NameTemplate` is provided, the new model will be named according to the template.
+        The template uses the same syntax as the `@friendlyName` decorator.
+    DeleteOperation:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            type: string
+        source:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    File:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - channelId
+        - size
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Part'
+        mimeType:
+          type: string
+        channelId:
+          type: integer
+          format: int64
+        path:
+          type: string
+        parentId:
+          type: string
+        size:
+          type: integer
+          format: int64
+        encrypted:
+          type: boolean
+    FileOperation:
+      type: object
+      required:
+        - files
+      properties:
+        files:
+          type: array
+          items:
+            type: string
+        destination:
+          type: string
+    FileOut:
+      type: object
+      required:
+        - updatedAt
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
+        parentPath:
+          type: string
+      allOf:
+        - $ref: '#/components/schemas/File'
+    FileShare:
+      type: object
+      required:
+        - protected
+        - type
+        - name
+      properties:
+        id:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        protected:
+          type: boolean
+        userId:
+          type: integer
+          format: int64
+        type:
+          type: string
+        name:
+          type: string
+    FileShareCreate:
+      type: object
+      properties:
+        password:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+    FileShareOut:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+      allOf:
+        - $ref: '#/components/schemas/FileShare'
+    InternalServerError:
+      type: object
+      description: ''
+    Meta:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        currentPage:
+          type: integer
+          format: int32
+    Part:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+        salt:
+          type: string
+    Session:
+      type: object
+      required:
+        - name
+        - userName
+        - userId
+        - isPremium
+        - hash
+        - expires
+      properties:
+        name:
+          type: string
+        userName:
+          type: string
+        userId:
+          type: integer
+          format: int64
+        isPremium:
+          type: boolean
+        hash:
+          type: string
+        expires:
+          type: string
+    SessionCreate:
+      type: object
+      required:
+        - name
+        - userName
+        - userId
+        - isPremium
+        - hash
+        - expires
+        - session
+      properties:
+        name:
+          type: string
+        userName:
+          type: string
+        userId:
+          type: integer
+          format: int64
+        isPremium:
+          type: boolean
+        hash:
+          type: string
+        expires:
+          type: string
+        session:
+          type: string
+    SessionOut:
+      type: object
+      required:
+        - hash
+        - createdAt
+        - valid
+        - current
+      properties:
+        hash:
+          type: string
+        createdAt:
+          type: string
+        location:
+          type: string
+        officialApp:
+          type: boolean
+        appName:
+          type: string
+        valid:
+          type: boolean
+        current:
+          type: boolean
+    UploadPartOut:
+      type: object
+      required:
+        - name
+        - partId
+        - partNo
+        - channelId
+        - size
+        - encrypted
+      properties:
+        name:
+          type: string
+        partId:
+          type: integer
+          format: int32
+        partNo:
+          type: integer
+          format: int32
+        channelId:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int64
+        encrypted:
+          type: boolean
+        salt:
+          type: string
+    UploadStats:
+      type: object
+      required:
+        - uploadDate
+        - totalUploaded
+      properties:
+        uploadDate:
+          type: string
+        totalUploaded:
+          type: integer
+          format: int64
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+servers:
+  - url: '{url}'
+    description: Teldrive Server URL
+    variables:
+      url:
+        default: ''
