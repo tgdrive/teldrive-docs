@@ -110,7 +110,7 @@ paths:
                   files:
                     type: array
                     items:
-                      $ref: '#/components/schemas/FileOut'
+                      $ref: '#/components/schemas/File'
                   meta:
                     $ref: '#/components/schemas/Meta'
                 required:
@@ -150,7 +150,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileOut'
+                $ref: '#/components/schemas/File'
         '400':
           description: The server could not understand the request due to invalid syntax.
           content:
@@ -372,7 +372,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileOut'
+                $ref: '#/components/schemas/File'
         '404':
           description: The server cannot find the requested resource.
           content:
@@ -406,7 +406,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileOut'
+                $ref: '#/components/schemas/File'
         '400':
           description: The server could not understand the request due to invalid syntax.
           content:
@@ -473,7 +473,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileOut'
+                $ref: '#/components/schemas/File'
         '400':
           description: The server could not understand the request due to invalid syntax.
           content:
@@ -784,7 +784,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileOut'
+                $ref: '#/components/schemas/File'
         '404':
           description: The server cannot find the requested resource.
           content:
@@ -821,7 +821,7 @@ paths:
                   files:
                     type: array
                     items:
-                      $ref: '#/components/schemas/FileOut'
+                      $ref: '#/components/schemas/File'
                   meta:
                     $ref: '#/components/schemas/Meta'
                 required:
@@ -1507,6 +1507,8 @@ components:
         - channelId
         - size
       properties:
+        id:
+          type: string
         name:
           type: string
         type:
@@ -1529,6 +1531,11 @@ components:
           format: int64
         encrypted:
           type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+        parentPath:
+          type: string
     FileOperation:
       type: object
       required:
@@ -1540,21 +1547,6 @@ components:
             type: string
         destination:
           type: string
-    FileOut:
-      type: object
-      required:
-        - id
-        - updatedAt
-      properties:
-        id:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        parentPath:
-          type: string
-      allOf:
-        - $ref: '#/components/schemas/File'
     FileShare:
       type: object
       required:

@@ -122,6 +122,7 @@ model Part {
   salt?: string;
 }
 model File {
+  id?: string;
   name: string;
   type: string;
   parts?: Part[];
@@ -131,15 +132,11 @@ model File {
   parentId?: string;
   size: int64;
   encrypted?: boolean;
-}
-
-model FileOut extends File{
-  id: string;
-  updatedAt: utcDateTime;
+  updatedAt?: utcDateTime;
   parentPath?: string;
 }
 
-model  Meta {
+model Meta {
   count?: int64;
   totalPages?: int32;
   currentPage?: int32;
@@ -176,7 +173,7 @@ interface Files {
 @summary("List all files")
 @extension("x-ogen-operation-group", "Files")
 op list(...FileQuery): {
-  files: FileOut[];
+  files: File[];
   meta: Meta;
 } | ConflictErrorResponse | NotFoundErrorResponse | InternalServerErrorResponse;
 
@@ -185,14 +182,14 @@ op list(...FileQuery): {
 @summary("Create a new file")
 @extension("x-ogen-operation-group", "Files")
 @extension("x-ogen-json-streaming", true)
-op create(...File): FileOut | NotFoundErrorResponse | ConflictErrorResponse 
+op create(...File): File | NotFoundErrorResponse | ConflictErrorResponse 
 | BadRequestErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}")
 @get
 @summary("Get file by ID")
 @extension("x-ogen-operation-group", "Files")
-op getById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
+op getById(@path id: string): File | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}")
 @patch
@@ -207,7 +204,7 @@ op update(
     size?: int64;
     updatedAt?: utcDateTime;
   },
-): FileOut | NotFoundErrorResponse | ConflictErrorResponse | BadRequestErrorResponse 
+): File | NotFoundErrorResponse | ConflictErrorResponse | BadRequestErrorResponse 
 | InternalServerErrorResponse;
 
 @route("/{id}/parts")
@@ -269,7 +266,7 @@ op copy(
     name:string;
     destination: string;
   },
-): FileOut | BadRequestErrorResponse | InternalServerErrorResponse;
+): File | BadRequestErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}/stream/{name}")
 @get
@@ -485,14 +482,14 @@ interface Shares {
 @get
 @summary("Get share by ID")
 @extension("x-ogen-operation-group", "Shares")
-op getById(@path id: string): FileOut | NotFoundErrorResponse | InternalServerErrorResponse;
+op getById(@path id: string): File | NotFoundErrorResponse | InternalServerErrorResponse;
 
 @route("/{id}/files")
 @get
 @summary("List files in share")
 @extension("x-ogen-operation-group", "Shares")
 op listFiles(@path id: string): {
-  files: FileOut[];
+  files: File[];
   meta: Meta;
 } | ConflictErrorResponse | NotFoundErrorResponse | InternalServerErrorResponse;
 
