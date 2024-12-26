@@ -16,8 +16,8 @@ alias ApiAuth = ApiKeyAuth<ApiKeyLocation.cookie, "user-session"> | BearerAuth;
 
 @error
 model Error {
-  code: int32;
-  message?: string;
+  code: int16;
+  message: string;
 }
 model InternalServerError is Response<500>;
 model ErrorResponse<T> {
@@ -411,7 +411,7 @@ model TgSession {
 
 model Channel {
   channelName:string;
-  channelId: string;
+  channelId: int64;
 }
 
 @route("/users")

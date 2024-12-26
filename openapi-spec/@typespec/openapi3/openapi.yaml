@@ -1472,14 +1472,16 @@ components:
         channelName:
           type: string
         channelId:
-          type: string
+          type: integer
+          format: int64
     ChannelUpdate:
       type: object
       properties:
         channelName:
           type: string
         channelId:
-          type: string
+          type: integer
+          format: int64
     DeleteOperation:
       type: object
       properties:
@@ -1493,10 +1495,11 @@ components:
       type: object
       required:
         - code
+        - message
       properties:
         code:
           type: integer
-          format: int32
+          format: int16
         message:
           type: string
     File:

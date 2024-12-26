@@ -2392,7 +2392,8 @@
             "type": "string"
           },
           "channelId": {
-            "type": "string"
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2403,7 +2404,8 @@
             "type": "string"
           },
           "channelId": {
-            "type": "string"
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2424,12 +2426,13 @@
       "Error": {
         "type": "object",
         "required": [
-          "code"
+          "code",
+          "message"
         ],
         "properties": {
           "code": {
             "type": "integer",
-            "format": "int32"
+            "format": "int16"
           },
           "message": {
             "type": "string"
