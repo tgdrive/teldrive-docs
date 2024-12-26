@@ -18,7 +18,7 @@
       "name": "Users"
     },
     {
-      "name": "Sharing"
+      "name": "Shares"
     }
   ],
   "paths": {
@@ -1262,7 +1262,7 @@
     },
     "/api/shares/{id}": {
       "get": {
-        "operationId": "Share_getById",
+        "operationId": "Shares_getById",
         "summary": "Get share by ID",
         "parameters": [
           {
@@ -1307,13 +1307,13 @@
           }
         },
         "tags": [
-          "Sharing"
+          "Shares"
         ]
       }
     },
     "/api/shares/{id}/files": {
       "get": {
-        "operationId": "Share_listFiles",
+        "operationId": "Shares_listFiles",
         "summary": "List files in share",
         "parameters": [
           {
@@ -1383,13 +1383,13 @@
           }
         },
         "tags": [
-          "Sharing"
+          "Shares"
         ]
       }
     },
     "/api/shares/{id}/files/{fileId}/download/{name}": {
       "get": {
-        "operationId": "Share_downloadFile",
+        "operationId": "Shares_downloadFile",
         "summary": "Download shared file",
         "parameters": [
           {
@@ -1446,13 +1446,13 @@
           }
         },
         "tags": [
-          "Sharing"
+          "Shares"
         ]
       }
     },
     "/api/shares/{id}/files/{fileId}/stream/{name}": {
       "get": {
-        "operationId": "Share_streamFile",
+        "operationId": "Shares_streamFile",
         "summary": "Stream shared file",
         "parameters": [
           {
@@ -1509,7 +1509,7 @@
           }
         },
         "tags": [
-          "Sharing"
+          "Shares"
         ]
       }
     },

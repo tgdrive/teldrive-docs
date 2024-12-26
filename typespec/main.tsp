@@ -430,8 +430,8 @@ op removeSession(@path id: string): NoContentResponse  | InternalServerErrorResp
 }
 
 @route("/shares")
-@tag("Sharing")
-interface Share {
+@tag("Shares")
+interface Shares {
 @route("/{id}")
 @get
 @summary("Get share by ID")
