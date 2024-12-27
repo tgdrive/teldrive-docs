@@ -186,8 +186,10 @@ paths:
                 properties:
                   totalFiles:
                     type: integer
+                    format: int64
                   totalSize:
                     type: integer
+                    format: int64
                   category:
                     type: string
                 required:
@@ -413,6 +415,7 @@ paths:
                     $ref: '#/components/schemas/Part'
                 size:
                   type: integer
+                  format: int64
                 updatedAt:
                   type: string
                   format: date-time
@@ -564,8 +567,10 @@ paths:
                   format: date-time
                 size:
                   type: integer
+                  format: int64
                 channelId:
                   type: integer
+                  format: int64
               required:
                 - updatedAt
                 - size
@@ -1116,6 +1121,7 @@ paths:
                 properties:
                   channelId:
                     type: integer
+                    format: int64
                   bots:
                     type: array
                     items:
@@ -1340,6 +1346,7 @@ components:
       required: false
       schema:
         type: integer
+        format: int64
       explode: false
     UploadQuery.encrypted:
       name: encrypted
@@ -1389,6 +1396,7 @@ components:
           type: string
         channelId:
           type: integer
+          format: int64
     ChannelUpdate:
       type: object
       properties:
@@ -1396,6 +1404,7 @@ components:
           type: string
         channelId:
           type: integer
+          format: int64
     DeleteOperation:
       type: object
       properties:
@@ -1438,6 +1447,7 @@ components:
           type: string
         channelId:
           type: integer
+          format: int64
         path:
           type: string
         parentId:
@@ -1445,6 +1455,7 @@ components:
           format: uuid
         size:
           type: integer
+          format: int64
         encrypted:
           type: boolean
         updatedAt:
@@ -1474,6 +1485,7 @@ components:
           type: boolean
         userId:
           type: integer
+          format: int64
         type:
           type: string
         name:
@@ -1526,6 +1538,7 @@ components:
           type: string
         userId:
           type: integer
+          format: int64
         isPremium:
           type: boolean
         hash:
@@ -1574,8 +1587,10 @@ components:
           type: integer
         channelId:
           type: integer
+          format: int64
         size:
           type: integer
+          format: int64
         encrypted:
           type: boolean
         salt:
@@ -1590,6 +1605,7 @@ components:
           type: string
         totalUploaded:
           type: integer
+          format: int64
   securitySchemes:
     BearerAuth:
       type: http

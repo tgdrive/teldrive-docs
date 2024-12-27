@@ -35,7 +35,7 @@ model BadRequestErrorResponse is ErrorResponse<BadRequestResponse>;
 model Session {
   name: string;
   userName: string;
-  userId: integer;
+  userId: int64;
   isPremium: boolean;
   hash: string;
   expires: string;
@@ -139,11 +139,11 @@ model File {
   type: string;
   parts?: Part[];
   mimeType?: string;
-  channelId: integer;
+  channelId: int64;
   path?: string;
   @format("uuid")
   parentId?: string;
-  size: integer;
+  size: int64;
   encrypted?: boolean;
   updatedAt?: utcDateTime;
   parentPath?: string;
@@ -161,7 +161,7 @@ model FileShareCreate {
 
 model FileShare {
   protected: boolean;
-  userId?: integer;
+  userId?: int64;
   type: string;
   name: string;
   expiresAt?: utcDateTime;
@@ -217,7 +217,7 @@ interface Files {
     @bodyRoot body: {
       name?: string;
       parts?: Part[];
-      size?: integer;
+      size?: int64;
       updatedAt?: utcDateTime;
     },
   ):
@@ -236,8 +236,8 @@ interface Files {
       parts?: Part[];
       uploadId?: string;
       updatedAt: utcDateTime;
-      size: integer;
-      channelId: integer;
+      size: int64;
+      channelId: int64;
     },
   ): NoContentResponse | NotFoundErrorResponse | BadRequestErrorResponse | InternalServerErrorResponse;
 
@@ -302,8 +302,8 @@ interface Files {
   @get
   @summary("Get category stats")
   categoryStats(): {
-    totalFiles: integer;
-    totalSize: integer;
+    totalFiles: int64;
+    totalSize: int64;
     category: string;
   } | InternalServerErrorResponse;
 
@@ -353,7 +353,7 @@ model UploadQuery {
   partNo: integer;
 
   @query
-  channelId?: integer;
+  channelId?: int64;
 
   @query
   encrypted?: boolean;
@@ -363,15 +363,15 @@ model UploadPart {
   name: string;
   partId: integer;
   partNo: integer;
-  channelId: integer;
-  size: integer;
+  channelId: int64;
+  size: int64;
   encrypted: boolean;
   salt?: string;
 }
 
 model UploadStats {
   uploadDate: string;
-  totalUploaded: integer;
+  totalUploaded: int64;
 }
 
 @route("/uploads")
@@ -416,7 +416,7 @@ model TgSession {
 
 model Channel {
   channelName: string;
-  channelId: integer;
+  channelId: int64;
 }
 
 @route("/users")
@@ -433,7 +433,7 @@ interface Users {
   @get
   @summary("Get user config")
   stats(): {
-    channelId: integer;
+    channelId: int64;
     bots: string[];
   } | InternalServerErrorResponse;
 

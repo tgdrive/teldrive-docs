@@ -321,10 +321,12 @@
                   "type": "object",
                   "properties": {
                     "totalFiles": {
-                      "type": "integer"
+                      "type": "integer",
+                      "format": "int64"
                     },
                     "totalSize": {
-                      "type": "integer"
+                      "type": "integer",
+                      "format": "int64"
                     },
                     "category": {
                       "type": "string"
@@ -695,7 +697,8 @@
                     }
                   },
                   "size": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                   },
                   "updatedAt": {
                     "type": "string",
@@ -943,10 +946,12 @@
                     "format": "date-time"
                   },
                   "size": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                   },
                   "channelId": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                   }
                 },
                 "required": [
@@ -1861,7 +1866,8 @@
                   "type": "object",
                   "properties": {
                     "channelId": {
-                      "type": "integer"
+                      "type": "integer",
+                      "format": "int64"
                     },
                     "bots": {
                       "type": "array",
@@ -2188,7 +2194,8 @@
         "in": "query",
         "required": false,
         "schema": {
-          "type": "integer"
+          "type": "integer",
+          "format": "int64"
         },
         "explode": false
       },
@@ -2252,7 +2259,8 @@
             "type": "string"
           },
           "channelId": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2263,7 +2271,8 @@
             "type": "string"
           },
           "channelId": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2325,7 +2334,8 @@
             "type": "string"
           },
           "channelId": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           },
           "path": {
             "type": "string"
@@ -2335,7 +2345,8 @@
             "format": "uuid"
           },
           "size": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           },
           "encrypted": {
             "type": "boolean"
@@ -2378,7 +2389,8 @@
             "type": "boolean"
           },
           "userId": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           },
           "type": {
             "type": "string"
@@ -2454,7 +2466,8 @@
             "type": "string"
           },
           "userId": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           },
           "isPremium": {
             "type": "boolean"
@@ -2523,10 +2536,12 @@
             "type": "integer"
           },
           "channelId": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           },
           "size": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           },
           "encrypted": {
             "type": "boolean"
@@ -2547,7 +2562,8 @@
             "type": "string"
           },
           "totalUploaded": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64"
           }
         }
       }
