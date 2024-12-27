@@ -50,6 +50,8 @@ Supabase provides a hosted PostgreSQL database with an easy-to-use interface. Fo
 - **Region**: Select a region closest to you for better performance.
 4. Click "Create New Project".
 5. Once the project is created, you will be directed to the project dashboard. Here you can find your database connection details.Copy the connection string URI of `transaction` mode  which will be used later in teldrive config.
+> [!IMPORTANT]
+>- Make sure to enable pgroonga postgres extension in supabase.
 
 
 ## Creating a Local Posgtres Instance using docker
