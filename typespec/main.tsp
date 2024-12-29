@@ -408,10 +408,7 @@ model FilePartsUpdate {
 }
 
 @doc("File Copy request")
-@example(#{
-  newName: "document_copy.pdf",
-  destination: "/Documents/2023/",
-})
+@example(#{ newName: "document_copy.pdf", destination: "/Documents/2023/" })
 model FileCopy {
   @doc("New file name")
   newName?: string;
@@ -459,9 +456,7 @@ model FileDelete {
 }
 
 @doc("Request to create directories")
-@example(#{
-  paths: #["/Documents/2023/", "/Documents/2024/"],
-})
+@example(#{ paths: #["/Documents/2023/", "/Documents/2024/"] })
 model FileMkDir {
   @doc("Directory path(s) to be created")
   paths: string[];
@@ -486,10 +481,10 @@ model CategoryStats {
 
 @route("/files")
 @tag("Files")
-@useAuth(BearerAuth)
 interface Files {
   @route("")
   @get
+  @useAuth(BearerAuth)
   @summary("List all files")
   list(
     ...FileQuery,
@@ -497,6 +492,7 @@ interface Files {
 
   @route("")
   @post
+  @useAuth(BearerAuth)
   @summary("Create a new file")
   create(...File):
     | {
@@ -510,6 +506,7 @@ interface Files {
 
   @route("/{id}")
   @get
+  @useAuth(BearerAuth)
   @summary("Get file by ID")
   getById(
     @path id: string,
@@ -517,6 +514,7 @@ interface Files {
 
   @route("/{id}")
   @patch
+  @useAuth(BearerAuth)
   @summary("Update file")
   update(@path id: string, @body body: FileUpdate):
     | File
@@ -527,6 +525,7 @@ interface Files {
 
   @route("/{id}/parts")
   @put
+  @useAuth(BearerAuth)
   @summary("Update file parts")
   updateParts(@path id: string, @body body: FilePartsUpdate):
     | NoContentResponse
@@ -536,6 +535,7 @@ interface Files {
 
   @route("/{id}/share")
   @delete
+  @useAuth(BearerAuth)
   @summary("Delete share")
   deleteShare(
     @path id: string,
@@ -543,6 +543,7 @@ interface Files {
 
   @route("/{id}/share")
   @get
+  @useAuth(BearerAuth)
   @summary("Get share by file ID")
   shareByid(
     @path id: string,
@@ -550,6 +551,7 @@ interface Files {
 
   @route("/{id}/share")
   @patch
+  @useAuth(BearerAuth)
   @summary("Edit share")
   editShare(
     @path id: string,
@@ -558,6 +560,7 @@ interface Files {
 
   @route("/{id}/share")
   @post
+  @useAuth(BearerAuth)
   @summary("Create a share for the file")
   createShare(
     @path id: string,
@@ -566,6 +569,7 @@ interface Files {
 
   @route("/{id}/copy")
   @post
+  @useAuth(BearerAuth)
   @summary("Copy file")
   copy(@path id: string, @body body: FileCopy):
     | File
@@ -593,6 +597,7 @@ interface Files {
 
   @route("/delete")
   @post
+  @useAuth(BearerAuth)
   @summary("Delete files")
   delete(
     @body body: FileDelete,
@@ -600,16 +605,19 @@ interface Files {
 
   @route("/move")
   @post
+  @useAuth(BearerAuth)
   @summary("Move files")
   move(@body body: FileMove): NoContentResponse | InternalServerErrorResponse;
 
   @route("/mkdir")
   @post
+  @useAuth(BearerAuth)
   @summary("Create Folders")
   mkdir(@body body: FileMkDir): NoContentResponse | InternalServerErrorResponse;
 
   @route("/categories")
   @get
+  @useAuth(BearerAuth)
   @summary("Get category stats")
   categoryStats(): CategoryStats[] | InternalServerErrorResponse;
 }
@@ -742,10 +750,7 @@ model UserSession {
 }
 
 @doc("Telegram channel information")
-@example(#{
-  channelName: "Channel Name",
-  channelId: 123456789,
-})
+@example(#{ channelName: "Channel Name", channelId: 123456789 })
 model Channel {
   @doc("Name of the Telegram channel")
   channelName: string;
@@ -754,11 +759,13 @@ model Channel {
   channelId: int64;
 }
 
+model AddBots {
+  @doc("List of bot tokens")
+  bots: string[];
+}
+
 @doc("User configuration for channel and bot settings")
-@example(#{
-  channelId: 123456789,
-  bots: #["bot1", "bot2"],
-})
+@example(#{ channelId: 123456789, bots: #["bot1", "bot2"] })
 model UserConfig {
   @doc("Channel identifier associated with the user")
   channelId: int64;
@@ -803,7 +810,7 @@ interface Users {
   @post
   @summary("Add bots to user account")
   addBots(
-    @body body: string[],
+    @body body: AddBots,
   ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
 
   @route("/bots")

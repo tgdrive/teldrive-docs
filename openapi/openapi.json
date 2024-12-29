@@ -851,11 +851,6 @@
         },
         "tags": [
           "Files"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
         ]
       }
     },
@@ -1298,11 +1293,6 @@
         },
         "tags": [
           "Files"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
         ]
       }
     },
@@ -2032,10 +2022,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+                "$ref": "#/components/schemas/AddBots"
               }
             }
           }
@@ -2547,6 +2534,21 @@
       }
     },
     "schemas": {
+      "AddBots": {
+        "type": "object",
+        "required": [
+          "bots"
+        ],
+        "properties": {
+          "bots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of bot tokens"
+          }
+        }
+      },
       "ApiError": {
         "type": "object",
         "required": [

@@ -509,8 +509,6 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Files
-      security:
-        - BearerAuth: []
   /api/files/{id}/parts:
     put:
       operationId: Files_updateParts
@@ -787,8 +785,6 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Files
-      security:
-        - BearerAuth: []
   /api/shares/{id}:
     get:
       operationId: Shares_getById
@@ -1249,9 +1245,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: string
+              $ref: '#/components/schemas/AddBots'
       security:
         - BearerAuth: []
     delete:
@@ -1602,6 +1596,16 @@ components:
         type: integer
       explode: false
   schemas:
+    AddBots:
+      type: object
+      required:
+        - bots
+      properties:
+        bots:
+          type: array
+          items:
+            type: string
+          description: List of bot tokens
     ApiError:
       type: object
       required:
