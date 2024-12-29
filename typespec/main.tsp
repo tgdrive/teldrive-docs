@@ -565,7 +565,7 @@ interface Files {
   createShare(
     @path id: string,
     @body body: FileShareCreate,
-  ): CreatedResponse | InternalServerErrorResponse;
+  ): CreatedResponse | BadRequestErrorResponse | InternalServerErrorResponse;
 
   @route("/{id}/copy")
   @post
@@ -601,19 +601,23 @@ interface Files {
   @summary("Delete files")
   delete(
     @body body: FileDelete,
-  ): NoContentResponse | InternalServerErrorResponse;
+  ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
 
   @route("/move")
   @post
   @useAuth(BearerAuth)
   @summary("Move files")
-  move(@body body: FileMove): NoContentResponse | InternalServerErrorResponse;
+  move(
+    @body body: FileMove,
+  ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
 
   @route("/mkdir")
   @post
   @useAuth(BearerAuth)
   @summary("Create Folders")
-  mkdir(@body body: FileMkDir): NoContentResponse | InternalServerErrorResponse;
+  mkdir(
+    @body body: FileMkDir,
+  ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
 
   @route("/categories")
   @get
