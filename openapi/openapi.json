@@ -2513,10 +2513,9 @@
         "name": "updatedAt",
         "in": "query",
         "required": false,
-        "description": "Last update time",
+        "description": "UpdatedAt Filter supports operator eq, gt, lt, gte, lte",
         "schema": {
-          "type": "string",
-          "format": "date-time"
+          "type": "string"
         },
         "explode": false
       },

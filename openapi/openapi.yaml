@@ -1572,10 +1572,9 @@ components:
       name: updatedAt
       in: query
       required: false
-      description: Last update time
+      description: UpdatedAt Filter supports operator eq, gt, lt, gte, lte
       schema:
         type: string
-        format: date-time
       explode: false
     UploadQuery.channelId:
       name: channelId

@@ -191,7 +191,7 @@ model FileQuery {
   @query
   @doc("Operation")
   @example("list")
-  operation?: "list" | "find" = "list";
+  operation: "list" | "find" = "list";
 
   @query
   @doc("Enable deep search")
@@ -214,31 +214,31 @@ model FileQuery {
   category?: Category;
 
   @query
-  @doc("Last update time")
-  updatedAt?: utcDateTime;
+  @doc("UpdatedAt Filter supports operator eq, gt, lt, gte, lte")
+  updatedAt?: string;
 
   @query
   @doc("Sort field")
   @example("name")
-  sort?: "name" | "updatedAt" | "size" = "name";
+  sort: "name" | "updatedAt" | "size" = "name";
 
   @query
   @doc("Sort order")
   @example("asc")
-  order?: "asc" | "desc" = "asc";
+  order: "asc" | "desc" = "asc";
 
   @query
   @doc("Items per page")
   @example(50)
   @maxValue(1000)
   @minValue(1)
-  limit?: integer = 500;
+  limit: integer = 500;
 
   @query
   @doc("Page number")
   @example(1)
   @minValue(1)
-  page?: integer = 1;
+  page: integer = 1;
 }
 
 @doc("File part information")
