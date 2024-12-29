@@ -65,7 +65,7 @@ model FileStream {
 model ApiError {
   @doc("Error code")
   @example(500)
-  code: integer;
+  code?: integer;
 
   @doc("Error message")
   @example("Internal server error occurred")

@@ -1633,7 +1633,6 @@ components:
     ApiError:
       type: object
       required:
-        - code
         - message
       properties:
         code:

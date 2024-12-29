@@ -2592,7 +2592,6 @@
       "ApiError": {
         "type": "object",
         "required": [
-          "code",
           "message"
         ],
         "properties": {
