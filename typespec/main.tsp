@@ -125,13 +125,13 @@ interface Auth {
   @route("/login")
   @summary("Login")
   @post
-  login(...Session): OkResponse | InternalServerErrorResponse;
+  login(...Session): NoContentResponse | InternalServerErrorResponse;
 
   @route("/logout")
   @summary("Logout")
   @useAuth(BearerAuth)
   @post
-  logout(): OkResponse | InternalServerErrorResponse;
+  logout(): NoContentResponse | InternalServerErrorResponse;
 
   @route("/ws")
   @summary("Websocket QR Login")
@@ -161,7 +161,6 @@ enum Category {
 }
 
 @doc("File query parameters")
-@withOptionalProperties
 model FileQuery {
   @query
   @doc("File name filter")
@@ -176,12 +175,12 @@ model FileQuery {
   @query
   @doc("Search type")
   @example("text")
-  searchType?: "text" | "regex" = "text";
+  searchType: "text" | "regex" = "text";
 
   @query
   @doc("File type")
   @example("file")
-  type?: "folder" | "file";
+  type: "folder" | "file";
 
   @query
   @doc("File path")
@@ -194,9 +193,14 @@ model FileQuery {
   operation: "list" | "find" = "list";
 
   @query
+  @doc("File Status")
+  @example("active")
+  status: "active" | "pending_deletion" = "active";
+
+  @query
   @doc("Enable deep search")
   @example(false)
-  deepSearch?: boolean;
+  deepSearch: boolean = false;
 
   @query
   @doc("Show shared files")
@@ -210,8 +214,8 @@ model FileQuery {
 
   @query
   @doc("File category")
-  @example(Category.document)
-  category?: Category;
+  @example(#[Category.document, Category.video])
+  category?: Array<Category>;
 
   @query
   @doc("UpdatedAt Filter supports operator eq, gt, lt, gte, lte")
@@ -302,11 +306,6 @@ model File {
   @doc("Last update time")
   @visibility(Lifecycle.Read)
   updatedAt?: utcDateTime;
-
-  @doc("Parent folder path")
-  @example("/documents/")
-  @visibility(Lifecycle.Read)
-  parentPath?: string;
 }
 
 @doc("Pagination metadata containing count, page information")
@@ -416,12 +415,6 @@ model FileCopy {
   destination: string;
 }
 
-model FolderCreate {
-  @doc("Directory path to create")
-  @example("/Documents/2023/")
-  path: string;
-}
-
 @doc("Move multiple files by ids or path")
 @example(#{
   ids: #["123e4567-e89b-12d3-a456-426614174000"],
@@ -455,10 +448,10 @@ model FileDelete {
 }
 
 @doc("Request to create directories")
-@example(#{ paths: #["/Documents/2023/", "/Documents/2024/"] })
+@example(#{ path: "/Documents/2023/" })
 model FileMkDir {
-  @doc("Directory path(s) to be created")
-  paths: string[];
+  @doc("Directory path to be created")
+  path: string;
 }
 
 @doc("Statistics for files by category")
@@ -576,19 +569,18 @@ interface Files {
     | BadRequestErrorResponse
     | InternalServerErrorResponse;
 
-  @route("/{id}/stream/{name}")
+  @route("/{id}/{name}")
   @get
-  @summary("Stream file by ID")
-  stream(@path id: string, @path name: string, @query hash?: string):
-    | FileStream
-    | RangeNotSatisfied
-    | NotFoundErrorResponse
-    | InternalServerErrorResponse;
-
-  @route("/{id}/download/{name}")
-  @get
-  @summary("Download file by ID")
-  download(@path id: string, @path name: string, @query hash?: string):
+  @summary("Stream or Download file")
+  stream(
+    @path id: string,
+    @path name: string,
+    @query download: boolean = false,
+    @query hash?: string,
+    @header range?: string,
+    @header authorization?: string,
+    @cookie authToken?: string,
+  ):
     | FileStream
     | RangeNotSatisfied
     | NotFoundErrorResponse
@@ -846,19 +838,15 @@ interface Shares {
     @path id: string,
   ): FileList | NotFoundErrorResponse | InternalServerErrorResponse;
 
-  @route("/{id}/files/{fileId}/stream/{name}")
+  @route("/{id}/files/{fileId}/{name}")
   @get
-  @summary("Stream shared file")
-  streamFile(@path id: string, @path fileId: string, @path name: string):
-    | FileStream
-    | RangeNotSatisfied
-    | NotFoundErrorResponse
-    | InternalServerErrorResponse;
-
-  @route("/{id}/files/{fileId}/download/{name}")
-  @get
-  @summary("Download shared file")
-  downloadFile(@path id: string, @path fileId: string, @path name: string):
+  @summary("Stream or Download shared file")
+  stream(
+    @path id: string,
+    @path name: string,
+    @path fileId: string,
+    @query download: boolean = false,
+  ):
     | FileStream
     | RangeNotSatisfied
     | NotFoundErrorResponse

@@ -15,8 +15,8 @@ paths:
       summary: Login
       parameters: []
       responses:
-        '200':
-          description: The request has succeeded.
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
         '500':
           description: Server error
           content:
@@ -37,8 +37,8 @@ paths:
       summary: Logout
       parameters: []
       responses:
-        '200':
-          description: The request has succeeded.
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
         '500':
           description: Server error
           content:
@@ -84,6 +84,7 @@ paths:
         - $ref: '#/components/parameters/FileQuery.type'
         - $ref: '#/components/parameters/FileQuery.path'
         - $ref: '#/components/parameters/FileQuery.operation'
+        - $ref: '#/components/parameters/FileQuery.status'
         - $ref: '#/components/parameters/FileQuery.deepSearch'
         - $ref: '#/components/parameters/FileQuery.shared'
         - $ref: '#/components/parameters/FileQuery.parentId'
@@ -403,130 +404,6 @@ paths:
               $ref: '#/components/schemas/FileCopy'
       security:
         - BearerAuth: []
-  /api/files/{id}/download/{name}:
-    get:
-      operationId: Files_download
-      summary: Download file by ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: hash
-          in: query
-          required: false
-          schema:
-            type: string
-          explode: false
-      responses:
-        '200':
-          description: File streaming response
-          headers:
-            Accept-Ranges:
-              required: true
-              description: Indicates server supports range requests
-              schema:
-                type: string
-                enum:
-                  - bytes
-            Content-Length:
-              required: true
-              description: Size of the response body in bytes
-              schema:
-                type: string
-            Content-Disposition:
-              required: true
-              description: File attachment information
-              schema:
-                type: string
-            Content-Range:
-              required: false
-              description: Range of bytes being sent
-              schema:
-                type: string
-            ETag:
-              required: true
-              description: Entity tag for cache validation
-              schema:
-                type: string
-            Last-Modified:
-              required: true
-              description: Last modification timestamp
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        '206':
-          description: File streaming response
-          headers:
-            Accept-Ranges:
-              required: true
-              description: Indicates server supports range requests
-              schema:
-                type: string
-                enum:
-                  - bytes
-            Content-Length:
-              required: true
-              description: Size of the response body in bytes
-              schema:
-                type: string
-            Content-Disposition:
-              required: true
-              description: File attachment information
-              schema:
-                type: string
-            Content-Range:
-              required: false
-              description: Range of bytes being sent
-              schema:
-                type: string
-            ETag:
-              required: true
-              description: Entity tag for cache validation
-              schema:
-                type: string
-            Last-Modified:
-              required: true
-              description: Last modification timestamp
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '416':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      tags:
-        - Files
   /api/files/{id}/parts:
     put:
       operationId: Files_updateParts
@@ -685,10 +562,10 @@ paths:
               $ref: '#/components/schemas/FileShareCreate'
       security:
         - BearerAuth: []
-  /api/files/{id}/stream/{name}:
+  /api/files/{id}/{name}:
     get:
       operationId: Files_stream
-      summary: Stream file by ID
+      summary: Stream or Download file
       parameters:
         - name: id
           in: path
@@ -700,8 +577,31 @@ paths:
           required: true
           schema:
             type: string
+        - name: download
+          in: query
+          required: true
+          schema:
+            type: boolean
+            default: false
+          explode: false
         - name: hash
           in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: range
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: auth_token
+          in: cookie
           required: false
           schema:
             type: string
@@ -871,17 +771,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
       tags:
         - Shares
-  /api/shares/{id}/files/{fileId}/download/{name}:
+  /api/shares/{id}/files/{fileId}/{name}:
     get:
-      operationId: Shares_downloadFile
-      summary: Download shared file
+      operationId: Shares_stream
+      summary: Stream or Download shared file
       parameters:
         - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: fileId
           in: path
           required: true
           schema:
@@ -891,129 +786,18 @@ paths:
           required: true
           schema:
             type: string
-      responses:
-        '200':
-          description: File streaming response
-          headers:
-            Accept-Ranges:
-              required: true
-              description: Indicates server supports range requests
-              schema:
-                type: string
-                enum:
-                  - bytes
-            Content-Length:
-              required: true
-              description: Size of the response body in bytes
-              schema:
-                type: string
-            Content-Disposition:
-              required: true
-              description: File attachment information
-              schema:
-                type: string
-            Content-Range:
-              required: false
-              description: Range of bytes being sent
-              schema:
-                type: string
-            ETag:
-              required: true
-              description: Entity tag for cache validation
-              schema:
-                type: string
-            Last-Modified:
-              required: true
-              description: Last modification timestamp
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        '206':
-          description: File streaming response
-          headers:
-            Accept-Ranges:
-              required: true
-              description: Indicates server supports range requests
-              schema:
-                type: string
-                enum:
-                  - bytes
-            Content-Length:
-              required: true
-              description: Size of the response body in bytes
-              schema:
-                type: string
-            Content-Disposition:
-              required: true
-              description: File attachment information
-              schema:
-                type: string
-            Content-Range:
-              required: false
-              description: Range of bytes being sent
-              schema:
-                type: string
-            ETag:
-              required: true
-              description: Entity tag for cache validation
-              schema:
-                type: string
-            Last-Modified:
-              required: true
-              description: Last modification timestamp
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '416':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      tags:
-        - Shares
-  /api/shares/{id}/files/{fileId}/stream/{name}:
-    get:
-      operationId: Shares_streamFile
-      summary: Stream shared file
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
         - name: fileId
           in: path
           required: true
           schema:
             type: string
-        - name: name
-          in: path
+        - name: download
+          in: query
           required: true
           schema:
-            type: string
+            type: boolean
+            default: false
+          explode: false
       responses:
         '200':
           description: File streaming response
@@ -1437,20 +1221,23 @@ components:
       required: false
       description: File category
       schema:
-        $ref: '#/components/schemas/Category'
+        type: array
+        items:
+          $ref: '#/components/schemas/Category'
       explode: false
     FileQuery.deepSearch:
       name: deepSearch
       in: query
-      required: false
+      required: true
       description: Enable deep search
       schema:
         type: boolean
+        default: false
       explode: false
     FileQuery.limit:
       name: limit
       in: query
-      required: false
+      required: true
       description: Items per page
       schema:
         type: integer
@@ -1469,7 +1256,7 @@ components:
     FileQuery.operation:
       name: operation
       in: query
-      required: false
+      required: true
       description: Operation
       schema:
         type: string
@@ -1481,7 +1268,7 @@ components:
     FileQuery.order:
       name: order
       in: query
-      required: false
+      required: true
       description: Sort order
       schema:
         type: string
@@ -1493,7 +1280,7 @@ components:
     FileQuery.page:
       name: page
       in: query
-      required: false
+      required: true
       description: Page number
       schema:
         type: integer
@@ -1527,7 +1314,7 @@ components:
     FileQuery.searchType:
       name: searchType
       in: query
-      required: false
+      required: true
       description: Search type
       schema:
         type: string
@@ -1547,7 +1334,7 @@ components:
     FileQuery.sort:
       name: sort
       in: query
-      required: false
+      required: true
       description: Sort field
       schema:
         type: string
@@ -1557,10 +1344,22 @@ components:
           - size
         default: name
       explode: false
+    FileQuery.status:
+      name: status
+      in: query
+      required: true
+      description: File Status
+      schema:
+        type: string
+        enum:
+          - active
+          - pending_deletion
+        default: active
+      explode: false
     FileQuery.type:
       name: type
       in: query
-      required: false
+      required: true
       description: File type
       schema:
         type: string
@@ -1768,11 +1567,6 @@ components:
           format: date-time
           description: Last update time
           readOnly: true
-        parentPath:
-          type: string
-          example: /documents/
-          description: Parent folder path
-          readOnly: true
       description: File metadata
     FileCopy:
       type: object
@@ -1880,17 +1674,13 @@ components:
     FileMkDir:
       type: object
       required:
-        - paths
+        - path
       properties:
-        paths:
-          type: array
-          items:
-            type: string
-          description: Directory path(s) to be created
+        path:
+          type: string
+          description: Directory path to be created
       example:
-        paths:
-          - /Documents/2023/
-          - /Documents/2024/
+        path: /Documents/2023/
       description: Request to create directories
     FileMove:
       type: object
@@ -2008,15 +1798,6 @@ components:
           format: date-time
           description: Last update time
       description: File update request
-    FolderCreate:
-      type: object
-      required:
-        - path
-      properties:
-        path:
-          type: string
-          example: /Documents/2023/
-          description: Directory path to create
     Meta:
       type: object
       properties:
