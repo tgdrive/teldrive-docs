@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ApiReference } from '@scalar/api-reference'
 import '@scalar/api-reference/style.css'
-import spec from "../openapi-spec/@typespec/openapi3/openapi.json"
+import spec from "../openapi/openapi.json"
 </script>
 
 <template>

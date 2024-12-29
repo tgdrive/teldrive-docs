@@ -22,7 +22,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Auth
       requestBody:
@@ -30,7 +30,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Session'
+              $ref: '#/components/schemas/SessionCreate'
   /api/auth/logout:
     post:
       operationId: Auth_logout
@@ -44,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Auth
       security:
@@ -83,7 +83,7 @@ paths:
         - $ref: '#/components/parameters/FileQuery.searchType'
         - $ref: '#/components/parameters/FileQuery.type'
         - $ref: '#/components/parameters/FileQuery.path'
-        - $ref: '#/components/parameters/FileQuery.op'
+        - $ref: '#/components/parameters/FileQuery.operation'
         - $ref: '#/components/parameters/FileQuery.deepSearch'
         - $ref: '#/components/parameters/FileQuery.shared'
         - $ref: '#/components/parameters/FileQuery.parentId'
@@ -99,29 +99,19 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  files:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/File'
-                  meta:
-                    $ref: '#/components/schemas/Meta'
-                required:
-                  - files
-                  - meta
+                $ref: '#/components/schemas/FileList'
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       security:
@@ -142,25 +132,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '409':
           description: The request conflicts with the current state of the server.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -168,7 +158,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/File'
+              $ref: '#/components/schemas/FileCreate'
       security:
         - BearerAuth: []
   /api/files/categories:
@@ -182,34 +172,23 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  totalFiles:
-                    type: integer
-                    format: int64
-                  totalSize:
-                    type: integer
-                    format: int64
-                  category:
-                    type: string
-                required:
-                  - totalFiles
-                  - totalSize
-                  - category
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryStats'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       security:
         - BearerAuth: []
   /api/files/delete:
     post:
-      operationId: Files_bulkDelete
-      summary: Bulk Delete files
+      operationId: Files_delete
+      summary: Delete files
       parameters: []
       responses:
         '204':
@@ -219,7 +198,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -227,23 +206,13 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                files:
-                  type: array
-                  items:
-                    type: string
-                source:
-                  type: string
-              required:
-                - files
-                - source
+              $ref: '#/components/schemas/FileDelete'
       security:
         - BearerAuth: []
-  /api/files/folders:
+  /api/files/mkdir:
     post:
       operationId: Files_mkdir
-      summary: Make a new directory
+      summary: Create Folders
       parameters: []
       responses:
         '204':
@@ -253,7 +222,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -261,44 +230,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                path:
-                  type: string
-              required:
-                - path
-      security:
-        - BearerAuth: []
-  /api/files/folders/move:
-    post:
-      operationId: Files_movedir
-      summary: Move directory
-      parameters: []
-      responses:
-        '204':
-          description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      tags:
-        - Files
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                source:
-                  type: string
-                destination:
-                  type: string
-              required:
-                - source
-                - destination
+              $ref: '#/components/schemas/FileMkDir'
       security:
         - BearerAuth: []
   /api/files/move:
@@ -314,7 +246,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -322,7 +254,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FileOperation'
+              $ref: '#/components/schemas/FileMove'
       security:
         - BearerAuth: []
   /api/files/{id}:
@@ -347,13 +279,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       security:
@@ -379,25 +311,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '409':
           description: The request conflicts with the current state of the server.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -405,20 +337,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                parts:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Part'
-                size:
-                  type: integer
-                  format: int64
-                updatedAt:
-                  type: string
-                  format: date-time
+              $ref: '#/components/schemas/FileUpdate'
       security:
         - BearerAuth: []
   /api/files/{id}/copy:
@@ -443,19 +362,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -463,15 +382,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                destination:
-                  type: string
-              required:
-                - name
-                - destination
+              $ref: '#/components/schemas/FileCopy'
       security:
         - BearerAuth: []
   /api/files/{id}/download/{name}:
@@ -497,21 +408,105 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '206':
-          description: Successful
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
+        '416':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       security:
@@ -534,19 +529,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -554,27 +549,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                parts:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Part'
-                uploadId:
-                  type: string
-                updatedAt:
-                  type: string
-                  format: date-time
-                size:
-                  type: integer
-                  format: int64
-                channelId:
-                  type: integer
-                  format: int64
-              required:
-                - updatedAt
-                - size
-                - channelId
+              $ref: '#/components/schemas/FilePartsUpdate'
       security:
         - BearerAuth: []
   /api/files/{id}/share:
@@ -595,7 +570,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       security:
@@ -621,13 +596,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       security:
@@ -649,7 +624,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -677,7 +652,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       requestBody:
@@ -711,21 +686,105 @@ paths:
           explode: false
       responses:
         '200':
-          description: The request has succeeded.
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '206':
-          description: Successful
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
+        '416':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Files
       security:
@@ -752,13 +811,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Shares
   /api/shares/{id}/files:
@@ -777,29 +836,19 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  files:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/File'
-                  meta:
-                    $ref: '#/components/schemas/Meta'
-                required:
-                  - files
-                  - meta
+                $ref: '#/components/schemas/FileList'
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Shares
   /api/shares/{id}/files/{fileId}/download/{name}:
@@ -824,21 +873,105 @@ paths:
             type: string
       responses:
         '200':
-          description: The request has succeeded.
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '206':
-          description: Successful
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
+        '416':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Shares
   /api/shares/{id}/files/{fileId}/stream/{name}:
@@ -863,21 +996,105 @@ paths:
             type: string
       responses:
         '200':
-          description: The request has succeeded.
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '206':
-          description: Successful
+          description: File streaming response
+          headers:
+            Accept-Ranges:
+              required: true
+              description: Indicates server supports range requests
+              schema:
+                type: string
+                enum:
+                  - bytes
+            Content-Length:
+              required: true
+              description: Size of the response body in bytes
+              schema:
+                type: string
+            Content-Disposition:
+              required: true
+              description: File attachment information
+              schema:
+                type: string
+            Content-Range:
+              required: false
+              description: Range of bytes being sent
+              schema:
+                type: string
+            ETag:
+              required: true
+              description: Entity tag for cache validation
+              schema:
+                type: string
+            Last-Modified:
+              required: true
+              description: Last modification timestamp
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '404':
           description: The server cannot find the requested resource.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
+        '416':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Shares
   /api/uploads/stats:
@@ -905,7 +1122,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Uploads
       security:
@@ -937,13 +1154,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Uploads
       requestBody:
@@ -978,7 +1195,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Uploads
       security:
@@ -1000,7 +1217,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Uploads
       security:
@@ -1018,13 +1235,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       requestBody:
@@ -1032,14 +1249,9 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                bots:
-                  type: array
-                  items:
-                    type: string
-              required:
-                - bots
+              type: array
+              items:
+                type: string
       security:
         - BearerAuth: []
     delete:
@@ -1054,7 +1266,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       security:
@@ -1078,7 +1290,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       security:
@@ -1095,7 +1307,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       requestBody:
@@ -1117,24 +1329,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  channelId:
-                    type: integer
-                    format: int64
-                  bots:
-                    type: array
-                    items:
-                      type: string
-                required:
-                  - channelId
-                  - bots
+                $ref: '#/components/schemas/UserConfig'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       security:
@@ -1152,13 +1353,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       security:
@@ -1176,13 +1377,13 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TgSession'
+                  $ref: '#/components/schemas/UserSession'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       security:
@@ -1205,7 +1406,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
       tags:
         - Users
       security:
@@ -1216,6 +1417,7 @@ components:
       name: category
       in: query
       required: false
+      description: File category
       schema:
         $ref: '#/components/schemas/Category'
       explode: false
@@ -1223,6 +1425,7 @@ components:
       name: deepSearch
       in: query
       required: false
+      description: Enable deep search
       schema:
         type: boolean
       explode: false
@@ -1230,6 +1433,7 @@ components:
       name: limit
       in: query
       required: false
+      description: Items per page
       schema:
         type: integer
         minimum: 1
@@ -1240,13 +1444,15 @@ components:
       name: name
       in: query
       required: false
+      description: File name filter
       schema:
         type: string
       explode: false
-    FileQuery.op:
-      name: op
+    FileQuery.operation:
+      name: operation
       in: query
       required: false
+      description: Operation
       schema:
         type: string
         enum:
@@ -1258,6 +1464,7 @@ components:
       name: order
       in: query
       required: false
+      description: Sort order
       schema:
         type: string
         enum:
@@ -1269,6 +1476,7 @@ components:
       name: page
       in: query
       required: false
+      description: Page number
       schema:
         type: integer
         minimum: 1
@@ -1278,14 +1486,15 @@ components:
       name: parentId
       in: query
       required: false
+      description: Parent folder ID
       schema:
         type: string
-        format: uuid
       explode: false
     FileQuery.path:
       name: path
       in: query
       required: false
+      description: File path
       schema:
         type: string
       explode: false
@@ -1293,6 +1502,7 @@ components:
       name: query
       in: query
       required: false
+      description: Search query
       schema:
         type: string
       explode: false
@@ -1300,6 +1510,7 @@ components:
       name: searchType
       in: query
       required: false
+      description: Search type
       schema:
         type: string
         enum:
@@ -1311,6 +1522,7 @@ components:
       name: shared
       in: query
       required: false
+      description: Show shared files
       schema:
         type: boolean
       explode: false
@@ -1318,6 +1530,7 @@ components:
       name: sort
       in: query
       required: false
+      description: Sort field
       schema:
         type: string
         enum:
@@ -1330,20 +1543,27 @@ components:
       name: type
       in: query
       required: false
+      description: File type
       schema:
         type: string
+        enum:
+          - folder
+          - file
       explode: false
     FileQuery.updatedAt:
       name: updatedAt
       in: query
       required: false
+      description: Last update time
       schema:
         type: string
+        format: date-time
       explode: false
     UploadQuery.channelId:
       name: channelId
       in: query
       required: false
+      description: Optional channel identifier for upload
       schema:
         type: integer
         format: int64
@@ -1352,13 +1572,16 @@ components:
       name: encrypted
       in: query
       required: false
+      description: Whether the upload content is encrypted
       schema:
         type: boolean
+        default: false
       explode: false
     UploadQuery.fileName:
       name: fileName
       in: query
       required: true
+      description: Original file name
       schema:
         type: string
       explode: false
@@ -1366,6 +1589,7 @@ components:
       name: partName
       in: query
       required: true
+      description: Name of the part being uploaded
       schema:
         type: string
       explode: false
@@ -1373,10 +1597,26 @@ components:
       name: partNo
       in: query
       required: true
+      description: Part number in sequence
       schema:
         type: integer
       explode: false
   schemas:
+    ApiError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          example: 500
+          description: Error code
+        message:
+          type: string
+          example: Internal server error occurred
+          description: Error message
+      description: Standard error response
     Category:
       type: string
       enum:
@@ -1386,6 +1626,31 @@ components:
         - image
         - other
         - video
+      description: Supported file categories
+    CategoryStats:
+      type: object
+      required:
+        - totalFiles
+        - totalSize
+        - category
+      properties:
+        totalFiles:
+          type: integer
+          format: int64
+          description: Total number of files
+        totalSize:
+          type: integer
+          format: int64
+          description: Total size of files in bytes
+        category:
+          allOf:
+            - $ref: '#/components/schemas/Category'
+          description: Category name
+      example:
+        totalFiles: 1250
+        totalSize: 104857600
+        category: document
+      description: Statistics for files by category
     Channel:
       type: object
       required:
@@ -1394,86 +1659,262 @@ components:
       properties:
         channelName:
           type: string
+          description: Name of the Telegram channel
         channelId:
           type: integer
           format: int64
+          description: Unique numeric identifier of the channel
+      example:
+        channelName: Channel Name
+        channelId: 123456789
+      description: Telegram channel information
     ChannelUpdate:
       type: object
       properties:
         channelName:
           type: string
+          description: Name of the Telegram channel
         channelId:
           type: integer
           format: int64
-    DeleteOperation:
-      type: object
-      properties:
-        files:
-          type: array
-          items:
-            type: string
-        source:
-          type: string
-    Error:
-      type: object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
+          description: Unique numeric identifier of the channel
+      example:
+        channelName: Channel Name
+        channelId: 123456789
+      description: Telegram channel information
     File:
       type: object
       required:
         - name
         - type
-        - channelId
+        - category
         - size
       properties:
         id:
           type: string
-          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: File ID
+          readOnly: true
         name:
           type: string
+          example: document.pdf
+          description: File name
         type:
           type: string
+          enum:
+            - folder
+            - file
+          example: file
+          description: File type
         parts:
           type: array
           items:
             $ref: '#/components/schemas/Part'
+          description: File parts
         mimeType:
           type: string
-        channelId:
-          type: integer
-          format: int64
-        path:
-          type: string
+          example: application/pdf
+          description: MIME type
+        category:
+          allOf:
+            - $ref: '#/components/schemas/Category'
+          example: document
+          description: File category
+          readOnly: true
         parentId:
           type: string
-          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: Parent folder ID
         size:
           type: integer
           format: int64
+          example: 1048576
+          description: File size in bytes
         encrypted:
           type: boolean
+          example: false
+          description: Encryption status
         updatedAt:
           type: string
           format: date-time
+          description: Last update time
+          readOnly: true
         parentPath:
           type: string
-    FileOperation:
+          example: /documents/
+          description: Parent folder path
+          readOnly: true
+      description: File metadata
+    FileCopy:
+      type: object
+      required:
+        - destination
+      properties:
+        newName:
+          type: string
+          description: New file name
+        destination:
+          type: string
+          description: Destination path for the copied file
+      example:
+        newName: document_copy.pdf
+        destination: /Documents/2023/
+      description: File Copy request
+    FileCreate:
+      type: object
+      required:
+        - name
+        - type
+        - size
+      properties:
+        name:
+          type: string
+          example: document.pdf
+          description: File name
+        type:
+          type: string
+          enum:
+            - folder
+            - file
+          example: file
+          description: File type
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Part'
+          description: File parts
+        mimeType:
+          type: string
+          example: application/pdf
+          description: MIME type
+        channelId:
+          type: integer
+          format: int64
+          example: 123456789
+          description: Channel ID
+        path:
+          type: string
+          example: /documents/2023/
+          description: File path
+        parentId:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: Parent folder ID
+        size:
+          type: integer
+          format: int64
+          example: 1048576
+          description: File size in bytes
+        encrypted:
+          type: boolean
+          example: false
+          description: Encryption status
+      description: File metadata
+    FileDelete:
+      type: object
+      required:
+        - destination
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Array of file or folders ids to be deleted
+        source:
+          type: string
+          description: Source file path to be deleted
+        destination:
+          type: string
+          description: Destination path where files will be moved to
+      example:
+        ids:
+          - 123e4567-e89b-12d3-a456-426614174000
+        destination: /Documents/2023/
+      description: Delete operation request
+    FileList:
       type: object
       required:
         - files
+        - meta
       properties:
         files:
           type: array
           items:
+            $ref: '#/components/schemas/File'
+          minItems: 0
+          maxItems: 1000
+          description: Array of file entries in the current page
+        meta:
+          allOf:
+            - $ref: '#/components/schemas/Meta'
+          description: Pagination metadata and total count information
+      description: Paginated file listing response with metadata
+    FileMkDir:
+      type: object
+      required:
+        - paths
+      properties:
+        paths:
+          type: array
+          items:
             type: string
+          description: Directory path(s) to be created
+      example:
+        paths:
+          - /Documents/2023/
+          - /Documents/2024/
+      description: Request to create directories
+    FileMove:
+      type: object
+      required:
+        - destination
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Array of file or folders ids to be moved
+        source:
+          type: string
+          description: Source path to move files from
         destination:
           type: string
+          description: Destination path where files will be moved to
+      example:
+        ids:
+          - 123e4567-e89b-12d3-a456-426614174000
+        destination: /Documents/2023/
+      description: Move multiple files by ids or path
+    FilePartsUpdate:
+      type: object
+      required:
+        - channelId
+        - size
+        - updatedAt
+      properties:
+        channelId:
+          type: integer
+          format: int64
+          example: 123456
+          description: Channel ID
+        uploadId:
+          type: string
+          description: Upload ID
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Part'
+          description: File parts
+        size:
+          type: integer
+          format: int64
+          example: 1048576
+          description: File size in bytes
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update time
+      description: File parts update request
     FileShare:
       type: object
       required:
@@ -1483,36 +1924,90 @@ components:
       properties:
         protected:
           type: boolean
+          example: true
+          description: Indicates if the shared file requires password protection
         userId:
           type: integer
           format: int64
+          example: 123456789
+          description: ID of the user who created the share
         type:
           type: string
+          enum:
+            - folder
+            - file
+          example: file
+          description: File type
         name:
           type: string
+          description: Name of the shared file or folder
         expiresAt:
           type: string
           format: date-time
+          description: Expiration date and time of the share link
+      description: File sharing information and settings
     FileShareCreate:
       type: object
       properties:
         password:
           type: string
+          example: securepass123
+          description: Share password
         expiresAt:
           type: string
           format: date-time
-    InternalServerError:
+          description: Share expiration date
+      description: File share creation request
+    FileUpdate:
       type: object
-      description: ''
+      properties:
+        name:
+          type: string
+          example: document.pdf
+          description: File name
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Part'
+          description: File parts
+        size:
+          type: integer
+          format: int64
+          example: 1048576
+          description: File size in bytes
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update time
+      description: File update request
+    FolderCreate:
+      type: object
+      required:
+        - path
+      properties:
+        path:
+          type: string
+          example: /Documents/2023/
+          description: Directory path to create
     Meta:
       type: object
       properties:
         count:
           type: integer
+          example: 1250
+          minimum: 0
+          description: Total number of items matching the query
         totalPages:
           type: integer
+          example: 25
+          minimum: 1
+          description: Total number of available pages based on limit
         currentPage:
           type: integer
+          example: 1
+          minimum: 1
+          description: Current page number in the pagination
+      description: Pagination metadata containing count, page information
     Part:
       type: object
       required:
@@ -1520,8 +2015,13 @@ components:
       properties:
         id:
           type: integer
+          example: 1
+          description: Part ID
         salt:
           type: string
+          example: abc123
+          description: Encryption salt
+      description: File part information
     Session:
       type: object
       required:
@@ -1534,41 +2034,72 @@ components:
       properties:
         name:
           type: string
+          example: John Doe
+          description: User's display name or full name
         userName:
           type: string
+          example: johndoe
+          description: Telegram username without @ symbol
         userId:
           type: integer
           format: int64
+          example: 123456789
+          minimum: 1
+          description: Telegram user ID (unique identifier)
         isPremium:
           type: boolean
+          example: true
+          description: Premium subscription status
         hash:
           type: string
+          example: a1b2c3d4e5f6g7h8i9j0
+          description: Session hash for verification and security
         expires:
           type: string
-        session:
-          type: string
-    TgSession:
+          format: date-time
+          description: Session expiration date
+      description: User session information containing authentication and profile details
+    SessionCreate:
       type: object
       required:
+        - name
+        - userName
+        - userId
+        - isPremium
         - hash
-        - createdAt
-        - valid
-        - current
+        - expires
+        - session
       properties:
+        name:
+          type: string
+          example: John Doe
+          description: User's display name or full name
+        userName:
+          type: string
+          example: johndoe
+          description: Telegram username without @ symbol
+        userId:
+          type: integer
+          format: int64
+          example: 123456789
+          minimum: 1
+          description: Telegram user ID (unique identifier)
+        isPremium:
+          type: boolean
+          example: true
+          description: Premium subscription status
         hash:
           type: string
-        createdAt:
+          example: a1b2c3d4e5f6g7h8i9j0
+          description: Session hash for verification and security
+        expires:
           type: string
-        location:
+          format: date-time
+          description: Session expiration date
+        session:
           type: string
-        officialApp:
-          type: boolean
-        appName:
-          type: string
-        valid:
-          type: boolean
-        current:
-          type: boolean
+          description: Optional session token for client identification
+      description: User session information containing authentication and profile details
     UploadPart:
       type: object
       required:
@@ -1581,20 +2112,28 @@ components:
       properties:
         name:
           type: string
+          description: Name identifier of the part
         partId:
           type: integer
+          description: Telegram Message ID
         partNo:
           type: integer
+          description: Sequential number of the part
         channelId:
           type: integer
           format: int64
+          description: Channel identifier associated with the upload
         size:
           type: integer
           format: int64
+          description: Size of the part in bytes
         encrypted:
           type: boolean
+          description: Indicates if the part is encrypted
         salt:
           type: string
+          description: Salt value used for encryption, required if encrypted is true
+      description: Details of an uploaded part
     UploadStats:
       type: object
       required:
@@ -1603,9 +2142,73 @@ components:
       properties:
         uploadDate:
           type: string
+          format: date-time
+          description: Date and time when the upload occurred
         totalUploaded:
           type: integer
           format: int64
+          description: Total number of bytes uploaded
+      description: Statistics about the upload
+    UserConfig:
+      type: object
+      required:
+        - channelId
+        - bots
+      properties:
+        channelId:
+          type: integer
+          format: int64
+          description: Channel identifier associated with the user
+        bots:
+          type: array
+          items:
+            type: string
+          description: List of bot tokens
+      example:
+        channelId: 123456789
+        bots:
+          - bot1
+          - bot2
+      description: User configuration for channel and bot settings
+    UserSession:
+      type: object
+      required:
+        - hash
+        - createdAt
+        - valid
+        - current
+      properties:
+        hash:
+          type: string
+          description: Unique hash identifier for the session
+        createdAt:
+          type: string
+          format: date-time
+          description: Session creation timestamp
+        location:
+          type: string
+          description: Geographic location where session was created
+        officialApp:
+          type: boolean
+          description: Indicates if session is from an official Telegram app
+        appName:
+          type: string
+          description: Name of the application used for session
+        valid:
+          type: boolean
+          description: Indicates if the session is still valid
+        current:
+          type: boolean
+          description: Indicates if this is the currently active session
+      example:
+        hash: a1b2c3d4e5f6g7h8i9j0
+        createdAt: 2023-10-21T07:28:00Z
+        location: New York, USA
+        officialApp: true
+        appName: Telegram
+        valid: true
+        current: true
+      description: User session information
   securitySchemes:
     BearerAuth:
       type: http
