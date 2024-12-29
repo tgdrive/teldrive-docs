@@ -276,11 +276,10 @@ model File {
   @doc("File category")
   @example(Category.document)
   @visibility(Lifecycle.Read)
-  category: Category;
+  category?: Category;
 
   @doc("Channel ID")
   @example(123456789)
-  @visibility(Lifecycle.Create)
   channelId?: int64;
 
   @doc("File path")
@@ -294,7 +293,7 @@ model File {
 
   @doc("File size in bytes")
   @example(1048576)
-  size: int64;
+  size?: int64;
 
   @doc("Encryption status")
   @example(false)
