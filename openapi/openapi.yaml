@@ -1714,8 +1714,6 @@ components:
       required:
         - name
         - type
-        - category
-        - size
       properties:
         id:
           type: string
@@ -1748,6 +1746,11 @@ components:
           example: document
           description: File category
           readOnly: true
+        channelId:
+          type: integer
+          format: int64
+          example: 123456789
+          description: Channel ID
         parentId:
           type: string
           example: 123e4567-e89b-12d3-a456-426614174000
@@ -1792,7 +1795,6 @@ components:
       required:
         - name
         - type
-        - size
       properties:
         name:
           type: string

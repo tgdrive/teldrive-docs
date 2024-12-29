@@ -2700,9 +2700,7 @@
         "type": "object",
         "required": [
           "name",
-          "type",
-          "category",
-          "size"
+          "type"
         ],
         "properties": {
           "id": {
@@ -2746,6 +2744,12 @@
             "example": "document",
             "description": "File category",
             "readOnly": true
+          },
+          "channelId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 123456789,
+            "description": "Channel ID"
           },
           "parentId": {
             "type": "string",
@@ -2803,8 +2807,7 @@
         "type": "object",
         "required": [
           "name",
-          "type",
-          "size"
+          "type"
         ],
         "properties": {
           "name": {
