@@ -4,7 +4,7 @@ import "@typespec/openapi";
 using TypeSpec.Http;
 using TypeSpec.OpenAPI;
 @server(
-  "{url}",
+  "{url}/api",
   "Teldrive Server URL",
   {
     url: string,
@@ -13,8 +13,9 @@ using TypeSpec.OpenAPI;
 @service({
   title: "Teldrive",
 })
-@route("/api")
 namespace Teldrive;
+
+alias ApiAuth = BearerAuth | ApiKeyAuth<ApiKeyLocation.cookie, "access_token">;
 
 @doc("File streaming response")
 model FileStream {
@@ -33,7 +34,7 @@ model FileStream {
   @header("Content-Type")
   @doc("The MIME type of the file")
   @example("application/octet-stream")
-  contentType: "application/octet-stream";
+  contentType: string;
 
   @header("Content-Length")
   @doc("Size of the response body in bytes")
@@ -50,7 +51,7 @@ model FileStream {
   @example("bytes 0-1048575/2097152")
   contentRange?: string;
 
-  @header("ETag")
+  @header("Etag")
   @doc("Entity tag for cache validation")
   @example("5e8d1a2b-3c4d-5e6f-7a8b-9c0d1e2f3a4b")
   eTag: string;
@@ -62,26 +63,15 @@ model FileStream {
 
 @error
 @doc("Standard error response")
-model ApiError {
+model Error {
   @doc("Error code")
   @example(500)
-  code?: integer;
+  code: integer;
 
   @doc("Error message")
   @example("Internal server error occurred")
   message: string;
 }
-
-model ErrorResponse<T> {
-  ...ApiError;
-  ...T;
-}
-
-model InternalServerErrorResponse is ErrorResponse<Response<500>>;
-model NotFoundErrorResponse is ErrorResponse<NotFoundResponse>;
-model ConflictErrorResponse is ErrorResponse<ConflictResponse>;
-model BadRequestErrorResponse is ErrorResponse<BadRequestResponse>;
-model RangeNotSatisfied is ErrorResponse<Response<416>>;
 
 @doc("User session information containing authentication and profile details")
 model Session {
@@ -120,23 +110,31 @@ interface Auth {
   @route("/session")
   @summary("Get session information")
   @get
-  session(): Session | null;
+  session(@cookie authToken?: string): (Session & {
+    @header("Set-Cookie") setCookie: string;
+  }) | Error;
 
   @route("/login")
   @summary("Login")
   @post
-  login(...Session): NoContentResponse | InternalServerErrorResponse;
+  login(...Session): {
+    ...NoContentResponse;
+    @header("Set-Cookie") setCookie: string;
+  } | Error;
 
   @route("/logout")
   @summary("Logout")
-  @useAuth(BearerAuth)
+  @useAuth(ApiAuth)
   @post
-  logout(): NoContentResponse | InternalServerErrorResponse;
+  logout(): {
+    ...NoContentResponse;
+    @header("Set-Cookie") setCookie: string;
+  } | Error;
 
   @route("/ws")
   @summary("Websocket QR Login")
   @get
-  ws(): Response<101>;
+  ws(): Response<101> | Error;
 }
 
 @doc("Supported file categories")
@@ -175,12 +173,12 @@ model FileQuery {
   @query
   @doc("Search type")
   @example("text")
-  searchType: "text" | "regex" = "text";
+  searchType?: "text" | "regex" = "text";
 
   @query
   @doc("File type")
   @example("file")
-  type: "folder" | "file";
+  type?: "folder" | "file";
 
   @query
   @doc("File path")
@@ -190,17 +188,17 @@ model FileQuery {
   @query
   @doc("Operation")
   @example("list")
-  operation: "list" | "find" = "list";
+  operation?: "list" | "find" = "list";
 
   @query
   @doc("File Status")
   @example("active")
-  status: "active" | "pending_deletion" = "active";
+  status?: "active" | "pending_deletion" = "active";
 
   @query
   @doc("Enable deep search")
   @example(false)
-  deepSearch: boolean = false;
+  deepSearch?: boolean = false;
 
   @query
   @doc("Show shared files")
@@ -224,25 +222,25 @@ model FileQuery {
   @query
   @doc("Sort field")
   @example("name")
-  sort: "name" | "updatedAt" | "size" = "name";
+  sort?: "name" | "updatedAt" | "size" = "name";
 
   @query
   @doc("Sort order")
   @example("asc")
-  order: "asc" | "desc" = "asc";
+  order?: "asc" | "desc" = "asc";
 
   @query
   @doc("Items per page")
   @example(50)
   @maxValue(1000)
   @minValue(1)
-  limit: integer = 500;
+  limit?: integer = 500;
 
   @query
   @doc("Page number")
   @example(1)
   @minValue(1)
-  page: integer = 1;
+  page?: integer = 1;
 }
 
 @doc("File part information")
@@ -286,9 +284,8 @@ model File {
   @example(123456789)
   channelId?: int64;
 
-  @doc("File path")
+  @doc("File or Folder path")
   @example("/documents/2023/")
-  @visibility(Lifecycle.Create)
   path?: string;
 
   @doc("Parent folder ID")
@@ -362,7 +359,7 @@ model FileList {
   @doc("Array of file entries in the current page")
   @minItems(0)
   @maxItems(1000)
-  files: File[];
+  items: File[];
 
   @doc("Pagination metadata and total count information")
   meta: Meta;
@@ -389,7 +386,7 @@ model FileUpdate {
 model FilePartsUpdate {
   @doc("Channel ID")
   @example(123456)
-  channelId: int64;
+  channelId?: int64;
 
   @doc("Upload ID")
   uploadId?: string;
@@ -473,148 +470,102 @@ model CategoryStats {
 
 @route("/files")
 @tag("Files")
+@useAuth(ApiAuth)
 interface Files {
   @route("")
   @get
-  @useAuth(BearerAuth)
   @summary("List all files")
-  list(
-    ...FileQuery,
-  ): FileList | NotFoundErrorResponse | InternalServerErrorResponse;
+  list(...FileQuery): FileList | Error;
 
   @route("")
   @post
-  @useAuth(BearerAuth)
   @summary("Create a new file")
-  create(...File):
-    | {
-        ...File;
-        @statusCode _: 201;
-      }
-    | NotFoundErrorResponse
-    | ConflictErrorResponse
-    | BadRequestErrorResponse
-    | InternalServerErrorResponse;
+  create(...File): {
+    ...File;
+    @statusCode _: 201;
+  } | Error;
 
   @route("/{id}")
   @get
-  @useAuth(BearerAuth)
   @summary("Get file by ID")
-  getById(
-    @path id: string,
-  ): File | NotFoundErrorResponse | InternalServerErrorResponse;
+  getById(@path id: string): File | Error;
 
   @route("/{id}")
   @patch
-  @useAuth(BearerAuth)
   @summary("Update file")
-  update(@path id: string, @body body: FileUpdate):
-    | File
-    | NotFoundErrorResponse
-    | ConflictErrorResponse
-    | BadRequestErrorResponse
-    | InternalServerErrorResponse;
+  update(@path id: string, @body body: FileUpdate): File | Error;
 
   @route("/{id}/parts")
   @put
-  @useAuth(BearerAuth)
   @summary("Update file parts")
-  updateParts(@path id: string, @body body: FilePartsUpdate):
-    | NoContentResponse
-    | NotFoundErrorResponse
-    | BadRequestErrorResponse
-    | InternalServerErrorResponse;
+  updateParts(
+    @path id: string,
+    @body body: FilePartsUpdate,
+  ): NoContentResponse | Error;
 
   @route("/{id}/share")
   @delete
-  @useAuth(BearerAuth)
   @summary("Delete share")
-  deleteShare(
-    @path id: string,
-  ): NoContentResponse | InternalServerErrorResponse;
+  deleteShare(@path id: string): NoContentResponse | Error;
 
   @route("/{id}/share")
   @get
-  @useAuth(BearerAuth)
   @summary("Get share by file ID")
-  shareByid(
-    @path id: string,
-  ): FileShare | NotFoundErrorResponse | InternalServerErrorResponse;
+  shareByid(@path id: string): FileShare | Error;
 
   @route("/{id}/share")
   @patch
-  @useAuth(BearerAuth)
   @summary("Edit share")
   editShare(
     @path id: string,
     @bodyRoot body: FileShareCreate,
-  ): NoContentResponse | InternalServerErrorResponse;
+  ): NoContentResponse | Error;
 
   @route("/{id}/share")
   @post
-  @useAuth(BearerAuth)
   @summary("Create a share for the file")
   createShare(
     @path id: string,
     @body body: FileShareCreate,
-  ): CreatedResponse | BadRequestErrorResponse | InternalServerErrorResponse;
+  ): CreatedResponse | Error;
 
   @route("/{id}/copy")
   @post
-  @useAuth(BearerAuth)
   @summary("Copy file")
-  copy(@path id: string, @body body: FileCopy):
-    | File
-    | NotFoundErrorResponse
-    | BadRequestErrorResponse
-    | InternalServerErrorResponse;
+  copy(@path id: string, @body body: FileCopy): File | Error;
 
   @route("/{id}/{name}")
   @get
+  @useAuth(NoAuth)
   @summary("Stream or Download file")
   stream(
     @path id: string,
     @path name: string,
     @query download: boolean = false,
     @query hash?: string,
-    @header range?: string,
-    @header authorization?: string,
+    @header("Range") range?: string,
     @cookie authToken?: string,
-  ):
-    | FileStream
-    | RangeNotSatisfied
-    | NotFoundErrorResponse
-    | InternalServerErrorResponse;
-
+  ): FileStream | Error;
+  
   @route("/delete")
   @post
-  @useAuth(BearerAuth)
   @summary("Delete files")
-  delete(
-    @body body: FileDelete,
-  ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
+  delete(@body body: FileDelete): NoContentResponse | Error;
 
   @route("/move")
   @post
-  @useAuth(BearerAuth)
   @summary("Move files")
-  move(
-    @body body: FileMove,
-  ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
+  move(@body body: FileMove): NoContentResponse | Error;
 
   @route("/mkdir")
   @post
-  @useAuth(BearerAuth)
   @summary("Create Folders")
-  mkdir(
-    @body body: FileMkDir,
-  ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
+  mkdir(@body body: FileMkDir): NoContentResponse | Error;
 
   @route("/categories")
   @get
-  @useAuth(BearerAuth)
   @summary("Get category stats")
-  categoryStats(): CategoryStats[] | InternalServerErrorResponse;
+  categoryStats(): CategoryStats[] | Error;
 }
 
 @doc("Query parameters for file upload")
@@ -682,7 +633,7 @@ model UploadStats {
 
 @route("/uploads")
 @tag("Uploads")
-@useAuth(BearerAuth)
+@useAuth(ApiAuth)
 interface Uploads {
   @route("/{id}")
   @post
@@ -690,24 +641,25 @@ interface Uploads {
   upload(
     @path id: string,
     @header contentType: "application/octet-stream",
+    @header("Content-Length") contentLength: int64,
     @bodyRoot body: bytes,
     ...UploadQuery,
-  ): UploadPart | BadRequestErrorResponse | InternalServerErrorResponse;
+  ): UploadPart | Error;
 
   @route("/{id}")
   @get
   @summary("Get uploaded parts by ID")
-  partsById(@path id: string): UploadPart[] | InternalServerErrorResponse;
+  partsById(@path id: string): UploadPart[] | Error;
 
   @route("/{id}")
   @delete
   @summary("Delete uploaded file")
-  delete(@path id: string): NoContentResponse | InternalServerErrorResponse;
+  delete(@path id: string): NoContentResponse | Error;
 
   @route("/stats")
   @get
   @summary("Get upload stats")
-  stats(@query days: integer): UploadStats[] | InternalServerErrorResponse;
+  stats(@query days: integer): UploadStats[] | Error;
 }
 
 @doc("User session information")
@@ -771,54 +723,110 @@ model UserConfig {
 
 @route("/users")
 @tag("Users")
-@useAuth(BearerAuth)
+@useAuth(ApiAuth)
 interface Users {
   @route("/profile")
   @get
   @summary("Get user profile photo")
-  profileImage(
-  ): OkResponse | NotFoundErrorResponse | InternalServerErrorResponse;
+  profileImage(): {
+    @body image: bytes;
+    @statusCode statusCode: 200;
+    @header("Content-Type") contentType: "image/jpeg";
+    @header("Cache-Control") cacheControl: string;
+    @header("Content-Length") contentLength: int64;
+    @header("Content-Disposition") contentDisposition: string;
+  } | Error;
 
   @route("/config")
   @get
   @summary("Get user config")
-  stats(): UserConfig | InternalServerErrorResponse;
+  stats(): UserConfig | Error;
 
   @route("/channels")
   @get
   @summary("List user channels")
-  listChannels(): Channel[] | InternalServerErrorResponse;
+  listChannels(): Channel[] | Error;
 
   @route("/channels")
   @patch
   @summary("Update user channel")
-  updateChannel(
-    @body body: Channel,
-  ): NoContentResponse | InternalServerErrorResponse;
+  updateChannel(@body body: Channel): NoContentResponse | Error;
 
   @route("/sessions")
   @get
   @summary("List user sessions")
-  listSessions(): UserSession[] | InternalServerErrorResponse;
+  listSessions(): UserSession[] | Error;
 
   @route("/bots")
   @post
   @summary("Add bots to user account")
-  addBots(
-    @body body: AddBots,
-  ): NoContentResponse | BadRequestErrorResponse | InternalServerErrorResponse;
+  addBots(@body body: AddBots): NoContentResponse | Error;
 
   @route("/bots")
   @delete
   @summary("Remove bots from user account")
-  removeBots(): NoContentResponse | InternalServerErrorResponse;
+  removeBots(): NoContentResponse | Error;
 
   @route("/sessions/{id}")
   @delete
   @summary("Remove user session")
-  removeSession(
-    @path id: string,
-  ): NoContentResponse | InternalServerErrorResponse;
+  removeSession(@path id: string): NoContentResponse | Error;
+}
+
+model FileShareInfo {
+  @doc("File name")
+  @example("document.pdf")
+  name: string;
+
+  @doc("File type")
+  @example("file")
+  type: "folder" | "file";
+
+  @doc("Share expiration date")
+  expiresAt?: utcDateTime;
+
+  @doc("Share User ID")
+  userId: int64;
+
+  @doc("Share Protection Status")
+  @example(false)
+  protected: boolean;
+}
+model ShareUnlock {
+  @doc("Share password")
+  @example("securepass123")
+  password: string;
+}
+
+@doc("Share query parameters")
+model ShareQuery {
+  @query
+  @doc("Folder path")
+  @example("/documents/2023/")
+  path?: string;
+
+  @query
+  @doc("Sort field")
+  @example("name")
+  sort?: "name" | "updatedAt" | "size" = "name";
+
+  @query
+  @doc("Sort order")
+  @example("asc")
+  order?: "asc" | "desc" = "asc";
+
+  @query
+  @doc("Items per page")
+  @example(50)
+  @maxValue(1000)
+  @minValue(1)
+  limit?: integer = 500;
+
+  @query
+  @doc("Page number")
+  @example(1)
+  @minValue(1)
+  page?: integer = 1;
 }
 
 @route("/shares")
@@ -827,16 +835,17 @@ interface Shares {
   @route("/{id}")
   @get
   @summary("Get share by ID")
-  getById(
-    @path id: string,
-  ): File | NotFoundErrorResponse | InternalServerErrorResponse;
+  getById(@path id: string): FileShareInfo | Error;
+
+  @route("/{id}/unlock")
+  @get
+  @summary("Unlock share")
+  unlock(@path id: string, @body body: ShareUnlock): NoContentResponse | Error;
 
   @route("/{id}/files")
   @get
   @summary("List files in share")
-  listFiles(
-    @path id: string,
-  ): FileList | NotFoundErrorResponse | InternalServerErrorResponse;
+  listFiles(@path id: string, ...ShareQuery): FileList | Error;
 
   @route("/{id}/files/{fileId}/{name}")
   @get
@@ -846,9 +855,5 @@ interface Shares {
     @path name: string,
     @path fileId: string,
     @query download: boolean = false,
-  ):
-    | FileStream
-    | RangeNotSatisfied
-    | NotFoundErrorResponse
-    | InternalServerErrorResponse;
+  ): FileStream | Error;
 }

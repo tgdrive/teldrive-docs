@@ -2,6 +2,7 @@
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build && vite build -c vite.scaler.config.ts",
+    "specs:build": "vite build -c vite.scaler.config.ts",
     "docs:preview": "vitepress preview",
     "tsp:generate": "tsp compile ./typespec/main.tsp && tsp compile ./typespec/main.tsp --emit @typespec/openapi3 --option \"@typespec/openapi3.file-type=json\""
   },

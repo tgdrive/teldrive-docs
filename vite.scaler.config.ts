@@ -43,11 +43,16 @@ export default defineConfig({
       const destDir = path.resolve(__dirname, '.vitepress/dist/assets');
       const srcIndexHtml = path.resolve(__dirname, 'dist/scaler-ui/index.html');
       const destIndexHtml = path.resolve(__dirname, '.vitepress/dist/docs/api.html');
+      const srcFavicon = path.resolve(__dirname, 'public/favicon.ico');
+      const destFavicon = path.resolve(__dirname, 'dist/favicon.ico');
 
       try {
         await copyDirectory(srcDir, destDir);
         console.log('Assets copied successfully.');
         await copyFile(srcIndexHtml, destIndexHtml);
+        await copyFile(srcIndexHtml, path.resolve(__dirname, 'dist/index.html'));
+        await copyFile(srcFavicon,destFavicon)
+        fs.rmSync(path.resolve(__dirname, 'dist/scaler-ui'),{recursive:true,force:true});
         console.log('index.html copied successfully.');
       } catch (err) {
         console.error('Error copying assets:', err);
@@ -55,7 +60,6 @@ export default defineConfig({
     }
   }],
   build: {
-    outDir: path.resolve(__dirname, 'dist'),
     copyPublicDir: false,
     rollupOptions: {
       input: {

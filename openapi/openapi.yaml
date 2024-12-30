@@ -9,20 +9,25 @@ tags:
   - name: Users
   - name: Shares
 paths:
-  /api/auth/login:
+  /auth/login:
     post:
       operationId: Auth_login
       summary: Login
       parameters: []
       responses:
         '204':
-          description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+          description: 'There is no content to send for this request, but the headers may be useful. '
+          headers:
+            Set-Cookie:
+              required: true
+              schema:
+                type: string
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Auth
       requestBody:
@@ -31,39 +36,62 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SessionCreate'
-  /api/auth/logout:
+  /auth/logout:
     post:
       operationId: Auth_logout
       summary: Logout
       parameters: []
       responses:
         '204':
-          description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+          description: 'There is no content to send for this request, but the headers may be useful. '
+          headers:
+            Set-Cookie:
+              required: true
+              schema:
+                type: string
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Auth
       security:
         - BearerAuth: []
-  /api/auth/session:
+        - ApiKeyAuth: []
+  /auth/session:
     get:
       operationId: Auth_session
       summary: Get session information
-      parameters: []
+      parameters:
+        - name: auth_token
+          in: cookie
+          required: false
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
+          headers:
+            Set-Cookie:
+              required: true
+              schema:
+                type: string
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       tags:
         - Auth
-  /api/auth/ws:
+  /auth/ws:
     get:
       operationId: Auth_ws
       summary: Websocket QR Login
@@ -71,9 +99,15 @@ paths:
       responses:
         '101':
           description: Informational
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       tags:
         - Auth
-  /api/files:
+  /files:
     get:
       operationId: Files_list
       summary: List all files
@@ -101,22 +135,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileList'
-        '404':
-          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     post:
       operationId: Files_create
       summary: Create a new file
@@ -128,30 +157,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/File'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '409':
-          description: The request conflicts with the current state of the server.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -159,10 +170,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FileCreate'
+              $ref: '#/components/schemas/File'
       security:
         - BearerAuth: []
-  /api/files/categories:
+        - ApiKeyAuth: []
+  /files/categories:
     get:
       operationId: Files_categoryStats
       summary: Get category stats
@@ -176,17 +188,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CategoryStats'
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       security:
         - BearerAuth: []
-  /api/files/delete:
+        - ApiKeyAuth: []
+  /files/delete:
     post:
       operationId: Files_delete
       summary: Delete files
@@ -194,18 +207,12 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -216,7 +223,8 @@ paths:
               $ref: '#/components/schemas/FileDelete'
       security:
         - BearerAuth: []
-  /api/files/mkdir:
+        - ApiKeyAuth: []
+  /files/mkdir:
     post:
       operationId: Files_mkdir
       summary: Create Folders
@@ -224,18 +232,12 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -246,7 +248,8 @@ paths:
               $ref: '#/components/schemas/FileMkDir'
       security:
         - BearerAuth: []
-  /api/files/move:
+        - ApiKeyAuth: []
+  /files/move:
     post:
       operationId: Files_move
       summary: Move files
@@ -254,18 +257,12 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -276,7 +273,8 @@ paths:
               $ref: '#/components/schemas/FileMove'
       security:
         - BearerAuth: []
-  /api/files/{id}:
+        - ApiKeyAuth: []
+  /files/{id}:
     get:
       operationId: Files_getById
       summary: Get file by ID
@@ -293,22 +291,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/File'
-        '404':
-          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     patch:
       operationId: Files_update
       summary: Update file
@@ -325,30 +318,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/File'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '409':
-          description: The request conflicts with the current state of the server.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -359,7 +334,8 @@ paths:
               $ref: '#/components/schemas/FileUpdate'
       security:
         - BearerAuth: []
-  /api/files/{id}/copy:
+        - ApiKeyAuth: []
+  /files/{id}/copy:
     post:
       operationId: Files_copy
       summary: Copy file
@@ -376,24 +352,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/File'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -404,7 +368,8 @@ paths:
               $ref: '#/components/schemas/FileCopy'
       security:
         - BearerAuth: []
-  /api/files/{id}/parts:
+        - ApiKeyAuth: []
+  /files/{id}/parts:
     put:
       operationId: Files_updateParts
       summary: Update file parts
@@ -417,24 +382,12 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: The server cannot find the requested resource.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -445,7 +398,8 @@ paths:
               $ref: '#/components/schemas/FilePartsUpdate'
       security:
         - BearerAuth: []
-  /api/files/{id}/share:
+        - ApiKeyAuth: []
+  /files/{id}/share:
     delete:
       operationId: Files_deleteShare
       summary: Delete share
@@ -458,16 +412,17 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     get:
       operationId: Files_shareByid
       summary: Get share by file ID
@@ -484,22 +439,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileShare'
-        '404':
-          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     patch:
       operationId: Files_editShare
       summary: Edit share
@@ -512,12 +462,12 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -528,6 +478,7 @@ paths:
               $ref: '#/components/schemas/FileShareCreate'
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     post:
       operationId: Files_createShare
       summary: Create a share for the file
@@ -540,18 +491,12 @@ paths:
       responses:
         '201':
           description: The request has succeeded and a new resource has been created as a result.
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
       requestBody:
@@ -562,7 +507,8 @@ paths:
               $ref: '#/components/schemas/FileShareCreate'
       security:
         - BearerAuth: []
-  /api/files/{id}/{name}:
+        - ApiKeyAuth: []
+  /files/{id}/{name}:
     get:
       operationId: Files_stream
       summary: Stream or Download file
@@ -590,12 +536,7 @@ paths:
           schema:
             type: string
           explode: false
-        - name: range
-          in: header
-          required: false
-          schema:
-            type: string
-        - name: authorization
+        - name: Range
           in: header
           required: false
           schema:
@@ -632,7 +573,7 @@ paths:
               description: Range of bytes being sent
               schema:
                 type: string
-            ETag:
+            Etag:
               required: true
               description: Entity tag for cache validation
               schema:
@@ -644,7 +585,7 @@ paths:
                 type: string
                 format: date-time
           content:
-            application/octet-stream:
+            '*/*':
               schema:
                 type: string
                 format: binary
@@ -673,7 +614,7 @@ paths:
               description: Range of bytes being sent
               schema:
                 type: string
-            ETag:
+            Etag:
               required: true
               description: Entity tag for cache validation
               schema:
@@ -685,31 +626,21 @@ paths:
                 type: string
                 format: date-time
           content:
-            application/octet-stream:
+            '*/*':
               schema:
                 type: string
                 format: binary
-        '404':
-          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '416':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Files
-  /api/shares/{id}:
+      security:
+        - {}
+  /shares/{id}:
     get:
       operationId: Shares_getById
       summary: Get share by ID
@@ -725,22 +656,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/File'
-        '404':
-          description: The server cannot find the requested resource.
+                $ref: '#/components/schemas/FileShareInfo'
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Shares
-  /api/shares/{id}/files:
+  /shares/{id}/files:
     get:
       operationId: Shares_listFiles
       summary: List files in share
@@ -750,6 +675,11 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: '#/components/parameters/ShareQuery.path'
+        - $ref: '#/components/parameters/ShareQuery.sort'
+        - $ref: '#/components/parameters/ShareQuery.order'
+        - $ref: '#/components/parameters/ShareQuery.limit'
+        - $ref: '#/components/parameters/ShareQuery.page'
       responses:
         '200':
           description: The request has succeeded.
@@ -757,21 +687,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileList'
-        '404':
-          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Shares
-  /api/shares/{id}/files/{fileId}/{name}:
+  /shares/{id}/files/{fileId}/{name}:
     get:
       operationId: Shares_stream
       summary: Stream or Download shared file
@@ -824,7 +748,7 @@ paths:
               description: Range of bytes being sent
               schema:
                 type: string
-            ETag:
+            Etag:
               required: true
               description: Entity tag for cache validation
               schema:
@@ -836,7 +760,7 @@ paths:
                 type: string
                 format: date-time
           content:
-            application/octet-stream:
+            '*/*':
               schema:
                 type: string
                 format: binary
@@ -865,7 +789,7 @@ paths:
               description: Range of bytes being sent
               schema:
                 type: string
-            ETag:
+            Etag:
               required: true
               description: Entity tag for cache validation
               schema:
@@ -877,31 +801,46 @@ paths:
                 type: string
                 format: date-time
           content:
-            application/octet-stream:
+            '*/*':
               schema:
                 type: string
                 format: binary
-        '404':
-          description: The server cannot find the requested resource.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '416':
-          description: Client error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Shares
-  /api/uploads/stats:
+  /shares/{id}/unlock:
+    get:
+      operationId: Shares_unlock
+      summary: Unlock share
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Shares
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareUnlock'
+  /uploads/stats:
     get:
       operationId: Uploads_stats
       summary: Get upload stats
@@ -921,17 +860,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UploadStats'
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Uploads
       security:
         - BearerAuth: []
-  /api/uploads/{id}:
+        - ApiKeyAuth: []
+  /uploads/{id}:
     post:
       operationId: Uploads_upload
       summary: Upload file
@@ -941,6 +881,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Content-Length
+          in: header
+          required: true
+          schema:
+            type: integer
+            format: int64
         - $ref: '#/components/parameters/UploadQuery.partName'
         - $ref: '#/components/parameters/UploadQuery.fileName'
         - $ref: '#/components/parameters/UploadQuery.partNo'
@@ -953,18 +899,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UploadPart'
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Uploads
       requestBody:
@@ -976,6 +916,7 @@ paths:
               format: binary
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     get:
       operationId: Uploads_partsById
       summary: Get uploaded parts by ID
@@ -994,16 +935,17 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UploadPart'
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Uploads
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     delete:
       operationId: Uploads_delete
       summary: Delete uploaded file
@@ -1016,17 +958,18 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Uploads
       security:
         - BearerAuth: []
-  /api/users/bots:
+        - ApiKeyAuth: []
+  /users/bots:
     post:
       operationId: Users_addBots
       summary: Add bots to user account
@@ -1034,18 +977,12 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '400':
-          description: The server could not understand the request due to invalid syntax.
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       requestBody:
@@ -1056,6 +993,7 @@ paths:
               $ref: '#/components/schemas/AddBots'
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     delete:
       operationId: Users_removeBots
       summary: Remove bots from user account
@@ -1063,17 +1001,18 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       security:
         - BearerAuth: []
-  /api/users/channels:
+        - ApiKeyAuth: []
+  /users/channels:
     get:
       operationId: Users_listChannels
       summary: List user channels
@@ -1087,16 +1026,17 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Channel'
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
     patch:
       operationId: Users_updateChannel
       summary: Update user channel
@@ -1104,12 +1044,12 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       requestBody:
@@ -1120,7 +1060,8 @@ paths:
               $ref: '#/components/schemas/ChannelUpdate'
       security:
         - BearerAuth: []
-  /api/users/config:
+        - ApiKeyAuth: []
+  /users/config:
     get:
       operationId: Users_stats
       summary: Get user config
@@ -1132,17 +1073,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserConfig'
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       security:
         - BearerAuth: []
-  /api/users/profile:
+        - ApiKeyAuth: []
+  /users/profile:
     get:
       operationId: Users_profileImage
       summary: Get user profile photo
@@ -1150,23 +1092,37 @@ paths:
       responses:
         '200':
           description: The request has succeeded.
-        '404':
-          description: The server cannot find the requested resource.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                type: string
+            Content-Length:
+              required: true
+              schema:
+                type: integer
+                format: int64
+            Content-Disposition:
+              required: true
+              schema:
+                type: string
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       security:
         - BearerAuth: []
-  /api/users/sessions:
+        - ApiKeyAuth: []
+  /users/sessions:
     get:
       operationId: Users_listSessions
       summary: List user sessions
@@ -1180,17 +1136,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserSession'
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       security:
         - BearerAuth: []
-  /api/users/sessions/{id}:
+        - ApiKeyAuth: []
+  /users/sessions/{id}:
     delete:
       operationId: Users_removeSession
       summary: Remove user session
@@ -1203,16 +1160,17 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
-        '500':
-          description: Server error
+        default:
+          description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
       tags:
         - Users
       security:
         - BearerAuth: []
+        - ApiKeyAuth: []
 components:
   parameters:
     FileQuery.category:
@@ -1228,7 +1186,7 @@ components:
     FileQuery.deepSearch:
       name: deepSearch
       in: query
-      required: true
+      required: false
       description: Enable deep search
       schema:
         type: boolean
@@ -1237,7 +1195,7 @@ components:
     FileQuery.limit:
       name: limit
       in: query
-      required: true
+      required: false
       description: Items per page
       schema:
         type: integer
@@ -1256,7 +1214,7 @@ components:
     FileQuery.operation:
       name: operation
       in: query
-      required: true
+      required: false
       description: Operation
       schema:
         type: string
@@ -1268,7 +1226,7 @@ components:
     FileQuery.order:
       name: order
       in: query
-      required: true
+      required: false
       description: Sort order
       schema:
         type: string
@@ -1280,7 +1238,7 @@ components:
     FileQuery.page:
       name: page
       in: query
-      required: true
+      required: false
       description: Page number
       schema:
         type: integer
@@ -1314,7 +1272,7 @@ components:
     FileQuery.searchType:
       name: searchType
       in: query
-      required: true
+      required: false
       description: Search type
       schema:
         type: string
@@ -1334,7 +1292,7 @@ components:
     FileQuery.sort:
       name: sort
       in: query
-      required: true
+      required: false
       description: Sort field
       schema:
         type: string
@@ -1347,7 +1305,7 @@ components:
     FileQuery.status:
       name: status
       in: query
-      required: true
+      required: false
       description: File Status
       schema:
         type: string
@@ -1359,7 +1317,7 @@ components:
     FileQuery.type:
       name: type
       in: query
-      required: true
+      required: false
       description: File type
       schema:
         type: string
@@ -1374,6 +1332,60 @@ components:
       description: UpdatedAt Filter supports operator eq, gt, lt, gte, lte
       schema:
         type: string
+      explode: false
+    ShareQuery.limit:
+      name: limit
+      in: query
+      required: false
+      description: Items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 500
+      explode: false
+    ShareQuery.order:
+      name: order
+      in: query
+      required: false
+      description: Sort order
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: asc
+      explode: false
+    ShareQuery.page:
+      name: page
+      in: query
+      required: false
+      description: Page number
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      explode: false
+    ShareQuery.path:
+      name: path
+      in: query
+      required: false
+      description: Folder path
+      schema:
+        type: string
+      explode: false
+    ShareQuery.sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort field
+      schema:
+        type: string
+        enum:
+          - name
+          - updatedAt
+          - size
+        default: name
       explode: false
     UploadQuery.channelId:
       name: channelId
@@ -1428,20 +1440,6 @@ components:
           items:
             type: string
           description: List of bot tokens
-    ApiError:
-      type: object
-      required:
-        - message
-      properties:
-        code:
-          type: integer
-          example: 500
-          description: Error code
-        message:
-          type: string
-          example: Internal server error occurred
-          description: Error message
-      description: Standard error response
     Category:
       type: string
       enum:
@@ -1507,6 +1505,21 @@ components:
         channelName: Channel Name
         channelId: 123456789
       description: Telegram channel information
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          example: 500
+          description: Error code
+        message:
+          type: string
+          example: Internal server error occurred
+          description: Error message
+      description: Standard error response
     File:
       type: object
       required:
@@ -1549,6 +1562,10 @@ components:
           format: int64
           example: 123456789
           description: Channel ID
+        path:
+          type: string
+          example: /documents/2023/
+          description: File or Folder path
         parentId:
           type: string
           example: 123e4567-e89b-12d3-a456-426614174000
@@ -1583,55 +1600,6 @@ components:
         newName: document_copy.pdf
         destination: /Documents/2023/
       description: File Copy request
-    FileCreate:
-      type: object
-      required:
-        - name
-        - type
-      properties:
-        name:
-          type: string
-          example: document.pdf
-          description: File name
-        type:
-          type: string
-          enum:
-            - folder
-            - file
-          example: file
-          description: File type
-        parts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Part'
-          description: File parts
-        mimeType:
-          type: string
-          example: application/pdf
-          description: MIME type
-        channelId:
-          type: integer
-          format: int64
-          example: 123456789
-          description: Channel ID
-        path:
-          type: string
-          example: /documents/2023/
-          description: File path
-        parentId:
-          type: string
-          example: 123e4567-e89b-12d3-a456-426614174000
-          description: Parent folder ID
-        size:
-          type: integer
-          format: int64
-          example: 1048576
-          description: File size in bytes
-        encrypted:
-          type: boolean
-          example: false
-          description: Encryption status
-      description: File metadata
     FileDelete:
       type: object
       required:
@@ -1656,10 +1624,10 @@ components:
     FileList:
       type: object
       required:
-        - files
+        - items
         - meta
       properties:
-        files:
+        items:
           type: array
           items:
             $ref: '#/components/schemas/File'
@@ -1706,7 +1674,6 @@ components:
     FilePartsUpdate:
       type: object
       required:
-        - channelId
         - size
         - updatedAt
       properties:
@@ -1776,6 +1743,37 @@ components:
           format: date-time
           description: Share expiration date
       description: File share creation request
+    FileShareInfo:
+      type: object
+      required:
+        - name
+        - type
+        - userId
+        - protected
+      properties:
+        name:
+          type: string
+          example: document.pdf
+          description: File name
+        type:
+          type: string
+          enum:
+            - folder
+            - file
+          example: file
+          description: File type
+        expiresAt:
+          type: string
+          format: date-time
+          description: Share expiration date
+        userId:
+          type: integer
+          format: int64
+          description: Share User ID
+        protected:
+          type: boolean
+          example: false
+          description: Share Protection Status
     FileUpdate:
       type: object
       properties:
@@ -1909,6 +1907,15 @@ components:
           type: string
           description: Optional session token for client identification
       description: User session information containing authentication and profile details
+    ShareUnlock:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+          example: securepass123
+          description: Share password
     UploadPart:
       type: object
       required:
@@ -2022,8 +2029,12 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
+    ApiKeyAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
 servers:
-  - url: '{url}'
+  - url: '{url}/api'
     description: Teldrive Server URL
     variables:
       url:
