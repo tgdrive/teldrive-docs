@@ -838,7 +838,7 @@ interface Shares {
   getById(@path id: string): FileShareInfo | Error;
 
   @route("/{id}/unlock")
-  @get
+  @post
   @summary("Unlock share")
   unlock(@path id: string, @body body: ShareUnlock): NoContentResponse | Error;
 

@@ -1368,7 +1368,7 @@
       }
     },
     "/shares/{id}/unlock": {
-      "get": {
+      "post": {
         "operationId": "Shares_unlock",
         "summary": "Unlock share",
         "parameters": [
