@@ -110,9 +110,9 @@ interface Auth {
   @route("/session")
   @summary("Get session information")
   @get
-  session(@cookie authToken?: string): (Session & {
+  session(@cookie(#{name: "access_token"}) accessToken?: string): (Session & {
     @header("Set-Cookie") setCookie: string;
-  }) | Error;
+  }) | NoContentResponse | Error;
 
   @route("/login")
   @summary("Login")
@@ -544,7 +544,7 @@ interface Files {
     @query download: boolean = false,
     @query hash?: string,
     @header("Range") range?: string,
-    @cookie authToken?: string,
+    @cookie(#{name: "access_token"}) accessToken?: string,
   ): FileStream | Error;
   
   @route("/delete")

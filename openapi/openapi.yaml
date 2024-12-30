@@ -65,7 +65,7 @@ paths:
       operationId: Auth_session
       summary: Get session information
       parameters:
-        - name: auth_token
+        - name: access_token
           in: cookie
           required: false
           schema:
@@ -83,6 +83,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
         default:
           description: An unexpected error response.
           content:
@@ -541,7 +543,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: auth_token
+        - name: access_token
           in: cookie
           required: false
           schema:

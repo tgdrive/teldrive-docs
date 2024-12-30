@@ -112,7 +112,7 @@
         "summary": "Get session information",
         "parameters": [
           {
-            "name": "auth_token",
+            "name": "access_token",
             "in": "cookie",
             "required": false,
             "schema": {
@@ -139,6 +139,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "There is no content to send for this request, but the headers may be useful."
           },
           "default": {
             "description": "An unexpected error response.",
@@ -945,7 +948,7 @@
             }
           },
           {
-            "name": "auth_token",
+            "name": "access_token",
             "in": "cookie",
             "required": false,
             "schema": {
