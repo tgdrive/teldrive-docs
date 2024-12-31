@@ -110,7 +110,7 @@ interface Auth {
   @route("/session")
   @summary("Get session information")
   @get
-  session(@cookie(#{name: "access_token"}) accessToken?: string): (Session & {
+  session(@cookie(#{ name: "access_token" }) accessToken?: string): (Session & {
     @header("Set-Cookie") setCookie: string;
   }) | NoContentResponse | Error;
 
@@ -335,6 +335,10 @@ model FileShareCreate {
 
 @doc("File sharing information and settings")
 model FileShare {
+  @doc("Share ID")
+  @example("123e4567-e89b-12d3-a456-426614174000")
+  id: string;
+
   @doc("Indicates if the shared file requires password protection")
   @example(true)
   protected: boolean;
@@ -429,19 +433,13 @@ model FileMove {
 }
 
 @doc("Delete operation request")
-@example(#{
-  ids: #["123e4567-e89b-12d3-a456-426614174000"],
-  destination: "/Documents/2023/",
-})
+@example(#{ ids: #["123e4567-e89b-12d3-a456-426614174000"] })
 model FileDelete {
   @doc("Array of file or folders ids to be deleted")
   ids?: string[];
 
   @doc("Source file path to be deleted")
   source?: string;
-
-  @doc("Destination path where files will be moved to")
-  destination: string;
 }
 
 @doc("Request to create directories")
@@ -544,9 +542,9 @@ interface Files {
     @query download?: "0" | "1" = "0",
     @query hash?: string,
     @header("Range") range?: string,
-    @cookie(#{name: "access_token"}) accessToken?: string,
+    @cookie(#{ name: "access_token" }) accessToken?: string,
   ): FileStream | Error;
-  
+
   @route("/delete")
   @post
   @summary("Delete files")

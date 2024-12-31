@@ -1610,8 +1610,6 @@ components:
       description: File Copy request
     FileDelete:
       type: object
-      required:
-        - destination
       properties:
         ids:
           type: array
@@ -1621,13 +1619,9 @@ components:
         source:
           type: string
           description: Source file path to be deleted
-        destination:
-          type: string
-          description: Destination path where files will be moved to
       example:
         ids:
           - 123e4567-e89b-12d3-a456-426614174000
-        destination: /Documents/2023/
       description: Delete operation request
     FileList:
       type: object
@@ -1711,10 +1705,15 @@ components:
     FileShare:
       type: object
       required:
+        - id
         - protected
         - type
         - name
       properties:
+        id:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: Share ID
         protected:
           type: boolean
           example: true
