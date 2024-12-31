@@ -310,17 +310,17 @@ model Meta {
   @doc("Total number of items matching the query")
   @example(1250)
   @minValue(0)
-  count?: integer;
+  count: integer;
 
   @doc("Total number of available pages based on limit")
   @example(25)
   @minValue(1)
-  totalPages?: integer;
+  totalPages: integer;
 
   @doc("Current page number in the pagination")
   @example(1)
   @minValue(1)
-  currentPage?: integer;
+  currentPage: integer;
 }
 
 @doc("File share creation request")

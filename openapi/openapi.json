@@ -2808,6 +2808,11 @@
       },
       "Meta": {
         "type": "object",
+        "required": [
+          "count",
+          "totalPages",
+          "currentPage"
+        ],
         "properties": {
           "count": {
             "type": "integer",

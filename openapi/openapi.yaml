@@ -1805,6 +1805,10 @@ components:
       description: File update request
     Meta:
       type: object
+      required:
+        - count
+        - totalPages
+        - currentPage
       properties:
         count:
           type: integer
