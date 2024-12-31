@@ -1844,15 +1844,30 @@
         ]
       }
     },
-    "/users/profile": {
+    "/users/profile/{name}": {
       "get": {
         "operationId": "Users_profileImage",
         "summary": "Get user profile photo",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "The request has succeeded.",
             "headers": {
+              "Etag": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
               "Cache-Control": {
                 "required": true,
                 "schema": {
