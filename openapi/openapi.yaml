@@ -527,10 +527,13 @@ paths:
             type: string
         - name: download
           in: query
-          required: true
+          required: false
           schema:
-            type: boolean
-            default: false
+            type: string
+            enum:
+              - '0'
+              - '1'
+            default: '0'
           explode: false
         - name: hash
           in: query
@@ -719,10 +722,13 @@ paths:
             type: string
         - name: download
           in: query
-          required: true
+          required: false
           schema:
-            type: boolean
-            default: false
+            type: string
+            enum:
+              - '0'
+              - '1'
+            default: '0'
           explode: false
       responses:
         '200':

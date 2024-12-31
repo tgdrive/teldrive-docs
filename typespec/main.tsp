@@ -541,7 +541,7 @@ interface Files {
   stream(
     @path id: string,
     @path name: string,
-    @query download: boolean = false,
+    @query download?: "0" | "1" = "0",
     @query hash?: string,
     @header("Range") range?: string,
     @cookie(#{name: "access_token"}) accessToken?: string,
@@ -854,6 +854,6 @@ interface Shares {
     @path id: string,
     @path name: string,
     @path fileId: string,
-    @query download: boolean = false,
+    @query download?: "0" | "1" = "0",
   ): FileStream | Error;
 }
