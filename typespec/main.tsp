@@ -723,13 +723,14 @@ model UserConfig {
 @tag("Users")
 @useAuth(ApiAuth)
 interface Users {
-  @route("/profile")
+  @route("/profile/{name}")
   @get
   @summary("Get user profile photo")
-  profileImage(): {
+  profileImage(@path name: string): {
     @body image: bytes;
     @statusCode statusCode: 200;
     @header("Content-Type") contentType: "image/jpeg";
+    @header("Etag") eTag: string;
     @header("Cache-Control") cacheControl: string;
     @header("Content-Length") contentLength: int64;
     @header("Content-Disposition") contentDisposition: string;
