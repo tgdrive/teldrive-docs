@@ -638,6 +638,7 @@ interface Uploads {
   @summary("Upload file")
   upload(
     @path id: string,
+    @header("Content-Type") contentType?: string,
     @header("Content-Length") contentLength: int64,
     @bodyRoot body: bytes,
     ...UploadQuery,

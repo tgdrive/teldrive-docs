@@ -1538,10 +1538,10 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "*/*": {
               "schema": {
                 "type": "string",
-                "format": "byte"
+                "format": "binary"
               }
             }
           }
