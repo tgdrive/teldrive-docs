@@ -158,5 +158,8 @@ Duration to retain upload data.
 **`--tg-uploads-threads`** (default: 8)  
 Number of concurrent upload threads.
 
+**`--tg-ntp`** (default: false)  
+Sync system clock with NTP(Network Time Protocol).
+
 > [!NOTE] 
 Duration values can be specified using units: "s" (seconds), "m" (minutes), "h" (hours), "d" (days). Required flags must be set either via command line or configuration file.

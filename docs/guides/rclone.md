@@ -50,4 +50,5 @@ random_chunk_name = true
 ```
 > [!IMPORTANT]
 >- For obtaining session token from cookies  easily use this chrome [extension](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm).This extension is also available for firefox.
->- Once extenion is installed go to teldrive website and copy values from cookie named `user-session`.
+>- Once extenion is installed go to teldrive website and copy values from cookie named `access_token`.
+>- You can also get token from browser developer tools in cookies section.

@@ -72,3 +72,7 @@ docker compose -f teldrive.yml  up -d
 ```
 - You can also create config in `$HOME/.teldrive/config.toml` then you can run teldrive from everywhere.
 - Go to  http://localhost:8080 in your browser to access teldrive.
+
+> [!NOTE]  
+>- If you are stuck on login screen you have to sync your system clock so that telegram doesn't drop all the packets.See more [here](https://core.telegram.org/mtproto#time-synchronization).
+>- You can also use NTP(Network Time Protocol) to sync your system clock.To enable this in teldrive use `ntp` key in tg config section or pass `--tg-ntp` in cli.
