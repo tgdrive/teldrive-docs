@@ -222,7 +222,7 @@ model FileQuery {
   @query
   @doc("Sort field")
   @example("name")
-  sort?: "name" | "updatedAt" | "size" = "name";
+  sort?: "name" | "updatedAt" | "size" | "id" = "name";
 
   @query
   @doc("Sort order")
@@ -807,7 +807,7 @@ model ShareQuery {
   @query
   @doc("Sort field")
   @example("name")
-  sort?: "name" | "updatedAt" | "size" = "name";
+  sort?: "name" | "updatedAt" | "size" | "id" = "name";
 
   @query
   @doc("Sort order")

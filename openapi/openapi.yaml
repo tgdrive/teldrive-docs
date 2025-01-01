@@ -1317,6 +1317,7 @@ components:
           - name
           - updatedAt
           - size
+          - id
         default: name
       explode: false
     FileQuery.status:
@@ -1402,6 +1403,7 @@ components:
           - name
           - updatedAt
           - size
+          - id
         default: name
       explode: false
     UploadQuery.channelId:
