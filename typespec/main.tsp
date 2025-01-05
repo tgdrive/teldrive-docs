@@ -388,6 +388,14 @@ model FileUpdate {
 
 @doc("File parts update request")
 model FilePartsUpdate {
+  @doc("File name")
+  @example("document.pdf")
+  name?: string;
+
+  @doc("Parent folder ID")
+  @example("123e4567-e89b-12d3-a456-426614174000")
+  parentId?: string;
+
   @doc("Channel ID")
   @example(123456)
   channelId?: int64;
@@ -423,10 +431,8 @@ model FileCopy {
 })
 model FileMove {
   @doc("Array of file or folders ids to be moved")
-  ids?: string[];
-
-  @doc("Source path to move files from")
-  source?: string;
+  @minItems(1)
+  ids: string[];
 
   @doc("Destination path where files will be moved to")
   destination: string;
@@ -436,10 +442,8 @@ model FileMove {
 @example(#{ ids: #["123e4567-e89b-12d3-a456-426614174000"] })
 model FileDelete {
   @doc("Array of file or folders ids to be deleted")
-  ids?: string[];
-
-  @doc("Source file path to be deleted")
-  source?: string;
+  @minItems(1)
+  ids: string[];
 }
 
 @doc("Request to create directories")

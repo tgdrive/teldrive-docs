@@ -1621,15 +1621,15 @@ components:
       description: File Copy request
     FileDelete:
       type: object
+      required:
+        - ids
       properties:
         ids:
           type: array
           items:
             type: string
+          minItems: 1
           description: Array of file or folders ids to be deleted
-        source:
-          type: string
-          description: Source file path to be deleted
       example:
         ids:
           - 123e4567-e89b-12d3-a456-426614174000
@@ -1666,16 +1666,15 @@ components:
     FileMove:
       type: object
       required:
+        - ids
         - destination
       properties:
         ids:
           type: array
           items:
             type: string
+          minItems: 1
           description: Array of file or folders ids to be moved
-        source:
-          type: string
-          description: Source path to move files from
         destination:
           type: string
           description: Destination path where files will be moved to
@@ -1690,6 +1689,14 @@ components:
         - size
         - updatedAt
       properties:
+        name:
+          type: string
+          example: document.pdf
+          description: File name
+        parentId:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: Parent folder ID
         channelId:
           type: integer
           format: int64
