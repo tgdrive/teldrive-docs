@@ -12,6 +12,22 @@ powershell -c "irm https://instl.vercel.app/tgdrive/rclone?platform=windows|iex"
 ```
 :::
 
+| Supported Features              |  |
+|----------------------|----------|
+| Purge                | Yes       |
+| Copy                 | Yes      |
+| Move                 | Yes      |
+| DirMove              | Yes       |
+| CleanUp              | Yes       |
+| ListR                | No       |
+| StreamUpload         | No       |
+| MultithreadUpload    | Yes       |
+| LinkSharing          | Yes      |
+| About                | No       |
+| EmptyDir             | Yes      |
+
+To know more about rclone commands and features, visit the official [rclone documentation](https://rclone.org/docs/).
+
 ### Rclone Configuration Section
 The configuration should be defined under the `[teldrive]` section in your config file.
 
