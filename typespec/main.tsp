@@ -422,6 +422,9 @@ model FileCopy {
 
   @doc("Destination path for the copied file")
   destination: string;
+
+  @doc("Last update time")
+  updatedAt?: utcDateTime;
 }
 
 @doc("Move multiple files by ids or path")
@@ -495,7 +498,11 @@ interface Files {
   @route("/{id}")
   @patch
   @summary("Update file")
-  update(@path id: string, @body body: FileUpdate): File | Error;
+  update(
+    @path id: string,
+    @body body: FileUpdate,
+    @query skiputs?: "0" | "1" = "0",
+  ): File | Error;
 
   @route("/{id}/parts")
   @put

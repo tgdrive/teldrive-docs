@@ -313,6 +313,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: skiputs
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - '0'
+              - '1'
+            default: '0'
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
@@ -1615,6 +1625,10 @@ components:
         destination:
           type: string
           description: Destination path for the copied file
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update time
       example:
         newName: document_copy.pdf
         destination: /Documents/2023/

@@ -552,6 +552,20 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "skiputs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "0",
+                "1"
+              ],
+              "default": "0"
+            },
+            "explode": false
           }
         ],
         "responses": {
@@ -2551,6 +2565,11 @@
           "destination": {
             "type": "string",
             "description": "Destination path for the copied file"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update time"
           }
         },
         "example": {
