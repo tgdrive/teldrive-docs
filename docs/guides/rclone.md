@@ -23,7 +23,7 @@ powershell -c "irm https://instl.vercel.app/tgdrive/rclone?platform=windows|iex"
 | StreamUpload         | No       |
 | MultithreadUpload    | Yes       |
 | LinkSharing          | Yes      |
-| About                | No       |
+| About                | Yes       |
 | EmptyDir             | Yes      |
 
 To know more about rclone commands and features, visit the official [rclone documentation](https://rclone.org/docs/).
