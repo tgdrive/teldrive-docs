@@ -19,6 +19,9 @@
     },
     {
       "name": "Shares"
+    },
+    {
+      "name": "Version"
     }
   ],
   "paths": {
@@ -2019,6 +2022,38 @@
           }
         ]
       }
+    },
+    "/version": {
+      "get": {
+        "operationId": "Version_version",
+        "summary": "Get API version",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiVersion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
     }
   },
   "components": {
@@ -2356,6 +2391,49 @@
               "type": "string"
             },
             "description": "List of bot tokens"
+          }
+        }
+      },
+      "ApiVersion": {
+        "type": "object",
+        "required": [
+          "version",
+          "commitSHA",
+          "buildTime",
+          "goVersion",
+          "os",
+          "arch"
+        ],
+        "properties": {
+          "version": {
+            "type": "string",
+            "example": "1.0.0",
+            "description": "API version"
+          },
+          "commitSHA": {
+            "type": "string",
+            "example": "a1b2c3d4e5f6g7h8i9j0",
+            "description": "Git commit SHA"
+          },
+          "buildTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Build timestamp"
+          },
+          "goVersion": {
+            "type": "string",
+            "example": "go1.17.1",
+            "description": "Go version"
+          },
+          "os": {
+            "type": "string",
+            "example": "linux",
+            "description": "Operating system"
+          },
+          "arch": {
+            "type": "string",
+            "example": "amd64",
+            "description": "Architecture"
           }
         }
       },

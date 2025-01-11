@@ -886,13 +886,11 @@ model ApiVersion {
 
   @doc("Operating system")
   @example("linux")
-
   os: string;
-  
+
   @doc("Architecture")
   @example("amd64")
   arch: string;
-
 }
 
 @route("/version")
