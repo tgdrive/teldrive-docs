@@ -1080,6 +1080,25 @@ paths:
       security:
         - BearerAuth: []
         - ApiKeyAuth: []
+  /users/channels/sync:
+    patch:
+      operationId: Users_syncChannels
+      summary: Sync user channels
+      parameters: []
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
   /users/config:
     get:
       operationId: Users_stats

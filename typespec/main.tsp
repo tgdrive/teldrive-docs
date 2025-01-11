@@ -762,6 +762,11 @@ interface Users {
   @summary("Update user channel")
   updateChannel(@body body: Channel): NoContentResponse | Error;
 
+  @route("/channels/sync")
+  @patch
+  @summary("Sync user channels")
+  syncChannels(): NoContentResponse | Error;
+
   @route("/sessions")
   @get
   @summary("List user sessions")
