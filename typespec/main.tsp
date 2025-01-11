@@ -878,7 +878,8 @@ model ApiVersion {
   commitSHA: string;
 
   @doc("Build timestamp")
-  buildTime: utcDateTime;
+  @example("2023-10-21T07:28:00Z")
+  buildTime: string;
 
   @doc("Go version")
   @example("go1.17.1")

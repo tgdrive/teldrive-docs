@@ -1510,7 +1510,7 @@ components:
           description: Git commit SHA
         buildTime:
           type: string
-          format: date-time
+          example: 2023-10-21T07:28:00Z
           description: Build timestamp
         goVersion:
           type: string
