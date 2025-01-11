@@ -876,11 +876,7 @@ model ApiVersion {
   @doc("Git commit SHA")
   @example("a1b2c3d4e5f6g7h8i9j0")
   commitSHA: string;
-
-  @doc("Build timestamp")
-  @example("2023-10-21T07:28:00Z")
-  buildTime: string;
-
+  
   @doc("Go version")
   @example("go1.17.1")
   goVersion: string;
