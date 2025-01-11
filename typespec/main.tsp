@@ -867,3 +867,39 @@ interface Shares {
     @query download?: "0" | "1" = "0",
   ): FileStream | Error;
 }
+
+model ApiVersion {
+  @doc("API version")
+  @example("1.0.0")
+  version: string;
+
+  @doc("Git commit SHA")
+  @example("a1b2c3d4e5f6g7h8i9j0")
+  commitSHA: string;
+
+  @doc("Build timestamp")
+  buildTime: utcDateTime;
+
+  @doc("Go version")
+  @example("go1.17.1")
+  goVersion: string;
+
+  @doc("Operating system")
+  @example("linux")
+
+  os: string;
+  
+  @doc("Architecture")
+  @example("amd64")
+  arch: string;
+
+}
+
+@route("/version")
+@tag("Version")
+interface Version {
+  @route("")
+  @get
+  @summary("Get API version")
+  version(): ApiVersion | Error;
+}
