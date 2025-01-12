@@ -63,15 +63,17 @@ touch session.db
 docker compose -f teldrive.yml  up -d
 ```
 - Go to  http://localhost:8080 in your browser to access teldrive.
-- Set default channel in UI settings.
 
 ## Run Without Docker 
 
 ```sh
 ./teldrive run
 ```
+
 - You can also create config in `$HOME/.teldrive/config.toml` then you can run teldrive from everywhere.
 - Go to  http://localhost:8080 in your browser to access teldrive.
+- Sync channels from UI settings.
+- Set default channel in UI settings.
 
 > [!NOTE]  
 >- If you are stuck on login screen you have to sync your system clock so that telegram doesn't drop all the packets.See more [here](https://core.telegram.org/mtproto#time-synchronization).
