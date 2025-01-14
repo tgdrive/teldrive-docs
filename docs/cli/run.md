@@ -60,8 +60,6 @@ Secret key for JWT token signing (required).
 Duration for which JWT tokens remain valid.
 
 ### Logging
-**`--log-development`**  
-Enable development mode logging.
 
 **`--log-file`**  
 File path for logging output.
