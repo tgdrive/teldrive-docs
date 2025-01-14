@@ -31,7 +31,7 @@ Interval for updating folder size calculations.
 **`--db-data-source`**  
 Database connection string (required).
 
-**`--db-log-level`** (default: 1)  
+**`--db-log-level`** (default: info)  
 Database logging verbosity level.
 
 **`--db-pool-enable`** (default: true)  
@@ -66,8 +66,8 @@ Enable development mode logging.
 **`--log-file`**  
 File path for logging output.
 
-**`--log-level`** (default: -1)  
-Logging level (-1=debug, 0=info, 1=warn, 2=error).
+**`--log-level`** (default: info)  
+Logging level (debug,info,warn,error).
 
 ### Server Options
 **`--server-enable-pprof`**  
