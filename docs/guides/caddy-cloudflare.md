@@ -67,10 +67,6 @@ docker compose --version
 
 ## Deploy Services
 
-```sh
-docker network create caddy
-```
-
 - Make sure you have followed [usage](/docs/getting-started/usage.md) guide for setting up `config.toml` and database.
 - Create these files mentioned below in the same directory.
 - Remove postgres part from networks if you are using supabase.
@@ -154,6 +150,7 @@ volumes:
 
 ```sh
 touch session.db
+docker network create caddy
 docker volume create caddy_data
 docker compose -f teldrive.yml  up -d
 docker compose -f imgproxy.yml  up -d
