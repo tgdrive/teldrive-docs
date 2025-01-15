@@ -126,8 +126,8 @@ Enable rate limiting for Telegram API.
 **`--tg-reconnect-timeout`** (default: 5m)  
 Timeout for reconnection attempts.
 
-**`--tg-session-file`**  
-Path to Telegram session file.
+**`--tg-storage-file`**  
+Sqlite Storage file path.
 
 **`--tg-stream-buffers`** (default: 8)  
 Number of streaming buffers.
