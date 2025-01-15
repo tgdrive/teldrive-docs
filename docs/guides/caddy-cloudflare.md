@@ -84,7 +84,7 @@ services:
      - caddy
     volumes:
       - ./config.toml:/config.toml
-      - ./session.db:/session.db
+      - ./storage.db:/storage.db
 networks:
   postgres:                                 
     external: true
@@ -149,7 +149,7 @@ volumes:
 :::
 
 ```sh
-touch session.db
+touch storage.db
 docker network create caddy
 docker volume create caddy_data
 docker compose -f teldrive.yml  up -d

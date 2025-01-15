@@ -59,7 +59,7 @@ app-hash = "your_telegram_app_hash"
 ```sh
 curl -LO "https://raw.githubusercontent.com/tgdrive/teldrive/refs/heads/main/docker/compose/teldrive.yml"
 # Remove networks block from teldrive.yml if you are using supabase
-touch session.db
+touch storage.db
 docker compose -f teldrive.yml  up -d
 ```
 - Go to  http://localhost:8080 in your browser to access teldrive.
