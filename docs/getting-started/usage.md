@@ -20,9 +20,6 @@ enable = false
 allowed-users = ["your-telegram-username"]
 secret = "abcd"
 
-[tg]
-app-id = "your_telegram_app_id"
-app-hash = "your_telegram_app_hash"
 ```
 ### `config.toml` for Local DB
 
@@ -34,14 +31,9 @@ data-source = "postgres://<db username>:<db password>@<db host>/<db name>"
 allowed-users = ["your-telegram-username"]
 secret = "abcd"
 
-[tg]
-app-id = "your_telegram_app_id"
-app-hash = "your_telegram_app_hash"
 ```
 
 ## Values 
-- app-id: Your Telegram application ID (obtained from my.telegram.org)
-- app-hash: Your Telegram application hash (obtained from my.telegram.org)
 - data-source: Connection string obtained from supabase or local db instance
 - allowed-users: Make sure to add your telegram `username` here for restricting access to others users.
 
@@ -56,11 +48,31 @@ app-hash = "your_telegram_app_hash"
 - Or visit: [Generate Secret](https://generate-secret.vercel.app/32)
 
 ## Run With Docker 
+
+::: code-group
+
+```yml [docker-compose.yml]
+services:
+  teldrive:
+    image: ghcr.io/tgdrive/teldrive
+    restart: always
+    container_name: teldrive
+    networks:
+     - postgres
+    volumes:
+      - ./config.toml:/config.toml
+      - ./storage.db:/storage.db
+    ports:
+      - 8080:8080
+networks:
+  postgres:                                 
+    external: true
+```
+:::
 ```sh
-curl -LO "https://raw.githubusercontent.com/tgdrive/teldrive/refs/heads/main/docker/compose/teldrive.yml"
 # Remove networks block from teldrive.yml if you are using supabase
 touch storage.db
-docker compose -f teldrive.yml  up -d
+docker compose up -d
 ```
 - Go to  http://localhost:8080 in your browser to access teldrive.
 
@@ -69,7 +81,6 @@ docker compose -f teldrive.yml  up -d
 ```sh
 ./teldrive run
 ```
-
 - You can also create config in `$HOME/.teldrive/config.toml` then you can run teldrive from everywhere.
 - Go to  http://localhost:8080 in your browser to access teldrive.
 - Sync channels from UI settings.

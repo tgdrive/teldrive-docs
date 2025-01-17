@@ -46,9 +46,25 @@ A bot token is essential for interacting with the Telegram API for upload and do
 
 - Teldrive supports image resizing on the fly using `imgproxy` for thumbnail viewing.
 
+::: code-group
+
+```yml [docker-compose.yml]
+services:
+  imgproxy:
+    image: darthsim/imgproxy
+    container_name: imgproxy
+    environment:
+      IMGPROXY_ALLOW_ORIGIN: "*"
+      IMGPROXY_ENFORCE_WEBP: true
+      IMGPROXY_MALLOC: "jemalloc"
+    restart: always
+    ports:
+      - 8000:8080
+```
+:::
+
 ```sh
-curl -LO "https://raw.githubusercontent.com/tgdrive/teldrive/refs/heads/main/docker/compose/image-resizer.yml"
-docker compose -f image-resizer.yml  up -d
+docker compose up -d
 ```
 - As imgproxy doesn't support caching so its recommended to use this behind `cloudflare` or any webserver that supports caching.
 

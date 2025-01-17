@@ -3,7 +3,6 @@
 Before you can start using this project, there are a few prerequisites you need to have in place. Please ensure that you have the following:
 
 1. A Telegram account.
-2. A Telegram application (to obtain `api_id` and `api_hash`).
 3. Private telegram channel for storing files.
 4. A Supabase PostgreSQL database (skip if you want to use local postgres instance).
 5. Docker and Docker compose(For Linux and Mac only).
@@ -18,25 +17,6 @@ curl https://get.docker.com | sh
 docker --version
 docker compose --version
 ```
-
-## Creating a Telegram Account
-
-If you don't already have a Telegram account, you will need to create one. You can do this by downloading the Telegram app from the [App Store](https://apps.apple.com/us/app/telegram-messenger/id686449807) or [Google Play](https://play.google.com/store/apps/details?id=org.telegram.messenger&hl=en). Once installed, open the app and follow the instructions to create your account.
-
-## Creating a Telegram Application
-
-To interact with the Telegram API, you need to create a Telegram application and obtain the `api_id` and `api_hash`. Follow these steps to create a Telegram application:
-
-1. Open your web browser and go to the [Telegram API development tools](https://my.telegram.org).
-2. Log in using your phone number and the verification code sent to your Telegram app.
-3. Once logged in, click on the "API Development Tools" link.
-4. Fill out the form to create a new application:
-   - **App title**: Choose a name for your application.
-   - **Short name**: Choose a short name for your application.
-   - **Platform**: Select the platform you are developing for (e.g., Web, Android, iOS, etc.).
-   - **URL**: Optionally, you can provide a URL for your application.
-   - **Description**: Optionally, you can provide a description for your application.
-5. After submitting the form, you will receive your `api_id` and `api_hash`.
 
 ## Creating a Supabase PostgreSQL Database
 
@@ -54,16 +34,14 @@ Supabase provides a hosted PostgreSQL database with an easy-to-use interface. Fo
 >- Make sure to enable pgroonga postgres extension in supabase.
 
 
-## Creating a Local Posgtres Instance using docker
-
-- Create a `docker-compose.yml` file and add the following configuration.
+## Creating a Local Posgtres Database using docker
 
 ::: code-group
 
 ```yml [docker-compose.yml]
 services:
   postgres:
-    image: ghcr.io/tgdrive/postgres:17-alpine
+    image: ghcr.io/tgdrive/postgres:17
     container_name: postgres_db
     restart: always
     networks:

@@ -55,6 +55,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'run', link: '/docs/cli/run.md' },
+          { text: 'check', link: '/docs/cli/check.md' },
         ]
       },
       {

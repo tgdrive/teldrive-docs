@@ -84,29 +84,12 @@ Maximum duration for reading request body.
 Maximum duration for writing response.
 
 ### Telegram Options
-**`--tg-app-hash`**  
-Telegram application hash (required).
-
-**`--tg-app-id`**  
-Telegram application ID (required).
-
-**`--tg-app-version`** (default: "4.6.3 K")  
-Application version string.
-
-**`--tg-device-model`** (default: "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0")  
-Device model string for Telegram client.
 
 **`--tg-disable-stream-bots`**  
 Disable streaming bots functionality.
 
 **`--tg-enable-logging`**  
 Enable Telegram client logging.
-
-**`--tg-lang-code`** (default: "en")  
-Language code for Telegram client.
-
-**`--tg-lang-pack`** (default: "webk")  
-Language pack identifier.
 
 **`--tg-pool-size`** (default: 8)  
 Size of Telegram session pool.
@@ -137,12 +120,6 @@ Timeout for fetching stream chunks.
 
 **`--tg-stream-multi-threads`**  
 Number of threads for streaming.
-
-**`--tg-system-lang-code`** (default: "en-US")  
-System language code.
-
-**`--tg-system-version`** (default: "Win32")  
-System version string.
 
 **`--tg-uploads-encryption-key`**  
 Encryption key for uploads.
