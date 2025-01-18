@@ -20,6 +20,10 @@ enable = false
 allowed-users = ["your-telegram-username"]
 secret = "abcd"
 
+[tg.uploads]
+encryption-key = "your-encryption-key"
+
+
 ```
 ### `config.toml` for Local DB
 
@@ -30,6 +34,9 @@ data-source = "postgres://<db username>:<db password>@<db host>/<db name>"
 [jwt]
 allowed-users = ["your-telegram-username"]
 secret = "abcd"
+
+[tg.uploads]
+encryption-key = "your-encryption-key"
 
 ```
 
