@@ -504,7 +504,6 @@ interface Files {
   update(
     @path id: string,
     @body body: FileUpdate,
-    @query skiputs?: "0" | "1" = "0",
   ): File | Error;
 
   @route("/{id}/parts")

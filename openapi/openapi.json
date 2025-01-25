@@ -555,20 +555,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "skiputs",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "0",
-                "1"
-              ],
-              "default": "0"
-            },
-            "explode": false
           }
         ],
         "responses": {
