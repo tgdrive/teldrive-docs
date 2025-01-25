@@ -430,15 +430,18 @@ model FileCopy {
 @doc("Move multiple files by ids or path")
 @example(#{
   ids: #["123e4567-e89b-12d3-a456-426614174000"],
-  destination: "/Documents/2023/",
+  destinationParent: "/Documents/2023/",
 })
 model FileMove {
   @doc("Array of file or folders ids to be moved")
   @minItems(1)
   ids: string[];
 
-  @doc("Destination path where files will be moved to")
-  destination: string;
+  @doc("Destination parent path or ID where files will be moved to")
+  destinationParent: string;
+  
+  @doc("Destination file or folder name")
+  destinationName?: string;
 }
 
 @doc("Delete operation request")
