@@ -41,7 +41,7 @@ Supabase provides a hosted PostgreSQL database with an easy-to-use interface. Fo
 ```yml [docker-compose.yml]
 services:
   postgres:
-    image: ghcr.io/tgdrive/postgres:17
+    image: groonga/pgroonga:latest-alpine-17
     container_name: postgres_db
     restart: always
     networks:
