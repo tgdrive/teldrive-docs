@@ -1,27 +1,51 @@
-# Usage
+# Storage Integrity Check
 
-### What Does `check` Do?
+The `check` command helps you maintain the integrity of your Teldrive storage by identifying and resolving file part issues.
 
-The `check` command performs a thorough inspection of your Telegram file storage. Specifically, it:
+## What Does the Command Do?
 
-1. **Identifies Missing File Parts**: Scans your Telegram storage to find any file parts that are missing.
-2. **Detects Orphan File Parts**: Finds file parts that do not belong to any complete file.
-3. **Cleans Up**: With the `--clean` flag, it removes any detected missing or orphan file parts to free up space and keep your storage organized.
-4. **Exports Incomplete Files**: With the `--export` flag, it exports details of incomplete files to a JSON file for further analysis or record-keeping.
+The `check` command performs a comprehensive analysis of your Telegram file storage to:
 
-### Flags
+1. **Find Missing File Parts**: Identifies file parts that are referenced in your database but no longer exist in Telegram storage
+2. **Detect Orphaned Parts**: Discovers file parts in Telegram storage that aren't properly linked to any file in your database
+3. **Clean Up Storage**: With the `--clean` flag, removes identified problematic file parts to optimize your storage
+4. **Export Details**: With the `--export` flag, saves information about incomplete files to a JSON file for further analysis
+
+## Command Options
 
 - `--clean`  
-  Clean missing and orphan file parts.
+  Remove any detected missing or orphaned file parts from your storage.
   
 - `-c, --config string`  
-  Config file path (default is `$HOME/.teldrive/config.toml`).
+  Specify a custom config file path (default is `$HOME/.teldrive/config.toml`).
   
 - `--export`  
-  Export incomplete files to a JSON file (default is `true`).
+  Export details of incomplete files to a JSON file for further analysis (enabled by default).
   
 - `-h, --help`  
-  Help for the `check` command.
+  Display help information for the `check` command.
   
 - `--user string`  
-  Telegram User Name.
+  Specify a Telegram username to check files for a specific user.
+
+## Example Usage
+
+Basic integrity check:
+```bash
+teldrive check
+```
+
+Check and clean up storage:
+```bash
+teldrive check --clean
+```
+
+Check a specific user's storage:
+```bash
+teldrive check --user yourTelegramUsername
+```
+
+Using a custom config file:
+```bash
+teldrive check -c /path/to/config.toml
+```

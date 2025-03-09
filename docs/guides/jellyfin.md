@@ -1,17 +1,23 @@
-# Using Teldrive with Plex/Jellyfin/Emby
+# Using Teldrive with Media Servers (Plex/Jellyfin/Emby)
 
-**This guide outlines the best practices for using Teldrive Plex/Jellyfin/Emby.**
+This guide explains how to integrate Teldrive with popular media server applications like Plex, Jellyfin, and Emby to create your own streaming media solution.
 
-**Read Teldrive setup guide before running this.**
+**Important:** Complete the Teldrive setup before following this guide.
 
-### Install Docker Volume Plugin
+## Install Docker Volume Plugin
+
+First, install the rclone Docker volume plugin to mount your Teldrive storage:
+
 ```bash
 docker plugin install ghcr.io/tgdrive/docker-volume-rclone --alias rclone --grant-all-permissions args="--allow-other" config=/etc/rclone cache=/var/cache
 ```
-> [!NOTE] 
-If you are using diff architecture, you can find all plugin tags [here](https://github.com/tgdrive/rclone/pkgs/container/docker-volume-rclone).Change rclone cache and config dir path acordingly
 
-### Setting Up Jellyfin
+> [!NOTE]
+> If you're using a different architecture, find all plugin tags [here](https://github.com/tgdrive/rclone/pkgs/container/docker-volume-rclone). Adjust the rclone cache and config directory paths accordingly.
+
+## Setting Up Jellyfin
+
+Create a Docker Compose file to run Jellyfin with access to your Teldrive storage:
 
 ::: code-group
 
@@ -31,11 +37,14 @@ volumes:
 ```
 :::
 
-- Plex and Emby can be configured in a similar way.You can share teldrive volume to any container by using rclone volume driver.
+Plex and Emby can be configured similarly. You can share the Teldrive volume with any container using the rclone volume driver.
+
+## Important Container Management
 
 > [!IMPORTANT]
->- Don't use restart policy in compose file that uses rclone volume driver.You have to use crontab job for containers that that depends on rclone volume.
->- Add the following script to crontab at startup.Change container name accodingly.
+> - Don't use restart policies in compose files that use the rclone volume driver.
+> - Instead, use a crontab job for containers that depend on rclone volumes.
+> - Add the following script to crontab to run at startup (modify container names as needed):
 
 ```bash
 #!/bin/bash
@@ -78,6 +87,6 @@ else
   echo "Volume $VOLUME_NAME already exists. Skipping creation."
 fi
 
-# Add other services here which depends on rclone volume
+# Add other services here which depend on rclone volume
 cd /path/to/jellyfin/compose && docker compose up -d
 ```

@@ -1,12 +1,12 @@
 # Teldrive Usage Guide
 
-This guide will help you set up and use Teldrive. Ensure you have met all the prerequisites and have the necessary configuration values ready.
+This guide will help you set up and configure Teldrive. Make sure you've completed all prerequisites before proceeding.
 
 ## Configuration
 
-Create a `config.toml` with the following content, replacing the placeholders with your actual values.
+Create a `config.toml` file with the appropriate settings for your environment. Below are examples for different database setups.
 
-### `config.toml` for Supabase DB
+### Configuration for Supabase Database
 
 ```toml
 [db]
@@ -18,14 +18,13 @@ enable = false
 
 [jwt]
 allowed-users = ["your-telegram-username"]
-secret = "abcd"
+secret = "your-jwt-secret-key"
 
 [tg.uploads]
 encryption-key = "your-encryption-key"
-
-
 ```
-### `config.toml` for Local DB
+
+### Configuration for Local Database
 
 ```toml
 [db]
@@ -33,28 +32,34 @@ data-source = "postgres://<db username>:<db password>@<db host>/<db name>"
 
 [jwt]
 allowed-users = ["your-telegram-username"]
-secret = "abcd"
+secret = "your-jwt-secret-key"
 
 [tg.uploads]
 encryption-key = "your-encryption-key"
-
 ```
 
-## Values 
-- data-source: Connection string obtained from supabase or local db instance
-- allowed-users: Make sure to add your telegram `username` here for restricting access to others users.
+## Important Configuration Values 
+
+- **data-source**: Connection string for your database (from Supabase or local instance)
+- **allowed-users**: Your Telegram username(s) to restrict access (without the @ symbol)
+- **secret**: Your JWT secret key for secure authentication
+- **encryption-key**: Key for encrypting file data (optional but recommended)
 
 > [!NOTE]  
->- For local db use `data-source` from [prerequisites](/docs/getting-started/prerequisites#creating-a-local-posgtres-instance-using-docker) guide.
->- For advanced cli [usage](/docs/cli/run.md).
->- For Sample config [visit](https://github.com/tgdrive/teldrive/blob/main/config.sample.toml).
+> - For local database connection strings, refer to the [prerequisites guide](/docs/getting-started/prerequisites#creating-a-local-posgtres-instance-using-docker)
+> - For advanced configuration options, see the [CLI reference](/docs/cli/run.md)
+> - View a complete sample configuration at the [GitHub repository](https://github.com/tgdrive/teldrive/blob/main/config.sample.toml)
 
 ## Generating a JWT Secret
-**For the secret field, use your generated JWT secret. You can generate one using:**
-- OpenSSL: `openssl rand -hex 32`
+
+For the `secret` field, generate a secure random string:
+
+- Using OpenSSL: `openssl rand -hex 32`
 - Or visit: [Generate Secret](https://generate-secret.vercel.app/32)
 
-## Run With Docker 
+## Running with Docker 
+
+Create a `docker-compose.yml` file:
 
 ::: code-group
 
@@ -76,23 +81,31 @@ networks:
     external: true
 ```
 :::
+
+Start Teldrive:
 ```sh
-# Remove networks block from teldrive.yml if you are using supabase
+# Remove networks block from docker-compose.yml if using Supabase
 touch storage.db
 docker compose up -d
 ```
-- Go to  http://localhost:8080 in your browser to access teldrive.
 
-## Run Without Docker 
+## Running Without Docker 
+
+If you installed Teldrive directly:
 
 ```sh
 ./teldrive run
 ```
-- You can also create config in `$HOME/.teldrive/config.toml` then you can run teldrive from everywhere.
-- Go to  http://localhost:8080 in your browser to access teldrive.
-- Sync channels from UI settings.
-- Set default channel in UI settings.
+
+You can also place your config at `$HOME/.teldrive/config.toml` to run Teldrive from any location.
+
+## Accessing Teldrive
+
+1. Open http://localhost:8080 in your browser
+2. Log in with your Telegram account
+3. Sync your channels from UI Settings
+4. Set a default channel in UI Settings
 
 > [!NOTE]  
->- If you are stuck on login screen you have to sync your system clock so that telegram doesn't drop all the packets.See more [here](https://core.telegram.org/mtproto#time-synchronization).
->- You can also use NTP(Network Time Protocol) to sync your system clock.To enable this in teldrive use `ntp` key in tg config section or pass `--tg-ntp` in cli.
+> - If you're stuck on the login screen, your system clock may be out of sync. Telegram requires accurate time synchronization to prevent dropped packets. See the [MTProto documentation](https://core.telegram.org/mtproto#time-synchronization) for details.
+> - You can enable automatic time synchronization by setting `ntp = true` in your config's `[tg]` section or using the `--tg-ntp` CLI flag.

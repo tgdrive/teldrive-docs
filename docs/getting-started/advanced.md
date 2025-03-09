@@ -1,20 +1,25 @@
 # Advanced Usage
 
-## Using Multi Threaded streams
+This guide covers advanced Teldrive configuration options to enhance performance and security.
 
-If content is buffering you can enable multi threaded options in config.This will improve streaming performance significantly.
+## Multi-Threaded Streams
+
+If you experience buffering issues, enable multi-threaded options to significantly improve streaming performance:
 
 ```toml
 [tg.stream]
-multi-threads=8
-stream-buffers=16
+multi-threads = 8
+stream-buffers = 16
 ```
-> [!NOTE]  
->- Also add `threaded_streams = true` in rclone config to enable multi threaded streams.
->- Keep in mind that enabling multi-threaded streams will increase the load on your server.
->- Dont't set `multi-threads` value more than 16 as it will cause high cpu usage.
 
-## Using File Encryption
+> [!NOTE]  
+> - Add `threaded_streams = true` in your rclone config to enable multi-threaded streams
+> - Multi-threaded streams will increase server load
+> - Keep `multi-threads` value at 16 or lower to prevent excessive CPU usage
+
+## File Encryption
+
+Enable file encryption to secure your data:
 
 ```toml
 [tg.uploads]
@@ -22,29 +27,28 @@ encryption-key = "your-key"
 ```
 
 > [!NOTE]
->- Also add `encrypt_files = true` in rclone config to enable encryption.
->- Keep your password safe once generated teldrive uses same encryption as of rclone internally 
-so you don't need to enable crypt in rclone.
->- Teldrive generates random salt for each file part and saves in database so its more secure than rclone crypt whereas in rclone same salt value  is used  for all files which can be compromised easily. Enabling crypt in rclone makes UI redundant so encrypting files in teldrive internally is better way to encrypt files and more secure encryption than rclone.To encrypt files see more about teldrive rclone config.
+> - Add `encrypt_files = true` in your rclone config when enabling encryption
+> - Store your encryption key securely - you can't recover files without it
+> - Teldrive's encryption is more secure than rclone's crypt implementation as it generates a random salt for each file part rather than using the same salt for all files
+> - Enabling encryption in Teldrive makes the UI fully compatible with encrypted files
 
-## Adding Bot tokens
+## Adding Bot Tokens
 
-A bot token is essential for interacting with the Telegram API for upload and downloads. To create a bot token, follow these steps:
+Bot tokens are essential for optimal Telegram API interaction. To create and add bot tokens:
 
-1. Open the Telegram app on your device.
-2. Search for `@BotFather` and start a chat with it.
-3. Type `/newbot` and follow the prompts to set up your new bot.
-   - You will need to choose a name for your bot.
-   - You will also need to choose a username for your bot; it must end with `bot`. For example, `my_sample_bot`.
-4. Once you have completed these steps, you will receive a message containing your bot token.
-5. Add around 7-8 tokens for better upload and download speeds in UI Settings.
+1. Open Telegram and search for `@BotFather`
+2. Start a chat and type `/newbot`
+3. Follow the prompts to set a name and username (must end with `bot`)
+4. BotFather will provide your bot token
+5. Add 7-8 bot tokens in the Teldrive UI Settings for better upload/download speeds
 
 > [!WARNING]
-> Bots will be auto added as admin in channel if you set them from UI if it fails somehow add it manually.For newly logged session you have to wait 20-30 min to add bots to telegram channel. **`FRESH_CHANGE_ADMINS_FORBIDDEN`** error  will be thrown if you try to add bots before that time frame.
+> Bots will be automatically added as admins in your channel when set through the UI. If this fails, add them manually.
+> For newly created Telegram sessions, you must wait 20-30 minutes before adding bots to a channel. You'll see a **`FRESH_CHANGE_ADMINS_FORBIDDEN`** error if you try too soon.
 
-## Using Thumbnail Resizer
+## Using a Thumbnail Resizer
 
-- Teldrive supports image resizing on the fly using `imgproxy` for thumbnail viewing.
+Teldrive supports on-the-fly image resizing using `imgproxy` for thumbnail viewing:
 
 ::: code-group
 
@@ -63,9 +67,11 @@ services:
 ```
 :::
 
+Start the service:
 ```sh
 docker compose up -d
 ```
-- As imgproxy doesn't support caching so its recommended to use this behind `cloudflare` or any webserver that supports caching.
 
-- Enter url of deployed resizer service in teldrive UI settings.
+For better performance:
+- Deploy imgproxy behind Cloudflare or another web server with caching
+- Enter the URL of your deployed resizer service in the Teldrive UI settings

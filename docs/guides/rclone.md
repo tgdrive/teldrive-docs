@@ -1,6 +1,10 @@
-# Setup Teldrive with Rclone
+# Setting Up Teldrive with Rclone
 
-# Installation
+Teldrive integrates with rclone, allowing you to use your Telegram storage with familiar rclone commands and features.
+
+## Installation
+
+Install the Teldrive rclone remote using one of these methods:
 
 ::: code-group
 ```sh [macOS/Linux (curl)]
@@ -12,48 +16,40 @@ powershell -c "irm https://instl.vercel.app/tgdrive/rclone?platform=windows|iex"
 ```
 :::
 
-| Supported Features              |  |
-|----------------------|----------|
+## Feature Compatibility
+
+| Feature              | Supported |
+|----------------------|-----------|
 | Purge                | Yes       |
-| Copy                 | Yes      |
-| Move                 | Yes      |
+| Copy                 | Yes       |
+| Move                 | Yes       |
 | DirMove              | Yes       |
 | CleanUp              | Yes       |
-| ListR                | No       |
-| StreamUpload         | No       |
+| ListR                | No        |
+| StreamUpload         | No        |
 | MultithreadUpload    | Yes       |
-| LinkSharing          | Yes      |
+| LinkSharing          | Yes       |
 | About                | Yes       |
-| EmptyDir             | Yes      |
+| EmptyDir             | Yes       |
 
-To know more about rclone commands and features, visit the official [rclone documentation](https://rclone.org/docs/).
+For more information about rclone commands and features, visit the [official rclone documentation](https://rclone.org/docs/).
 
-### Rclone Configuration Section
-The configuration should be defined under the `[teldrive]` section in your config file.
+## Configuration Options
 
-**`type`**  
-Must be set to "teldrive"
+Configure rclone under the `[teldrive]` section in your rclone config file:
 
-**`api_host`** (default: "http://localhost:8080")  
-The host address where TelDrive API is running.
-
-**`access_token`**  
-Session token obtained from cookies for authentication.
-
-**`chunk_size`** (default: "500M" , max: "2GB")
-<br>
-Maximum size of file chunks for uploads. Supports size units (B, K, M, G).
-
-**`upload_concurrency`** (default: 4)  
-Number of concurrent upload operations.
-
-**`encrypt_files`** (default: false)  
-Enable file encryption. Make sure encryption key is configured in TelDrive config file when enabled.
-
-**`random_chunk_name`** (default: true)  
-Use random names for file chunks when uploading to channel instead of original filename.
+| Option | Description |
+|--------|-------------|
+| **`type`** | Must be "teldrive" |
+| **`api_host`** | Host address of TelDrive API (default: "http://localhost:8080") |
+| **`access_token`** | Session token from cookies for authentication |
+| **`chunk_size`** | Maximum size for file chunks (default: "500M", max: "2GB") |
+| **`upload_concurrency`** | Number of concurrent uploads (default: 4) |
+| **`encrypt_files`** | Enable file encryption (default: false) |
+| **`random_chunk_name`** | Use random names for file chunks (default: true) |
 
 ### Example Configuration
+
 ```toml
 [teldrive]
 type = "teldrive"
@@ -64,7 +60,10 @@ upload_concurrency = 4
 encrypt_files = false
 random_chunk_name = true
 ```
+
 > [!IMPORTANT]
->- For obtaining session token from cookies  easily use this chrome [extension](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm).This extension is also available for firefox.
->- Once extenion is installed go to teldrive website and copy values from cookie named `access_token`.
->- You can also get token from browser developer tools in cookies section.
+> To obtain your session token easily:
+> 1. Install the [Cookie Editor](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm) extension for Chrome or Firefox
+> 2. Visit your Teldrive website
+> 3. Open the extension and copy the value from the cookie named `access_token`
+> 4. Alternatively, find the token in your browser's developer tools in the cookies section

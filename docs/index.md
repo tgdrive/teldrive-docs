@@ -1,51 +1,53 @@
 # Teldrive
 
-Teldrive is a powerful utility that enables you to organise your telegram files and much more.
+Teldrive is a powerful utility that enables you to organize your Telegram files and unlock their full potential as cloud storage.
 
 ## Features
 
 ### 🚀 Ultrafast & Lightweight
-Built with Go, TelDrive delivers exceptional performance with minimal resource usage:
-- Lightning-fast operations
-- Small binary footprint
-- Efficient memory usage
-- Cross-platform compatibility
+Built with Go for exceptional performance with minimal resource usage:
+- Lightning-fast file operations
+- Small binary footprint (under 20MB)
+- Efficient memory management
+- Cross-platform compatibility (Windows, macOS, Linux)
 
 ### 🎨 Sleek Material You Design
 Modern and intuitive user interface:
-- Material You design
+- Material You design system
 - Dynamic color theming
-- Responsive layouts
-- Seamless dark/light mode
-- Clean and intuitive navigation
+- Responsive layouts for all devices
+- Seamless dark/light mode switching
+- Clean and intuitive file navigation
 
 ### 🔄 Rclone Integration
 Seamless integration with Rclone for enhanced functionality:
-- Mount as remote storage
+- Mount as a standard remote storage
 - Use familiar Rclone commands
-- Sync with other cloud storage
-- Automated backups
+- Sync with other cloud storage services
+- Set up automated backups
 - Cross-platform file management
 
 ### 🔐 Robust Encryption
-Protect Files with Robust Encryption:
-- Secure individual file chunks.
+Protect your files with robust encryption:
+- Secure individual file chunks
+- End-to-end encryption
+- Compatible with standard tools
 
 ![demo](/images/demo1.png)
 
 <details>
-<summary><b>More Images</b></summary>
+<summary><b>More Screenshots</b></summary>
 
-![demo2](/images/demo2.png)
-![demo3](/images/demo3.png)
-![demo5](/images/demo6.png)
-![demo8](/images/demo8.png)
-![demo7](/images/demo7.png)
-![demo4](/images/demo4.png)
+![File listing and management](/images/demo2.png)
+![Mobile responsive interface](/images/demo3.png)
+![Settings panel](/images/demo6.png)
+![Media preview capabilities](/images/demo8.png)
+![Dark mode interface](/images/demo7.png)
+![File sharing options](/images/demo4.png)
 </details>
 
 <br>
 
-[UI Repo ](https://github.com/tgdrive/teldrive-ui)
+[UI Repository](https://github.com/tgdrive/teldrive-ui)
 
-[UI Library ](https://github.com/divyam234/tw-material)
+[UI Component Library](https://github.com/divyam234/tw-material)

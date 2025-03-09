@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   lang: "en-US",
   title: "Teldrive",
-  description: "Teldrive is a powerful utility that enables you to organise your telegram files and much more",
+  description: "Teldrive is a powerful utility that enables you to organize your Telegram files and much more",
   lastUpdated: true,
   ignoreDeadLinks: true,
   cleanUrls: true,
@@ -23,7 +23,6 @@ export default defineConfig({
     },
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2023-present Divyam'
     },
     nav: [
       { text: 'Home', link: '/' },
@@ -44,10 +43,12 @@ export default defineConfig({
         text: 'Guides',
         collapsed: false,
         items: [
-          { text: 'Deploy Teldrive with Caddy and Cloudflare', link: '/docs/guides/caddy-cloudflare.md' },
+          { text: 'Deploy with Caddy and Cloudflare', link: '/docs/guides/caddy-cloudflare.md' },
+          { text: 'Deploy with Nginx', link: '/docs/guides/nginx-setup.md' },
+          { text: 'Deploy with Traefik', link: '/docs/guides/traefik-setup.md' },
           { text: 'Database Backup', link: '/docs/guides/db-backup.md' },
-          { text: 'Setup Teldrive with Rclone', link: '/docs/guides/rclone.md' },
-          { text: 'Setup Teldrive with Jellyfin', link: '/docs/guides/jellyfin.md' },
+          { text: 'Setup with Rclone', link: '/docs/guides/rclone.md' },
+          { text: 'Use with Media Servers', link: '/docs/guides/jellyfin.md' },
         ]
       },
       {

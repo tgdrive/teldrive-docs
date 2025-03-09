@@ -11,3 +11,4 @@ $RECYCLE.BIN/
 .DS_Store
 
 dist
+.aider*

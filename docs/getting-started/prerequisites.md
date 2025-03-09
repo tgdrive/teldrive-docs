@@ -1,40 +1,47 @@
 # Prerequisites
 
-Before you can start using this project, there are a few prerequisites you need to have in place. Please ensure that you have the following:
+Before setting up Teldrive, ensure you have the following requirements in place:
 
-1. A Telegram account.
-3. Private telegram channel for storing files.
-4. A Supabase PostgreSQL database (skip if you want to use local postgres instance).
-5. Docker and Docker compose(For Linux and Mac only).
+## Required Components
 
-## Docker Setup
+1. **A Telegram Account**: You'll need an active Telegram account
+2. **A Private Telegram Channel**: For storing your files securely
+3. **A PostgreSQL Database**: Either Supabase (cloud-hosted) or a local instance
+4. **Docker and Docker Compose**: For containerized deployment (required for Linux and macOS)
+
+## Docker Installation
+
+Install Docker and Docker Compose using the official Docker script:
 
 ```sh
 curl https://get.docker.com | sh
 ```
-**Verify Installation:**
+
+Verify your installation:
 ```sh
 docker --version
 docker compose --version
 ```
 
-## Creating a Supabase PostgreSQL Database
+## Database Options
 
-Supabase provides a hosted PostgreSQL database with an easy-to-use interface. Follow these steps to create a Supabase PostgreSQL database:
+You can use either Supabase (cloud-hosted) or set up a local PostgreSQL instance.
 
-1. Go to the [Supabase website](https://supabase.io) and sign up for an account if you don't already have one.
-2. Once logged in, click on the "New Project" button.
-3. Fill out the project details:
-- **Project Name**: Choose a name for your project.
-- **Database Password**: Set a password for your database.
-- **Region**: Select a region closest to you for better performance.
-4. Click "Create New Project".
-5. Once the project is created, you will be directed to the project dashboard. Here you can find your database connection details.Copy the connection string URI of `transaction` mode  which will be used later in teldrive config.
-> [!IMPORTANT]
->- Make sure to enable pgroonga postgres extension in supabase.
+### Option 1: Using Supabase (Recommended for Beginners)
 
+1. Go to [Supabase](https://supabase.io) and create an account
+2. Click "New Project" and fill in the details:
+   - **Project Name**: Give your project a name
+   - **Database Password**: Set a secure password
+   - **Region**: Choose the closest region to your location
+3. Click "Create New Project"
+4. Once created, go to the project dashboard
+5. Find and copy the "Connection String (Transaction)" from the settings
+6. **Important**: Enable the pgroonga extension in your Supabase project
 
-## Creating a Local Posgtres Database using docker
+### Option 2: Setting Up a Local PostgreSQL Database
+
+Create a `docker-compose.yml` file with the following content:
 
 ::: code-group
 
@@ -63,11 +70,18 @@ volumes:
 ```
 :::
 
-**Change default user and password in environment variables.**
+**Important**: Customize the username and password for security.
+
+Launch your local database:
 
 ```sh
 docker network create postgres
 docker volume create postgres_data
 docker compose up -d
 ```
-- Connection string for local db will be `postgres://teldrive:secret@postgres/postgres` which will be used later in teldrive config.
+
+Your local database connection string will be `postgres://teldrive:secret@postgres/postgres` (adjust username and password if changed).
+
+## Next Steps
+
+Once you have all prerequisites in place, proceed to the [Installation](/docs/getting-started/installation.md) or [Usage](/docs/getting-started/usage.md) guides.
