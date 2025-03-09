@@ -50,12 +50,14 @@ encryption-key = "your-encryption-key"
 > - For advanced configuration options, see the [CLI reference](/docs/cli/run.md)
 > - View a complete sample configuration at the [GitHub repository](https://github.com/tgdrive/teldrive/blob/main/config.sample.toml)
 
-## Generating a JWT Secret
+## Generate Secret Keys
 
-For the `secret` field, generate a secure random string:
+Use the tool below to generate secure random keys for JWT authentication and file encryption:
 
+<SecretGenerator />
+
+You can also generate a JWT secret using other methods:
 - Using OpenSSL: `openssl rand -hex 32`
-- Or visit: [Generate Secret](https://generate-secret.vercel.app/32)
 
 ## Running with Docker 
 

@@ -26,6 +26,8 @@ Enable file encryption to secure your data:
 encryption-key = "your-key"
 ```
 
+You can generate a secure random encryption key using the [key generator tool](/docs/getting-started/usage.md#generate-secret-keys) in the usage guide.
+
 > [!NOTE]
 > - Add `encrypt_files = true` in your rclone config when enabling encryption
 > - Store your encryption key securely - you can't recover files without it
