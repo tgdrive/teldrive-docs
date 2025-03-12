@@ -6,7 +6,7 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v4
-      - uses: github.com/oven-sh/setup-bun@v2
+      - uses: https://github.com/oven-sh/setup-bun@v2
         with:
           bun-version: latest
       
@@ -19,7 +19,7 @@ jobs:
           NODE_ENV: production
 
       - name: Deploy
-        uses: github.com/cloudflare/wrangler-action@v3
+        uses: https://github.com/cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
