@@ -114,7 +114,7 @@ Create a new directory and `docker-compose.yml`:
 ```yml
 services:
   teldrive:
-    image: ghcr.io/tgdrive/teldrive
+    image: teldrive/teldrive
     container_name: teldrive
     restart: unless-stopped
     volumes:

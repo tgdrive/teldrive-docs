@@ -80,7 +80,7 @@ Create these files in the same directory, adjusting configurations as needed:
 ```yml [teldrive.yml]
 services:
   teldrive:
-    image: ghcr.io/tgdrive/teldrive
+    image: teldrive/teldrive
     restart: always
     container_name: teldrive
     networks:
@@ -128,7 +128,7 @@ imgproxy.yourdomain.com {
 ```yml [caddy.yml]
 services:
  caddy:
-    image: ghcr.io/tgdrive/caddy
+    image: teldrive/caddy
     container_name: caddy
     ports:
      - "80:80"

@@ -68,7 +68,7 @@ Create a `docker-compose.yml` file:
 ```yml [docker-compose.yml]
 services:
   teldrive:
-    image: ghcr.io/tgdrive/teldrive
+    image: teldrive/teldrive
     restart: always
     container_name: teldrive
     networks:

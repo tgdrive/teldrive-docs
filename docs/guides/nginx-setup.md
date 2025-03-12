@@ -85,7 +85,7 @@ version: '3'
 
 services:
   teldrive:
-    image: ghcr.io/tgdrive/teldrive
+    image: teldrive/teldrive
     container_name: teldrive
     restart: always
     volumes:
