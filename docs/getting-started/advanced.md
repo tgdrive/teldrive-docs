@@ -8,14 +8,20 @@ If you experience buffering issues, enable multi-threaded options to significant
 
 ```toml
 [tg.stream]
-multi-threads = 8
-stream-buffers = 16
+multi-threads = 4
+stream-buffers = 12
+```
+For Rclone use these options:
+```
+--vfs-read-chunk-size=12M
+--vfs-read-chunk-streams=20
+--teldrive-threaded-streams=1
 ```
 
-> [!NOTE]  
-> - Add `threaded_streams = true` in your rclone config to enable multi-threaded streams
-> - Multi-threaded streams will increase server load
-> - Keep `multi-threads` value at 16 or lower to prevent excessive CPU usage
+> [!NOTE] 
+> - You may not need this if your telegram dc is close to your location.
+> - Keep `multi-threads` value at 8 or lower to prevent excessive CPU usage.
+> - You can tweak these params to find the best performance for your connection.Don't set `vfs-read-chunk-size` too high, as it may cause buffering issues.
 
 ## File Encryption
 
