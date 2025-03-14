@@ -17,7 +17,7 @@ Create a Docker Compose file for the backup service:
 ```yml [docker-compose.yml]
 services:
   rclone-backup:
-    image: teldrive/rclone-backup # for postgres 16 use ghcr.io/adrienpoupa/rclone-backup
+    image: teldrive/rclone-backup:17 # for postgres 16 use teldrive/rclone-backup:16
     container_name: rclone-backup
     environment:
       - RCLONE_REMOTE_NAME=remote # use your configured rclone remote name
