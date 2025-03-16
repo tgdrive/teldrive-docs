@@ -8,11 +8,11 @@ Install the Teldrive rclone remote using one of these methods:
 
 ::: code-group
 ```sh [macOS/Linux (curl)]
-curl -sSL instl.vercel.app/tgdrive/rclone | bash
+curl -sSL instl.vercel.app/rclone | bash
 ```
 
 ```powershell [PowerShell/cmd.exe]
-powershell -c "irm https://instl.vercel.app/tgdrive/rclone?platform=windows|iex"
+powershell -c "irm https://instl.vercel.app/rclone?platform=windows|iex"
 ```
 :::
 

@@ -8,11 +8,11 @@ Choose the appropriate installation method for your operating system:
 
 ::: code-group
 ```sh [macOS/Linux (curl)]
-curl -sSL instl.vercel.app/tgdrive/teldrive | bash
+curl -sSL instl.vercel.app/teldrive | bash
 ```
 
 ```powershell [PowerShell/cmd.exe]
-powershell -c "irm https://instl.vercel.app/tgdrive/teldrive?platform=windows|iex"
+powershell -c "irm https://instl.vercel.app/teldrive?platform=windows|iex"
 ```
 :::
 
