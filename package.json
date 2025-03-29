@@ -7,17 +7,17 @@
     "tsp:generate": "tsp compile ./typespec/main.tsp && tsp compile ./typespec/main.tsp --emit @typespec/openapi3 --option \"@typespec/openapi3.file-type=json\""
   },
   "devDependencies": {
-    "@types/bun": "^1.1.14",
-    "@typespec/compiler": "^0.63.0",
-    "@typespec/http": "^0.63.0",
-    "@typespec/openapi": "^0.63.0",
-    "@typespec/openapi3": "^0.63.0",
-    "@vitejs/plugin-vue": "^5.2.1",
-    "vite": "^6.0.5",
-    "vitepress": "^1.5.0"
+    "@types/bun": "^1.2.8",
+    "@typespec/compiler": "^0.67.2",
+    "@typespec/http": "^0.67.1",
+    "@typespec/openapi": "^0.67.1",
+    "@typespec/openapi3": "^0.67.1",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "vite": "^6.2.3",
+    "vitepress": "^1.6.3"
   },
   "dependencies": {
-    "@scalar/api-reference": "^1.25.99",
+    "@scalar/api-reference": "^1.28.9",
     "vue": "^3.5.13"
   },
   "type": "module"
