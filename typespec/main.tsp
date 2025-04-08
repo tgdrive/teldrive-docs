@@ -2,7 +2,6 @@ import "@typespec/http";
 import "@typespec/openapi";
 
 using TypeSpec.Http;
-using TypeSpec.OpenAPI;
 @server(
   "{url}/api",
   "Teldrive Server URL",
@@ -10,7 +9,7 @@ using TypeSpec.OpenAPI;
     url: string,
   }
 )
-@service({
+@service(#{
   title: "Teldrive",
 })
 namespace Teldrive;
@@ -873,6 +872,50 @@ interface Shares {
     @path fileId: string,
     @query download?: "0" | "1" = "0",
   ): FileStream | Error;
+}
+
+
+model EventDetails{
+  @doc("File ID")
+  @example("123e4567-e89b-12d3-a456-426614174000")
+  fileId?: string;
+
+  @doc("Folder ID")
+  @example("123e4567-e89b-12d3-a456-426614174000")
+  folderId: string;
+
+  @doc("Old Folder ID")
+  @example("123e4567-e89b-12d3-a456-426614174000")
+  oldFolderId?: string;
+}
+
+@doc("Event information")
+model Event {
+  @doc("Event ID")
+  @example("123e4567-e89b-12d3-a456-426614174000")
+  id: string;
+
+  @doc("Event type")
+  @example("file_update")
+  type: string;
+
+  @doc("Event timestamp")
+  createdAt: utcDateTime;
+
+  @doc("Event details")
+  details: EventDetails;
+}
+
+
+@route("/events")
+@tag("Events")
+interface Events {
+  @route("")
+  @get
+  @summary("Get events")
+  @useAuth(ApiAuth)
+  @doc("Get events")
+  getEvents(): Array<Event> | Error;
 }
 
 model ApiVersion {

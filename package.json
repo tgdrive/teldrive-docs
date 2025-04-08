@@ -8,16 +8,16 @@
   },
   "devDependencies": {
     "@types/bun": "^1.2.8",
-    "@typespec/compiler": "^0.67.2",
-    "@typespec/http": "^0.67.1",
-    "@typespec/openapi": "^0.67.1",
-    "@typespec/openapi3": "^0.67.1",
+    "@typespec/compiler": "^1.0.0-rc.0",
+    "@typespec/http": "^1.0.0-rc.0",
+    "@typespec/openapi": "^1.0.0-rc.0",
+    "@typespec/openapi3": "^1.0.0-rc.0",
     "@vitejs/plugin-vue": "^5.2.3",
-    "vite": "^6.2.3",
+    "vite": "^6.2.5",
     "vitepress": "^1.6.3"
   },
   "dependencies": {
-    "@scalar/api-reference": "^1.28.9",
+    "@scalar/api-reference": "^1.28.13",
     "vue": "^3.5.13"
   },
   "type": "module"

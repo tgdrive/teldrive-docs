@@ -8,6 +8,7 @@ tags:
   - name: Uploads
   - name: Users
   - name: Shares
+  - name: Events
   - name: Version
 paths:
   /auth/login:
@@ -110,6 +111,32 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Auth
+  /events:
+    get:
+      operationId: Events_getEvents
+      summary: Get events
+      description: Get events
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Events
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
   /files:
     get:
       operationId: Files_list
@@ -589,7 +616,7 @@ paths:
               description: Last modification timestamp
               schema:
                 type: string
-                format: date-time
+                format: http-date
           content:
             '*/*':
               schema:
@@ -630,7 +657,7 @@ paths:
               description: Last modification timestamp
               schema:
                 type: string
-                format: date-time
+                format: http-date
           content:
             '*/*':
               schema:
@@ -767,7 +794,7 @@ paths:
               description: Last modification timestamp
               schema:
                 type: string
-                format: date-time
+                format: http-date
           content:
             '*/*':
               schema:
@@ -808,7 +835,7 @@ paths:
               description: Last modification timestamp
               schema:
                 type: string
-                format: date-time
+                format: http-date
           content:
             '*/*':
               schema:
@@ -1510,24 +1537,24 @@ components:
       properties:
         version:
           type: string
-          example: 1.0.0
           description: API version
+          example: 1.0.0
         commitSHA:
           type: string
-          example: a1b2c3d4e5f6g7h8i9j0
           description: Git commit SHA
+          example: a1b2c3d4e5f6g7h8i9j0
         goVersion:
           type: string
-          example: go1.17.1
           description: Go version
+          example: go1.17.1
         os:
           type: string
-          example: linux
           description: Operating system
+          example: linux
         arch:
           type: string
-          example: amd64
           description: Architecture
+          example: amd64
     Category:
       type: string
       enum:
@@ -1557,11 +1584,11 @@ components:
           allOf:
             - $ref: '#/components/schemas/Category'
           description: Category name
+      description: Statistics for files by category
       example:
         totalFiles: 1250
         totalSize: 104857600
         category: document
-      description: Statistics for files by category
     Channel:
       type: object
       required:
@@ -1575,10 +1602,10 @@ components:
           type: integer
           format: int64
           description: Unique numeric identifier of the channel
+      description: Telegram channel information
       example:
         channelName: Channel Name
         channelId: 123456789
-      description: Telegram channel information
     ChannelUpdate:
       type: object
       properties:
@@ -1589,10 +1616,10 @@ components:
           type: integer
           format: int64
           description: Unique numeric identifier of the channel
+      description: Telegram channel information
       example:
         channelName: Channel Name
         channelId: 123456789
-      description: Telegram channel information
     Error:
       type: object
       required:
@@ -1601,13 +1628,55 @@ components:
       properties:
         code:
           type: integer
-          example: 500
           description: Error code
+          example: 500
         message:
           type: string
-          example: Internal server error occurred
           description: Error message
+          example: Internal server error occurred
       description: Standard error response
+    Event:
+      type: object
+      required:
+        - id
+        - type
+        - createdAt
+        - details
+      properties:
+        id:
+          type: string
+          description: Event ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+        type:
+          type: string
+          description: Event type
+          example: file_update
+        createdAt:
+          type: string
+          format: date-time
+          description: Event timestamp
+        details:
+          allOf:
+            - $ref: '#/components/schemas/EventDetails'
+          description: Event details
+      description: Event information
+    EventDetails:
+      type: object
+      required:
+        - folderId
+      properties:
+        fileId:
+          type: string
+          description: File ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+        folderId:
+          type: string
+          description: Folder ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+        oldFolderId:
+          type: string
+          description: Old Folder ID
+          example: 123e4567-e89b-12d3-a456-426614174000
     File:
       type: object
       required:
@@ -1616,20 +1685,20 @@ components:
       properties:
         id:
           type: string
-          example: 123e4567-e89b-12d3-a456-426614174000
           description: File ID
+          example: 123e4567-e89b-12d3-a456-426614174000
           readOnly: true
         name:
           type: string
-          example: document.pdf
           description: File name
+          example: document.pdf
         type:
           type: string
           enum:
             - folder
             - file
-          example: file
           description: File type
+          example: file
         parts:
           type: array
           items:
@@ -1637,36 +1706,36 @@ components:
           description: File parts
         mimeType:
           type: string
-          example: application/pdf
           description: MIME type
+          example: application/pdf
         category:
           allOf:
             - $ref: '#/components/schemas/Category'
-          example: document
           description: File category
+          example: document
           readOnly: true
         channelId:
           type: integer
           format: int64
-          example: 123456789
           description: Channel ID
+          example: 123456789
         path:
           type: string
-          example: /documents/2023/
           description: File or Folder path
+          example: /documents/2023/
         parentId:
           type: string
-          example: 123e4567-e89b-12d3-a456-426614174000
           description: Parent folder ID
+          example: 123e4567-e89b-12d3-a456-426614174000
         size:
           type: integer
           format: int64
-          example: 1048576
           description: File size in bytes
+          example: 1048576
         encrypted:
           type: boolean
-          example: false
           description: Encryption status
+          example: false
         updatedAt:
           type: string
           format: date-time
@@ -1688,10 +1757,10 @@ components:
           type: string
           format: date-time
           description: Last update time
+      description: File Copy request
       example:
         newName: document_copy.pdf
         destination: /Documents/2023/
-      description: File Copy request
     FileDelete:
       type: object
       required:
@@ -1703,10 +1772,10 @@ components:
             type: string
           minItems: 1
           description: Array of file or folders ids to be deleted
+      description: Delete operation request
       example:
         ids:
           - 123e4567-e89b-12d3-a456-426614174000
-      description: Delete operation request
     FileList:
       type: object
       required:
@@ -1733,9 +1802,9 @@ components:
         path:
           type: string
           description: Directory path to be created
+      description: Request to create directories
       example:
         path: /Documents/2023/
-      description: Request to create directories
     FileMove:
       type: object
       required:
@@ -1754,11 +1823,11 @@ components:
         destinationName:
           type: string
           description: Destination file or folder name
+      description: Move multiple files by ids or path
       example:
         ids:
           - 123e4567-e89b-12d3-a456-426614174000
         destinationParent: /Documents/2023/
-      description: Move multiple files by ids or path
     FilePartsUpdate:
       type: object
       required:
@@ -1767,17 +1836,17 @@ components:
       properties:
         name:
           type: string
-          example: document.pdf
           description: File name
+          example: document.pdf
         parentId:
           type: string
-          example: 123e4567-e89b-12d3-a456-426614174000
           description: Parent folder ID
+          example: 123e4567-e89b-12d3-a456-426614174000
         channelId:
           type: integer
           format: int64
-          example: 123456
           description: Channel ID
+          example: 123456
         uploadId:
           type: string
           description: Upload ID
@@ -1789,8 +1858,8 @@ components:
         size:
           type: integer
           format: int64
-          example: 1048576
           description: File size in bytes
+          example: 1048576
         updatedAt:
           type: string
           format: date-time
@@ -1806,24 +1875,24 @@ components:
       properties:
         id:
           type: string
-          example: 123e4567-e89b-12d3-a456-426614174000
           description: Share ID
+          example: 123e4567-e89b-12d3-a456-426614174000
         protected:
           type: boolean
-          example: true
           description: Indicates if the shared file requires password protection
+          example: true
         userId:
           type: integer
           format: int64
-          example: 123456789
           description: ID of the user who created the share
+          example: 123456789
         type:
           type: string
           enum:
             - folder
             - file
-          example: file
           description: File type
+          example: file
         name:
           type: string
           description: Name of the shared file or folder
@@ -1837,8 +1906,8 @@ components:
       properties:
         password:
           type: string
-          example: securepass123
           description: Share password
+          example: securepass123
         expiresAt:
           type: string
           format: date-time
@@ -1854,15 +1923,15 @@ components:
       properties:
         name:
           type: string
-          example: document.pdf
           description: File name
+          example: document.pdf
         type:
           type: string
           enum:
             - folder
             - file
-          example: file
           description: File type
+          example: file
         expiresAt:
           type: string
           format: date-time
@@ -1873,15 +1942,15 @@ components:
           description: Share User ID
         protected:
           type: boolean
-          example: false
           description: Share Protection Status
+          example: false
     FileUpdate:
       type: object
       properties:
         name:
           type: string
-          example: document.pdf
           description: File name
+          example: document.pdf
         parts:
           type: array
           items:
@@ -1890,8 +1959,8 @@ components:
         size:
           type: integer
           format: int64
-          example: 1048576
           description: File size in bytes
+          example: 1048576
         updatedAt:
           type: string
           format: date-time
@@ -1906,19 +1975,19 @@ components:
       properties:
         count:
           type: integer
-          example: 1250
           minimum: 0
           description: Total number of items matching the query
+          example: 1250
         totalPages:
           type: integer
-          example: 25
           minimum: 1
           description: Total number of available pages based on limit
+          example: 25
         currentPage:
           type: integer
-          example: 1
           minimum: 1
           description: Current page number in the pagination
+          example: 1
       description: Pagination metadata containing count, page information
     Part:
       type: object
@@ -1927,12 +1996,12 @@ components:
       properties:
         id:
           type: integer
-          example: 1
           description: Part ID
+          example: 1
         salt:
           type: string
-          example: abc123
           description: Encryption salt
+          example: abc123
       description: File part information
     Session:
       type: object
@@ -1946,26 +2015,26 @@ components:
       properties:
         name:
           type: string
-          example: John Doe
           description: User's display name or full name
+          example: John Doe
         userName:
           type: string
-          example: johndoe
           description: Telegram username without @ symbol
+          example: johndoe
         userId:
           type: integer
           format: int64
-          example: 123456789
           minimum: 1
           description: Telegram user ID (unique identifier)
+          example: 123456789
         isPremium:
           type: boolean
-          example: true
           description: Premium subscription status
+          example: true
         hash:
           type: string
-          example: a1b2c3d4e5f6g7h8i9j0
           description: Session hash for verification and security
+          example: a1b2c3d4e5f6g7h8i9j0
         expires:
           type: string
           format: date-time
@@ -1984,26 +2053,26 @@ components:
       properties:
         name:
           type: string
-          example: John Doe
           description: User's display name or full name
+          example: John Doe
         userName:
           type: string
-          example: johndoe
           description: Telegram username without @ symbol
+          example: johndoe
         userId:
           type: integer
           format: int64
-          example: 123456789
           minimum: 1
           description: Telegram user ID (unique identifier)
+          example: 123456789
         isPremium:
           type: boolean
-          example: true
           description: Premium subscription status
+          example: true
         hash:
           type: string
-          example: a1b2c3d4e5f6g7h8i9j0
           description: Session hash for verification and security
+          example: a1b2c3d4e5f6g7h8i9j0
         expires:
           type: string
           format: date-time
@@ -2019,8 +2088,8 @@ components:
       properties:
         password:
           type: string
-          example: securepass123
           description: Share password
+          example: securepass123
     UploadPart:
       type: object
       required:
@@ -2085,12 +2154,12 @@ components:
           items:
             type: string
           description: List of bot tokens
+      description: User configuration for channel and bot settings
       example:
         channelId: 123456789
         bots:
           - bot1
           - bot2
-      description: User configuration for channel and bot settings
     UserSession:
       type: object
       required:
@@ -2121,19 +2190,19 @@ components:
         current:
           type: boolean
           description: Indicates if this is the currently active session
+      description: User session information
       example:
         hash: a1b2c3d4e5f6g7h8i9j0
-        createdAt: 2023-10-21T07:28:00Z
+        createdAt: '2023-10-21T07:28:00Z'
         location: New York, USA
         officialApp: true
         appName: Telegram
         valid: true
         current: true
-      description: User session information
   securitySchemes:
     BearerAuth:
       type: http
-      scheme: bearer
+      scheme: Bearer
     ApiKeyAuth:
       type: apiKey
       in: cookie
