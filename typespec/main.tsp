@@ -875,7 +875,7 @@ interface Shares {
 }
 
 
-model EventDetails{
+model EventData{
   @doc("File ID")
   @example("123e4567-e89b-12d3-a456-426614174000")
   fileId?: string;
@@ -903,7 +903,7 @@ model Event {
   createdAt: utcDateTime;
 
   @doc("Event details")
-  details: EventDetails;
+  Data: EventData;
 }
 
 

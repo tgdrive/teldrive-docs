@@ -2611,7 +2611,7 @@
           "id",
           "type",
           "createdAt",
-          "details"
+          "Data"
         ],
         "properties": {
           "id": {
@@ -2629,10 +2629,10 @@
             "format": "date-time",
             "description": "Event timestamp"
           },
-          "details": {
+          "Data": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/EventDetails"
+                "$ref": "#/components/schemas/EventData"
               }
             ],
             "description": "Event details"
@@ -2640,7 +2640,7 @@
         },
         "description": "Event information"
       },
-      "EventDetails": {
+      "EventData": {
         "type": "object",
         "required": [
           "folderId"
