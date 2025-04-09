@@ -875,18 +875,25 @@ interface Shares {
 }
 
 
-model EventData{
+model Source{
   @doc("File ID")
   @example("123e4567-e89b-12d3-a456-426614174000")
-  fileId?: string;
+  id: string;
 
-  @doc("Folder ID")
-  @example("123e4567-e89b-12d3-a456-426614174000")
-  folderId: string;
+  @doc("File name")
+  @example("document.pdf")
+  name: string;
+  @doc("File type")
+  @example("file")
+  type: "folder" | "file";
 
-  @doc("Old Folder ID")
+  @doc("Parent ID")
   @example("123e4567-e89b-12d3-a456-426614174000")
-  oldFolderId?: string;
+  parentId: string;
+
+  @doc("Destination Parent ID")
+  @example("123e4567-e89b-12d3-a456-426614174000")
+  destParentId?: string;
 }
 
 @doc("Event information")
@@ -902,8 +909,8 @@ model Event {
   @doc("Event timestamp")
   createdAt: utcDateTime;
 
-  @doc("Event details")
-  Data: EventData;
+  @doc("Event Source")
+  Source: Source;
 }
 
 

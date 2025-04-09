@@ -2611,7 +2611,7 @@
           "id",
           "type",
           "createdAt",
-          "Data"
+          "Source"
         ],
         "properties": {
           "id": {
@@ -2629,39 +2629,16 @@
             "format": "date-time",
             "description": "Event timestamp"
           },
-          "Data": {
+          "Source": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/EventData"
+                "$ref": "#/components/schemas/Source"
               }
             ],
-            "description": "Event details"
+            "description": "Event Source"
           }
         },
         "description": "Event information"
-      },
-      "EventData": {
-        "type": "object",
-        "required": [
-          "folderId"
-        ],
-        "properties": {
-          "fileId": {
-            "type": "string",
-            "description": "File ID",
-            "example": "123e4567-e89b-12d3-a456-426614174000"
-          },
-          "folderId": {
-            "type": "string",
-            "description": "Folder ID",
-            "example": "123e4567-e89b-12d3-a456-426614174000"
-          },
-          "oldFolderId": {
-            "type": "string",
-            "description": "Old Folder ID",
-            "example": "123e4567-e89b-12d3-a456-426614174000"
-          }
-        }
       },
       "File": {
         "type": "object",
@@ -3205,6 +3182,46 @@
             "type": "string",
             "description": "Share password",
             "example": "securepass123"
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "parentId"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "File ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "description": "File name",
+            "example": "document.pdf"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "folder",
+              "file"
+            ],
+            "description": "File type",
+            "example": "file"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "Parent ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "destParentId": {
+            "type": "string",
+            "description": "Destination Parent ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
           }
         }
       },
