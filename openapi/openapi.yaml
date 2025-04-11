@@ -1641,7 +1641,7 @@ components:
         - id
         - type
         - createdAt
-        - Source
+        - source
       properties:
         id:
           type: string
@@ -1655,7 +1655,7 @@ components:
           type: string
           format: date-time
           description: Event timestamp
-        Source:
+        source:
           allOf:
             - $ref: '#/components/schemas/Source'
           description: Event Source

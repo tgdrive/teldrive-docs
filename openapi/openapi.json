@@ -2611,7 +2611,7 @@
           "id",
           "type",
           "createdAt",
-          "Source"
+          "source"
         ],
         "properties": {
           "id": {
@@ -2629,7 +2629,7 @@
             "format": "date-time",
             "description": "Event timestamp"
           },
-          "Source": {
+          "source": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/Source"

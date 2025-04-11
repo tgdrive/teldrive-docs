@@ -910,7 +910,7 @@ model Event {
   createdAt: utcDateTime;
 
   @doc("Event Source")
-  Source: Source;
+  source: Source;
 }
 
 
