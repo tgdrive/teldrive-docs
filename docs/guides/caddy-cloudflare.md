@@ -80,7 +80,7 @@ Create these files in the same directory, adjusting configurations as needed:
 ```yml [teldrive.yml]
 services:
   teldrive:
-    image: teldrive/teldrive
+    image: ghcr.io/tgdrive/teldrive
     restart: always
     container_name: teldrive
     networks:
@@ -165,6 +165,49 @@ docker compose -f caddy.yml up -d
 * Replace `yourdomain.com` with your actual domain in the Caddyfile
 * Access Teldrive at `https://teldrive.yourdomain.com`
 * Update the Resizer host to `https://imgproxy.yourdomain.com` in Teldrive UI settings
+
+## Advanced 
+- You can make use of caddy l4 module to use same port  443 or 80 port for postgres and enable tls for secure connections.
+- Make sure to use `teldrive/caddy` docker image not official one as it is compiled with l4-caddy.
+
+``` [Caddyfile]
+{
+	servers {
+		listener_wrappers {
+			layer4 {
+				@postgres tls sni postgres.yourdomain.com 
+				route @postgres {
+					tls {
+						connection_policy {
+							alpn postgresql
+						}
+					}
+					proxy postgres:5432
+				}
+			}
+			tls
+		}
+	}
+}
+
+postgres.yourdomain.com {
+	respond "ok" 200
+}
+
+teldrive.yourdomain.com {
+    tls internal
+    reverse_proxy teldrive:8080
+}
+
+imgproxy.yourdomain.com {
+    tls internal
+    reverse_proxy imgproxy:8080
+}
+```
+> [!IMPORTANT]
+> - Add `?sslnegotiation=direct` direct ssl negotiation parmeter after your postgres connection string.Change default postgres port to 443.
+> - This feature is only supported on postgres 17 and above.
+
 
 ## Troubleshooting
 

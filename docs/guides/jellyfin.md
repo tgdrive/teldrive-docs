@@ -9,7 +9,7 @@ This guide explains how to integrate Teldrive with popular media server applicat
 First, install the rclone Docker volume plugin to mount your Teldrive storage:
 
 ```bash
-docker plugin install teldrive/docker-volume-rclone --alias rclone --grant-all-permissions args="--allow-other" config=/etc/rclone cache=/var/cache
+docker plugin install ghcr.io/tgdrive/docker-volume-rclone --alias rclone --grant-all-permissions args="--allow-other" config=/etc/rclone cache=/var/cache
 ```
 
 > [!NOTE]

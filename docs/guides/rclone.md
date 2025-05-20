@@ -47,6 +47,7 @@ Configure rclone under the `[teldrive]` section in your rclone config file:
 | **`upload_concurrency`** | Number of concurrent uploads (default: 4) |
 | **`encrypt_files`** | Enable file encryption (default: false) |
 | **`random_chunk_name`** | Use random names for file chunks (default: true) |
+| **`channel_id`** | Telegram Channel ID  (default: selected automatically if not mentioned) |
 
 ### Example Configuration
 

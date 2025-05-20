@@ -8,13 +8,13 @@ If you experience buffering issues, enable multi-threaded options to significant
 
 ```toml
 [tg.stream]
-multi-threads = 4
-stream-buffers = 12
+multi-threads = 6
+stream-buffers = 20
 ```
 For Rclone use these options:
 ```
---vfs-read-chunk-size=12M
---vfs-read-chunk-streams=20
+--vfs-read-chunk-size=32M
+--vfs-read-chunk-streams=4
 --teldrive-threaded-streams=1
 ```
 

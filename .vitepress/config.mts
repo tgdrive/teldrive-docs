@@ -45,7 +45,6 @@ export default defineConfig({
         items: [
           { text: 'Deploy with Caddy and Cloudflare', link: '/docs/guides/caddy-cloudflare.md' },
           { text: 'Deploy with Nginx', link: '/docs/guides/nginx-setup.md' },
-          { text: 'Deploy with Traefik', link: '/docs/guides/traefik-setup.md' },
           { text: 'Database Backup', link: '/docs/guides/db-backup.md' },
           { text: 'Setup with Rclone', link: '/docs/guides/rclone.md' },
           { text: 'Use with Media Servers', link: '/docs/guides/jellyfin.md' },
