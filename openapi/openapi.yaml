@@ -1641,7 +1641,6 @@ components:
       type: object
       required:
         - channelName
-        - channelId
       properties:
         channelName:
           type: string

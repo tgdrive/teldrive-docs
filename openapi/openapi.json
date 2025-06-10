@@ -2629,8 +2629,7 @@
       "Channel": {
         "type": "object",
         "required": [
-          "channelName",
-          "channelId"
+          "channelName"
         ],
         "properties": {
           "channelName": {

@@ -713,7 +713,7 @@ model Channel {
   channelName: string;
 
   @doc("Unique numeric identifier of the channel")
-  channelId: int64;
+  channelId?: int64;
 }
 
 model AddBots {
