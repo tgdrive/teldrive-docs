@@ -498,7 +498,7 @@ interface Files {
   getById(@path id: string): File | Error;
 
   @route("/{id}")
-  @patch
+  @patch(#{implicitOptionality: true})
   @summary("Update file")
   update(
     @path id: string,
@@ -524,7 +524,7 @@ interface Files {
   shareByid(@path id: string): FileShare | Error;
 
   @route("/{id}/share")
-  @patch
+  @patch(#{implicitOptionality: true})
   @summary("Edit share")
   editShare(
     @path id: string,
@@ -758,13 +758,25 @@ interface Users {
   @summary("List user channels")
   listChannels(): Channel[] | Error;
 
+
   @route("/channels")
-  @patch
+  @post
+  @summary("Create user channel")
+  createChannel(@body body: Channel): CreatedResponse | Error;
+
+  @route("/channels")
+  @patch(#{implicitOptionality: true})
   @summary("Update user channel")
   updateChannel(@body body: Channel): NoContentResponse | Error;
 
+
+  @route("/channels/{id}")
+  @delete
+  @summary("Delete user channel")
+  deleteChannel(@path id: string): NoContentResponse | Error;
+
   @route("/channels/sync")
-  @patch
+  @patch(#{implicitOptionality: true})
   @summary("Sync user channels")
   syncChannels(): NoContentResponse | Error;
 
