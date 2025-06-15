@@ -17,23 +17,20 @@ Create a Docker Compose file for the backup service:
 ```yml [docker-compose.yml]
 services:
   rclone-backup:
-    image: teldrive/rclone-backup:17 # for postgres 16 use teldrive/rclone-backup:16
+    image: ghcr.io/tgdrive/rclone-backup:17 # for postgres 16 use tag 16
     container_name: rclone-backup
     environment:
-      - RCLONE_REMOTE_NAME=remote # use your configured rclone remote name
-      - BACKUP_KEEP_DAYS=10 # how many days to keep backup history
-      - CRON=0 */6 * * * # backup frequency (every 6 hours in this example)
+      - RCLONE_REMOTE_NAME=remote
+      - BACKUP_KEEP_DAYS=10
+      - CRON=0 0 * * * # backup frequency (every 24 hours in this example)
       - ZIP_ENABLE=true # enable backup compression
-      - PG_HOST=postgres # database hostname
-      - PG_DBNAME=postgres # database name
-      - PG_USERNAME=user # database username
-      - PG_PASSWORD=pass # database password
+      - PG_CONNECTION_STRING=postgres://user:pass@postgres/postgres # database string
       - ZIP_PASSWORD=zippass # password to protect backup archives
     restart: always
     networks:
      - postgres
     volumes:
-      - /path/to/rclone/configdir/:/app/rclone # mount your rclone config directory
+      - /path/to/rclone/configdir/:/config/rclone # mount your rclone config directory
 
 networks:
   postgres:                                 
@@ -61,11 +58,7 @@ Customize your backup solution further with these environment variables:
 | `CRON` | Backup schedule in cron format | "0 0 * * *" (daily) |
 | `ZIP_ENABLE` | Enable backup compression | false |
 | `ZIP_PASSWORD` | Password for encrypted backups | *empty* |
-| `PG_HOST` | PostgreSQL host | *required* |
-| `PG_DBNAME` | PostgreSQL database name | *required* |
-| `PG_USERNAME` | PostgreSQL username | *required* |
-| `PG_PASSWORD` | PostgreSQL password | *required* |
-
+| `PG_CONNECTION_STRING` | PostgreSQL Connection string | *required* |
 ## Verifying Backups
 
 Your backups will be uploaded to your configured Rclone remote according to the schedule. You can verify the backups by:
