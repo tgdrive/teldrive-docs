@@ -405,6 +405,9 @@ model FilePartsUpdate {
   @doc("File parts")
   parts?: Part[];
 
+  @doc("Indicates if the part is encrypted")
+  encrypted?: boolean;
+
   @doc("File size in bytes")
   @example(1048576)
   size: int64;

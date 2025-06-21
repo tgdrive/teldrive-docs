@@ -1885,6 +1885,9 @@ components:
           items:
             $ref: '#/components/schemas/Part'
           description: File parts
+        encrypted:
+          type: boolean
+          description: Indicates if the part is encrypted
         size:
           type: integer
           format: int64
