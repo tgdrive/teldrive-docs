@@ -48,6 +48,7 @@ export default defineConfig({
           { text: 'Database Backup', link: '/docs/guides/db-backup.md' },
           { text: 'Setup with Rclone', link: '/docs/guides/rclone.md' },
           { text: 'Use with Media Servers', link: '/docs/guides/jellyfin.md' },
+          { text: 'Android using Termux', link: '/docs/guides/teldrive-on-android.md' },
         ]
       },
       {
