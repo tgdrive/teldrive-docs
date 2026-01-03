@@ -116,7 +116,7 @@ nano config.toml
 - Press **Enter** to confirm
 - Press **Ctrl + X** to exit
 
-> To run Teldrive, follow the instructions here. [Running without Docker](https://github.com/tgdrive/teldrive-docs/blob/main/docs/getting-started/usage#running-without-docker) 
+> To run Teldrive, follow the instructions here. [Running without Docker](docs/getting-started/usage#running-without-docker) 
 
 ## Accessing Teldrive
 
