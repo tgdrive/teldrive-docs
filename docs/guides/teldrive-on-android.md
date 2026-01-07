@@ -98,7 +98,7 @@ After opening Termux for the first time:
 
 ### Basic `config.toml` (Recommended for New Users)
 
-1. First, read the [/usage documentation](docs/getting-started/usage) for configuring a Supabase database.
+1. First, read the [usage documentation](/docs/getting-started/usage) for configuring a Supabase database.
 
 2. Create and open the configuration file:
 
