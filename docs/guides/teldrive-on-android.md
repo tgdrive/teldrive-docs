@@ -112,9 +112,9 @@ nano config.toml
 
 ### Saving and Exiting Nano
 
-- Press **Ctrl + O** to save
-- Press **Enter** to confirm
-- Press **Ctrl + X** to exit
+- Press **Ctrl + O** to save.
+- Press **Enter** to confirm.
+- Press **Ctrl + X** to exit.
 
 > To run Teldrive, follow the instructions here. [Running without Docker](/docs/getting-started/usage#running-without-docker) 
 
