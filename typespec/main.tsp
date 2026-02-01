@@ -157,6 +157,21 @@ enum Category {
   video,
 }
 
+@doc("Hash algorithm types for integrity checking")
+enum HashAlgorithm {
+  @doc("MD5 hash algorithm")
+  md5,
+
+  @doc("SHA-256 hash algorithm")
+  sha256,
+
+  @doc("XXHash64 algorithm")
+  xxhash,
+
+  @doc("BLAKE3 hash algorithm")
+  blake3,
+}
+
 @doc("File query parameters")
 model FileQuery {
   @query
@@ -259,6 +274,10 @@ model File {
   @visibility(Lifecycle.Read)
   id?: string;
 
+  @doc("Upload session ID (for multi-part uploads)")
+  @example("upload-abc-123")
+  uploadId?: string;
+
   @doc("File name")
   @example("document.pdf")
   name: string;
@@ -298,6 +317,10 @@ model File {
   @doc("Encryption status")
   @example(false)
   encrypted?: boolean;
+
+  @doc("BLAKE3 tree hash for integrity checking")
+  @example("d41d8cd98f00b204e9800998ecf8427e")
+  hash?: string;
 
   @doc("Last update time")
   @visibility(Lifecycle.Read)
@@ -374,23 +397,6 @@ model FileUpdate {
   @example("document.pdf")
   name?: string;
 
-  @doc("File parts")
-  parts?: Part[];
-
-  @doc("File size in bytes")
-  @example(1048576)
-  size?: int64;
-
-  @doc("Last update time")
-  updatedAt?: utcDateTime;
-}
-
-@doc("File parts update request")
-model FilePartsUpdate {
-  @doc("File name")
-  @example("document.pdf")
-  name?: string;
-
   @doc("Parent folder ID")
   @example("123e4567-e89b-12d3-a456-426614174000")
   parentId?: string;
@@ -399,21 +405,21 @@ model FilePartsUpdate {
   @example(123456)
   channelId?: int64;
 
-  @doc("Upload ID")
+  @doc("Upload ID for hash calculation")
   uploadId?: string;
 
   @doc("File parts")
   parts?: Part[];
 
-  @doc("Indicates if the part is encrypted")
+  @doc("Indicates if the file is encrypted")
   encrypted?: boolean;
 
   @doc("File size in bytes")
   @example(1048576)
-  size: int64;
+  size?: int64;
 
   @doc("Last update time")
-  updatedAt: utcDateTime;
+  updatedAt?: utcDateTime;
 }
 
 @doc("File Copy request")
@@ -441,7 +447,7 @@ model FileMove {
 
   @doc("Destination parent path or ID where files will be moved to")
   destinationParent: string;
-  
+
   @doc("Destination file or folder name")
   destinationName?: string;
 }
@@ -507,14 +513,6 @@ interface Files {
     @path id: string,
     @body body: FileUpdate,
   ): File | Error;
-
-  @route("/{id}/parts")
-  @put
-  @summary("Update file parts")
-  updateParts(
-    @path id: string,
-    @body body: FilePartsUpdate,
-  ): NoContentResponse | Error;
 
   @route("/{id}/share")
   @delete
@@ -609,6 +607,10 @@ model UploadQuery {
   @doc("Whether the upload content is encrypted")
   @query
   encrypted?: boolean = false;
+
+  @doc("Enable BLAKE3 hashing for integrity checking")
+  @query
+  hashing?: boolean = true;
 }
 
 @doc("Details of an uploaded part")
@@ -948,7 +950,7 @@ model ApiVersion {
   @doc("Git commit SHA")
   @example("a1b2c3d4e5f6g7h8i9j0")
   commitSHA: string;
-  
+
   @doc("Go version")
   @example("go1.17.1")
   goVersion: string;

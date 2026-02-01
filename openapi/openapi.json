@@ -708,58 +708,6 @@
         ]
       }
     },
-    "/files/{id}/parts": {
-      "put": {
-        "operationId": "Files_updateParts",
-        "summary": "Update file parts",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "There is no content to send for this request, but the headers may be useful."
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Files"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FilePartsUpdate"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          },
-          {
-            "ApiKeyAuth": []
-          }
-        ]
-      }
-    },
     "/files/{id}/share": {
       "delete": {
         "operationId": "Files_deleteShare",
@@ -1558,6 +1506,9 @@
           },
           {
             "$ref": "#/components/parameters/UploadQuery.encrypted"
+          },
+          {
+            "$ref": "#/components/parameters/UploadQuery.hashing"
           }
         ],
         "responses": {
@@ -2506,6 +2457,17 @@
         },
         "explode": false
       },
+      "UploadQuery.hashing": {
+        "name": "hashing",
+        "in": "query",
+        "required": false,
+        "description": "Enable BLAKE3 hashing for integrity checking",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "explode": false
+      },
       "UploadQuery.partName": {
         "name": "partName",
         "in": "query",
@@ -2735,6 +2697,11 @@
             "example": "123e4567-e89b-12d3-a456-426614174000",
             "readOnly": true
           },
+          "uploadId": {
+            "type": "string",
+            "description": "Upload session ID (for multi-part uploads)",
+            "example": "upload-abc-123"
+          },
           "name": {
             "type": "string",
             "description": "File name",
@@ -2797,6 +2764,11 @@
             "type": "boolean",
             "description": "Encryption status",
             "example": false
+          },
+          "hash": {
+            "type": "string",
+            "description": "BLAKE3 tree hash for integrity checking",
+            "example": "d41d8cd98f00b204e9800998ecf8427e"
           },
           "updatedAt": {
             "type": "string",
@@ -2930,58 +2902,6 @@
           "destinationParent": "/Documents/2023/"
         }
       },
-      "FilePartsUpdate": {
-        "type": "object",
-        "required": [
-          "size",
-          "updatedAt"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "File name",
-            "example": "document.pdf"
-          },
-          "parentId": {
-            "type": "string",
-            "description": "Parent folder ID",
-            "example": "123e4567-e89b-12d3-a456-426614174000"
-          },
-          "channelId": {
-            "type": "integer",
-            "format": "int64",
-            "description": "Channel ID",
-            "example": 123456
-          },
-          "uploadId": {
-            "type": "string",
-            "description": "Upload ID"
-          },
-          "parts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Part"
-            },
-            "description": "File parts"
-          },
-          "encrypted": {
-            "type": "boolean",
-            "description": "Indicates if the part is encrypted"
-          },
-          "size": {
-            "type": "integer",
-            "format": "int64",
-            "description": "File size in bytes",
-            "example": 1048576
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Last update time"
-          }
-        },
-        "description": "File parts update request"
-      },
       "FileShare": {
         "type": "object",
         "required": [
@@ -3092,12 +3012,31 @@
             "description": "File name",
             "example": "document.pdf"
           },
+          "parentId": {
+            "type": "string",
+            "description": "Parent folder ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "channelId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Channel ID",
+            "example": 123456
+          },
+          "uploadId": {
+            "type": "string",
+            "description": "Upload ID for hash calculation"
+          },
           "parts": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Part"
             },
             "description": "File parts"
+          },
+          "encrypted": {
+            "type": "boolean",
+            "description": "Indicates if the file is encrypted"
           },
           "size": {
             "type": "integer",
