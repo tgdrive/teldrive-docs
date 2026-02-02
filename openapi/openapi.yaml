@@ -115,7 +115,7 @@ paths:
     get:
       operationId: Events_getEvents
       summary: Get events
-      description: Get events
+      description: Get events (polling)
       parameters: []
       responses:
         '200':
@@ -126,6 +126,51 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Event'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Events
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+  /events/stream:
+    get:
+      operationId: Events_eventsStream
+      summary: Server-Sent Events stream
+      description: Real-time event stream using Server-Sent Events (SSE). Events are filtered by authenticated user. Optional interval parameter for heartbeat configuration.
+      parameters:
+        - name: interval
+          in: query
+          required: false
+          description: 'Heartbeat interval in milliseconds (default: 30000)'
+          schema:
+            type: integer
+            format: int64
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                type: string
+                enum:
+                  - no-cache
+            Connection:
+              required: true
+              schema:
+                type: string
+                enum:
+                  - keep-alive
+          content:
+            text/event-stream:
+              schema:
+                type: string
         default:
           description: An unexpected error response.
           content:
@@ -2117,6 +2162,10 @@ components:
           type: string
           description: Destination Parent ID
           example: 123e4567-e89b-12d3-a456-426614174000
+        path:
+          type: string
+          description: Full path of the file/folder (e.g., 'documents/projects/file.txt')
+          example: documents/2023/report.pdf
     UploadPart:
       type: object
       required:

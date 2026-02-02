@@ -911,6 +911,10 @@ model Source{
   @doc("Destination Parent ID")
   @example("123e4567-e89b-12d3-a456-426614174000")
   destParentId?: string;
+
+  @doc("Full path of the file/folder (e.g., 'documents/projects/file.txt')")
+  @example("documents/2023/report.pdf")
+  path?: string;
 }
 
 @doc("Event information")
@@ -938,8 +942,24 @@ interface Events {
   @get
   @summary("Get events")
   @useAuth(ApiAuth)
-  @doc("Get events")
+  @doc("Get events (polling)")
   getEvents(): Array<Event> | Error;
+
+  @route("/stream")
+  @get
+  @summary("Server-Sent Events stream")
+  @useAuth(ApiAuth)
+  @doc("Real-time event stream using Server-Sent Events (SSE). Events are filtered by authenticated user. Optional interval parameter for heartbeat configuration.")
+  eventsStream(
+    @doc("Heartbeat interval in milliseconds (default: 30000)")
+    @query interval?: int64
+  ): {
+    @statusCode statusCode: 200;
+    @header("Content-Type") contentType: "text/event-stream";
+    @header("Cache-Control") cacheControl: "no-cache";
+    @header("Connection") connection: "keep-alive";
+    @body body: string;
+  } | Error;
 }
 
 model ApiVersion {
