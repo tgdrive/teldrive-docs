@@ -6,7 +6,7 @@ Setting up Teldrive on Android, ensure you have the following in place.
 
 ### Before you begin
 
-- Read the main [Prerequisites guide.](docs/getting-started/prerequisites).
+- Read the main [Prerequisites guide.](/docs/getting-started/prerequisites).
 - An installed Termux.
 
 ## Database and Telegram setup
@@ -90,15 +90,15 @@ After opening Termux for the first time:
 
 ### Method: One-line installer
 
-- [Follow Here](docs/getting-started/installation)
+- [Follow Here](/docs/getting-started/installation)
 
 ## Configuration
 
-- Read [this](docs/getting-started/usage#configuration)
+- Read [this](/docs/getting-started/usage#configuration)
 
 ### Basic `config.toml` (Recommended for New Users)
 
-1. First, read the [usage documentation](docs/getting-started/usage) for configuring a Supabase database.
+1. First, read the [usage documentation](/docs/getting-started/usage) for configuring a Supabase database.
 
 2. Create and open the configuration file:
 
@@ -112,13 +112,13 @@ nano config.toml
 
 ### Saving and Exiting Nano
 
-- Press **Ctrl + O** to save
-- Press **Enter** to confirm
-- Press **Ctrl + X** to exit
+- Press **Ctrl + O** to save.
+- Press **Enter** to confirm.
+- Press **Ctrl + X** to exit.
 
-> To run Teldrive, follow the instructions here. [Running without Docker](docs/getting-started/usage#running-without-docker) 
+> To run Teldrive, follow the instructions here. [Running without Docker](/docs/getting-started/usage#running-without-docker) 
 
 ## Accessing Teldrive
 
 - Open http://localhost:8080 in your browser.
-> See the main guide:  [Here](docs/getting-started/usage#accessing-teldrive)
+> See the main guide:  [Here](/docs/getting-started/usage#accessing-teldrive)
